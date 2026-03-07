@@ -1,0 +1,87 @@
+server:
+  transport: "http"
+  host: "0.0.0.0"
+  port: 8000
+
+database:
+  provider: "neo4j"
+  providers:
+    neo4j:
+      uri: ${NEO4J_URI:bolt://neo4j:7687}
+      username: ${NEO4J_USER:neo4j}
+      password: ${NEO4J_PASSWORD:demodemo}
+      database: ${NEO4J_DATABASE:neo4j}
+      use_parallel_runtime: false
+
+llm:
+  provider: "openai"
+  model: "gpt-4o-mini"
+  temperature: 0.0
+  max_tokens: 4096
+  providers:
+    openai:
+      api_key: ${OPENAI_API_KEY}
+      api_url: https://api.openai.com/v1
+
+embedder:
+  provider: "openai"
+  model: "text-embedding-3-small"
+  dimensions: 1536
+  providers:
+    openai:
+      api_key: ${OPENAI_API_KEY}
+      api_url: https://api.openai.com/v1
+
+graphiti:
+  group_id: "vex"
+  user_id: "shane"
+  custom_extraction_instructions: |
+    The primary user is Shane (he/him, she/her, they/them — all valid).
+    In user messages, "I" and "me" refer to Shane. In assistant messages,
+    "I" and "me" refer to Vex, the AI assistant.
+
+    Shane is a 36-year-old non-binary person in Melbourne, Australia.
+    Context for accurate extraction:
+    - Medical: Has ASD Level 2, ADHD-I, POTS, Binge Eating Disorder.
+      Extract conditions, medications, and symptoms as distinct entities.
+    - Psychological: Has identified schemas (Failure Schema) and patterns
+      (PDA response). These are recurring patterns, not one-off events.
+    - Work: Product Manager at AutoGrab. Extract colleagues with roles.
+    - Infrastructure: Runs a homelab. Extract components AND their
+      architectural relationships. "Neo4j runs on Proxmox" contains two
+      entities and a relationship — preserve both, not just the components.
+    - Identity: Actively exploring gender expression. Extract as Identity
+      entities, not Person attributes.
+
+    Prioritise: preferences, medical information, psychological patterns,
+    relationship dynamics, infrastructure topology, identity exploration.
+    Deprioritise: conversational filler, transient emotional states.
+  entity_types:
+    - name: "Person"
+      description: "A named human individual — friend, family member, colleague, healthcare provider, therapist, or public figure. Includes their role and relationship to Shane where relevant."
+    - name: "Preference"
+      description: "A stated preference, opinion, choice, or interaction boundary. Includes communication style requirements, likes, dislikes, and sensory preferences."
+    - name: "HealthCondition"
+      description: "A health condition, diagnosis, symptom, medication, supplement, or treatment protocol. Examples: ASD Level 2, POTS, propranolol, compression tights for POTS."
+    - name: "PsychologicalPattern"
+      description: "A recurring psychological pattern, schema, emotional dynamic, coping strategy, or therapeutic insight. Examples: Failure Schema, PDA response, alexithymia, demand avoidance."
+    - name: "Project"
+      description: "A named initiative or body of work with defined goals — work projects, personal coding projects, and learning endeavours. Examples: Boot.dev backend path, Graphiti POC, ai-skills repo."
+    - name: "Organisation"
+      description: "A company, institution, team, or formal group of people. Examples: AutoGrab, Boot.dev, Kaiko, AI Squad."
+    - name: "Skill"
+      description: "A competency, learned ability, or development milestone — not the project it was learned in. Examples: Go error handling, vim motions, closures, early return patterns, reading component architecture."
+    - name: "Tool"
+      description: "A software application or utility for productivity, development, or daily tasks. NOT infrastructure components. Examples: Neovim, Obsidian, Claude Code, tmux, Firefox."
+    - name: "Infrastructure"
+      description: "A technical infrastructure component — server, hypervisor, database, container platform, storage system, or network service and their architectural relationships. Examples: Proxmox, Unraid, Neo4j, Tailscale, Docker, NixOS."
+    - name: "Event"
+      description: "A significant time-bound occurrence — milestone, appointment, emotional incident, breakthrough, or crisis. Includes date or time context where available."
+    - name: "Identity"
+      description: "An aspect of gender identity, presentation, expression, or sexuality. Includes gender exploration, clothing as expression, pronoun usage, and ace spectrum experiences."
+    - name: "Procedure"
+      description: "A workflow, process, operational method, or step-by-step instruction set. Examples: Jira ticket workflow, NixOS rebuild process, morning routine sequence."
+    - name: "Product"
+      description: "A product, service, or feature being developed, sold, or evaluated. Examples: AutoGrab AI, Graphiti MCP, Claude Desktop."
+    - name: "Routine"
+      description: "A recurring self-care practice, regulation activity, stimming pattern, or daily habit. Examples: femme routine, stim toy use, shower stool accommodation, salt water for POTS."

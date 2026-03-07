@@ -1,0 +1,23 @@
+# Environment and secrets
+.env
+.env.*
+*.env
+secrets/
+*.secret
+mcp_settings.json
+
+# Docker runtime
+docker-compose.override.yml
+
+# Data volumes
+data/
+volumes/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~

@@ -1,0 +1,2 @@
+FROM zepai/knowledge-graph-mcp:standalone
+RUN cd /app/mcp && /root/.local/bin/uv pip install --python .venv/bin/python "graphiti-core>=0.28.0"
