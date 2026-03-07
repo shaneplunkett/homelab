@@ -2,12 +2,29 @@
 
 ## Summary
 
-Documentation of homelab, including docker compose and details
+Documentation of homelab infrastructure, including docker compose configs, Proxmox VM/LXC configs, and setup guides.
+
+## Hosts
+
+| Host | IP            | Hardware                          | Purpose                     |
+|------|---------------|-----------------------------------|-----------------------------|
+| PVE  | 192.168.1.169 | Ryzen 9 7900, 96 GB RAM, 1 TB NVMe | Primary Proxmox node       |
+| Cube | 192.168.1.238 | Intel (UHD 630), 32 GB RAM, 2x 1 TB NVMe | Secondary Proxmox node |
+
+## Network Map
+
+Managed by Unifi. Static IPs / DHCP reservations:
+
+| IP              | Name          | Type | Host | Purpose                                    |
+|-----------------|---------------|------|------|--------------------------------------------|
+| 192.168.1.90    | arr           | LXC  | Cube | Media automation (*arr stack, Overseerr)   |
+| 192.168.1.169   | PVE           | Host | —    | Primary Proxmox host                      |
+| 192.168.1.176   | proxy         | LXC  | PVE  | Nginx Proxy Manager                       |
+| 192.168.1.195   | mcphub        | LXC  | PVE  | MCPHub, Graphiti, Open Wearables           |
+| 192.168.1.205   | macos-tahoe   | VM   | PVE  | macOS Tahoe — Apple MCP servers            |
+| 192.168.1.237   | plex          | LXC  | Cube | Plex Media Server (iGPU transcoding)      |
+| 192.168.1.238   | Cube          | Host | —    | Secondary Proxmox host                    |
 
 ## Structure
 
-### Folders
-
-Folder per host, sub folders per resource on host.
-
-- for each sub folder have Readme, docker compose if relevant
+Folder per host, subfolders per resource on host. Each subfolder has a README and docker compose if relevant.
