@@ -1,0 +1,109 @@
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: always
+    environment:
+      - PUID=99
+      - PGID=100
+      - TZ=Australia/Melbourne
+    volumes:
+      - /var/lib/containers/radarr:/config:Z
+      - /mnt/media:/Media:Z
+    ports:
+      - "7878:7878"
+
+  sonarrtv:
+    image: lscr.io/linuxserver/sonarr:develop
+    container_name: sonarrtv
+    restart: always
+    environment:
+      - PUID=99
+      - PGID=100
+      - TZ=Australia/Melbourne
+    volumes:
+      - /var/lib/containers/sonarrtv:/config:Z
+      - /mnt/media:/Media:Z
+    ports:
+      - "8989:8989"
+
+  anime-sonarr:
+    image: docker.io/binhex/arch-sonarr:latest
+    container_name: anime-sonarr
+    restart: always
+    environment:
+      - PUID=99
+      - PGID=100
+      - UMASK=000
+    volumes:
+      - /var/lib/containers/anime-sonarr:/config:Z
+      - /mnt/media:/Media:Z
+    ports:
+      - "8990:8989"
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Australia/Melbourne
+    volumes:
+      - /var/lib/containers/prowlarr:/config:Z
+    ports:
+      - "9696:9696"
+
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    restart: always
+    environment:
+      - PUID=99
+      - PGID=100
+      - TZ=Australia/Melbourne
+    volumes:
+      - /var/lib/containers/deluge:/config:Z
+      - /mnt/media:/Media:Z
+    ports:
+      - "6881:6881"
+      - "6881:6881/udp"
+      - "8112:8112"
+
+  sabnzbd:
+    image: docker.io/binhex/arch-sabnzbd:latest
+    container_name: sabnzbd
+    restart: always
+    environment:
+      - PUID=99
+      - PGID=100
+      - UMASK=000
+    volumes:
+      - /var/lib/containers/sabnzbd:/config:Z
+      - /mnt/media:/Media:Z
+    ports:
+      - "8080:8080"
+
+  overseerr:
+    image: docker.io/sctx/overseerr:latest
+    container_name: overseerr
+    restart: always
+    environment:
+      - LOG_LEVEL=info
+    volumes:
+      - /var/lib/containers/overseerr:/app/config:Z
+    ports:
+      - "5055:5055"
+
+  minidlna:
+    image: docker.io/binhex/arch-minidlna:latest
+    container_name: minidlna
+    restart: always
+    environment:
+      - PUID=99
+      - PGID=100
+      - SCAN_ON_BOOT=yes
+    volumes:
+      - /var/lib/containers/minidlna:/config
+      - /mnt/programs:/media:ro
+    network_mode: host
