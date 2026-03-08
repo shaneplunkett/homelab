@@ -59,7 +59,9 @@ resource "proxmox_virtual_environment_container" "this" {
         sudo pct exec ${self.vm_id} -- sh -c '\
           # Create shane user with sudo
           adduser -D -s /bin/ash shane && \
-          apk add --no-cache sudo && \
+          apk add --no-cache sudo openssh-server && \
+          rc-update add sshd default && \
+          rc-service sshd start && \
           echo \"shane ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/shane && \
           chmod 440 /etc/sudoers.d/shane && \
 
