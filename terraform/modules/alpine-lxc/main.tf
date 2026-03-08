@@ -32,8 +32,8 @@ resource "proxmox_virtual_environment_container" "this" {
   }
 
   network_interface {
-    name    = "eth0"
-    bridge  = "vmbr0"
+    name     = "eth0"
+    bridge   = "vmbr0"
     firewall = true
   }
 
@@ -52,40 +52,37 @@ resource "proxmox_virtual_environment_container" "this" {
     nesting = var.nesting
   }
 
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      host        = self.initialization[0].ip_config[0].ipv4[0].address
-      user        = "root"
-      private_key = file("~/.ssh/id_ed25519")
-    }
+  # Provision via pct exec on the host — works both locally and in CI
+  provisioner "local-exec" {
+    command = <<-EOT
+      ssh -o StrictHostKeyChecking=no shane@${var.node_ip} "\
+        sudo pct exec ${self.vm_id} -- sh -c '\
+          # Create shane user with sudo
+          adduser -D -s /bin/ash shane && \
+          apk add --no-cache sudo && \
+          echo \"shane ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/shane && \
+          chmod 440 /etc/sudoers.d/shane && \
 
-    inline = [
-      # Create shane user with sudo
-      "adduser -D -s /bin/ash shane",
-      "apk add --no-cache sudo",
-      "echo 'shane ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/shane",
-      "chmod 440 /etc/sudoers.d/shane",
+          # SSH key for shane
+          mkdir -p /home/shane/.ssh && \
+          echo \"${var.ssh_public_key}\" > /home/shane/.ssh/authorized_keys && \
+          chown -R shane:shane /home/shane/.ssh && \
+          chmod 700 /home/shane/.ssh && \
+          chmod 600 /home/shane/.ssh/authorized_keys && \
 
-      # SSH key for shane
-      "mkdir -p /home/shane/.ssh",
-      "cp /root/.ssh/authorized_keys /home/shane/.ssh/authorized_keys",
-      "chown -R shane:shane /home/shane/.ssh",
-      "chmod 700 /home/shane/.ssh",
-      "chmod 600 /home/shane/.ssh/authorized_keys",
+          # Lock down root SSH
+          sed -i \"s/^#*PermitRootLogin.*/PermitRootLogin no/\" /etc/ssh/sshd_config && \
+          sed -i \"s/^#*PasswordAuthentication.*/PasswordAuthentication no/\" /etc/ssh/sshd_config && \
+          rc-service sshd restart && \
 
-      # Lock down root SSH
-      "sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config",
-      "sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config",
-      "rc-service sshd restart",
-
-      # Auto-updates via periodic
-      "apk add --no-cache apk-cron",
-      "echo '#!/bin/sh' > /etc/periodic/daily/apk-update",
-      "echo 'apk update && apk upgrade' >> /etc/periodic/daily/apk-update",
-      "chmod +x /etc/periodic/daily/apk-update",
-      "rc-update add crond default",
-      "rc-service crond start",
-    ]
+          # Auto-updates via periodic
+          apk add --no-cache apk-cron && \
+          echo \"#!/bin/sh\" > /etc/periodic/daily/apk-update && \
+          echo \"apk update && apk upgrade\" >> /etc/periodic/daily/apk-update && \
+          chmod +x /etc/periodic/daily/apk-update && \
+          rc-update add crond default && \
+          rc-service crond start \
+        '"
+    EOT
   }
 }

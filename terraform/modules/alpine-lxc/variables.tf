@@ -8,6 +8,11 @@ variable "node_name" {
   description = "Proxmox node to create on"
 }
 
+variable "node_ip" {
+  type        = string
+  description = "IP or Tailscale hostname of the Proxmox node (for pct exec)"
+}
+
 variable "vm_id" {
   type        = number
   description = "Proxmox VMID (null for auto-assign)"
@@ -44,11 +49,6 @@ variable "gateway" {
   default = "192.168.1.1"
 }
 
-variable "ssh_public_key" {
-  type    = string
-  default = "~/.ssh/id_ed25519.pub"
-}
-
 variable "nesting" {
   type        = bool
   default     = false
@@ -68,4 +68,9 @@ variable "start_on_boot" {
 variable "template_file_id" {
   type    = string
   default = "local:vztmpl/alpine-3.22-default_20250617_amd64.tar.xz"
+}
+
+variable "ssh_public_key" {
+  type        = string
+  description = "SSH public key content to add for shane user"
 }
