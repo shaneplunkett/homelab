@@ -2,6 +2,7 @@
 .env
 .env.*
 *.env
+.envrc
 secrets/
 *.secret
 mcp_settings.json

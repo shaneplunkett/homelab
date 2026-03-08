@@ -20,9 +20,10 @@ Ubuntu LXC running Plex Media Server with Intel iGPU passthrough for hardware tr
 ```
 arch: amd64
 cores: 4
-features: mount=nfs,nesting=1
+features: nesting=1
 hostname: plex
 memory: 8192
+mp0: /mnt/pve/unraid-media,mp=/mnt/media
 net0: name=eth0,bridge=vmbr0,firewall=1,hwaddr=BC:24:11:AA:D1:7C,ip=dhcp,type=veth
 ostype: ubuntu
 rootfs: local-lvm:vm-104-disk-0,size=150G
@@ -37,7 +38,7 @@ Key config notes:
   - `c 226:0` — `/dev/dri/card0`
   - `c 226:128` — `/dev/dri/renderD128`
   - `/dev/dri` bind-mounted into the container
-- `mount=nfs` — can mount NFS shares directly (media from Unraid)
+- Media via Proxmox-managed NFS storage pool (`unraid-media`), bind-mounted at `/mnt/media`
 - `nesting=1` — standard LXC feature
 - Plex is installed natively (systemd service), not Docker
 
@@ -50,4 +51,4 @@ Key config notes:
 
 - Plex runs as a native systemd service, not Docker — this simplifies iGPU access
 - 150 GB disk accommodates Plex metadata, thumbnails, and transcoding cache
-- Media is accessed via NFS mounts from Unraid (not bind mounts from host like the arr LXC)
+- Media accessed via Proxmox-managed NFS storage pool bind mount (same pattern as arr LXC)

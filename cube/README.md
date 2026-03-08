@@ -9,6 +9,18 @@ Secondary Proxmox host. Runs critical always-on services (Plex, media automation
 - **Storage:** 1 TB NVMe (local-lvm thin pool) + 1 TB NVMe (unmounted, second drive)
 - **IP:** 192.168.1.238
 
+## Proxmox Storage Pools
+
+Unraid NFS shares managed by Proxmox (mounted at `/mnt/pve/<name>/`, options: `soft,nofail`):
+
+| Storage ID       | Unraid Export          | Purpose               |
+|------------------|------------------------|-----------------------|
+| unraid-media     | `/mnt/user/Media`      | Media library         |
+| unraid-appdata   | `/mnt/user/appdata`    | App config data       |
+| unraid-programs  | `/mnt/user/Programs`   | Programs/software     |
+
+Proxmox handles mount lifecycle, reconnection, and health — visible in the web UI under Storage.
+
 ## Resources
 
 | ID  | Type | Name | IP            | Purpose                                      |

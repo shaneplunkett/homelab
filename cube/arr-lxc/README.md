@@ -23,9 +23,9 @@ cores: 2
 features: nesting=1
 hostname: arr
 memory: 4096
-mp0: /mnt/unraid,mp=/mnt/media
-mp1: /mnt/unraid-user/appdata,mp=/mnt/appdata
-mp2: /mnt/programs,mp=/mnt/programs
+mp0: /mnt/pve/unraid-media,mp=/mnt/media
+mp1: /mnt/pve/unraid-appdata,mp=/mnt/appdata
+mp2: /mnt/pve/unraid-programs,mp=/mnt/programs
 net0: name=eth0,bridge=vmbr0,firewall=1,gw=192.168.1.1,hwaddr=BC:24:11:D0:E3:0D,ip=192.168.1.90/24,type=veth
 ostype: alpine
 rootfs: local-lvm:vm-103-disk-0,size=40G
@@ -35,10 +35,10 @@ unprivileged: 1
 
 Key config notes:
 - Static IP `192.168.1.90` (other services need stable addresses for this)
-- Three bind mounts from the Proxmox host (which mounts Unraid shares):
-  - `/mnt/unraid` → `/mnt/media` — media library
-  - `/mnt/unraid-user/appdata` → `/mnt/appdata` — app configs
-  - `/mnt/programs` → `/mnt/programs` — programs/software share
+- Three bind mounts from Proxmox-managed NFS storage pools:
+  - `unraid-media` → `/mnt/media` — media library
+  - `unraid-appdata` → `/mnt/appdata` — app configs
+  - `unraid-programs` → `/mnt/programs` — programs/software share
 - `nesting=1` for Docker-in-LXC
 
 ## Services
