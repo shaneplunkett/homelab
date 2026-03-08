@@ -1,0 +1,71 @@
+variable "hostname" {
+  type        = string
+  description = "Container hostname"
+}
+
+variable "node_name" {
+  type        = string
+  description = "Proxmox node to create on"
+}
+
+variable "vm_id" {
+  type        = number
+  description = "Proxmox VMID (null for auto-assign)"
+  default     = null
+}
+
+variable "cores" {
+  type    = number
+  default = 2
+}
+
+variable "memory" {
+  type    = number
+  default = 2048
+}
+
+variable "swap" {
+  type    = number
+  default = 512
+}
+
+variable "disk_size" {
+  type    = number
+  default = 8
+}
+
+variable "ip" {
+  type        = string
+  description = "IP address in CIDR notation (e.g. 192.168.1.50/24) or 'dhcp'"
+}
+
+variable "gateway" {
+  type    = string
+  default = "192.168.1.1"
+}
+
+variable "ssh_public_key" {
+  type    = string
+  default = "~/.ssh/id_ed25519.pub"
+}
+
+variable "nesting" {
+  type        = bool
+  default     = false
+  description = "Enable nesting (required for Docker-in-LXC)"
+}
+
+variable "unprivileged" {
+  type    = bool
+  default = true
+}
+
+variable "start_on_boot" {
+  type    = bool
+  default = true
+}
+
+variable "template_file_id" {
+  type    = string
+  default = "local:vztmpl/alpine-3.22-default_20250617_amd64.tar.xz"
+}
