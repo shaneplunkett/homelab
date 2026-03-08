@@ -7,5 +7,6 @@ locals {
   cube = {
     ip   = var.cube_ip
     name = "cube"
+
   }
 }
