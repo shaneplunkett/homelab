@@ -8,5 +8,5 @@ module "home-assistant" {
   memory         = 4096
   disk_size      = 16
   nesting        = true
-  ssh_public_key = file("~/.ssh/id_ed25519.pub")
+  ssh_public_key = var.ssh_public_key != "" ? var.ssh_public_key : file("~/.ssh/id_ed25519.pub")
 }
