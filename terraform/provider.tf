@@ -10,6 +10,7 @@ provider "proxmox" {
     node {
       name    = local.pve.name
       address = local.pve.ip
+
     }
     node {
       name    = local.cube.name
