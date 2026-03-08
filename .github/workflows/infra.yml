@@ -1,0 +1,42 @@
+name: Infrastructure
+
+on:
+  push:
+    branches: [main]
+    paths: ['terraform/**']
+  pull_request:
+    paths: ['terraform/**']
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Plan
+        working-directory: terraform
+        env:
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_CLOUD_TOKEN }}
+          TF_VAR_pve_api_token: ${{ secrets.PVE_API_TOKEN }}
+          TF_VAR_pve_ip: ${{ secrets.PVE_TAILSCALE_IP }}
+          TF_VAR_cube_ip: ${{ secrets.CUBE_TAILSCALE_IP }}
+        run: terraform init && terraform plan -out=plan.tfplan
+
+      - name: Apply
+        if: github.event_name == 'push'
+        working-directory: terraform
+        env:
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_CLOUD_TOKEN }}
+          TF_VAR_pve_api_token: ${{ secrets.PVE_API_TOKEN }}
+          TF_VAR_pve_ip: ${{ secrets.PVE_TAILSCALE_IP }}
+          TF_VAR_cube_ip: ${{ secrets.CUBE_TAILSCALE_IP }}
+        run: terraform apply plan.tfplan

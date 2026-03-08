@@ -1,18 +1,11 @@
 locals {
   pve = {
-    ip      = "192.168.1.169"
+    ip      = var.pve_ip
     name    = "pve"
-    api_url = "https://192.168.1.169:8006"
-
-
+    api_url = "https://${var.pve_ip}:8006"
   }
   cube = {
-    ip   = "192.168.1.238"
+    ip   = var.cube_ip
     name = "cube"
-
-
   }
-
-
-
 }
