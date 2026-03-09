@@ -18,3 +18,8 @@ provider "proxmox" {
     }
   }
 }
+
+provider "hcloud" {
+  token = var.hcloud_token
+}
+

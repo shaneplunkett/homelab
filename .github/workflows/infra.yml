@@ -30,6 +30,7 @@ jobs:
           TF_VAR_pve_ip: ${{ secrets.PVE_TAILSCALE_IP }}
           TF_VAR_cube_ip: ${{ secrets.CUBE_TAILSCALE_IP }}
           TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+          TF_VAR_hcloud_token: ${{ secrets.HCLOUD_TOKEN }}
         run: terraform init && terraform plan -out=plan.tfplan
 
       - name: Apply
@@ -41,4 +42,5 @@ jobs:
           TF_VAR_pve_ip: ${{ secrets.PVE_TAILSCALE_IP }}
           TF_VAR_cube_ip: ${{ secrets.CUBE_TAILSCALE_IP }}
           TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+          TF_VAR_hcloud_token: ${{ secrets.HCLOUD_TOKEN }}
         run: terraform apply plan.tfplan
