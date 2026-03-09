@@ -8,7 +8,7 @@ resource "hcloud_server" "hetzvps" {
   image       = "ubuntu-24.04"
   server_type = "cax11"
   location    = "nbg1"
-  # attempt 3 — firewall + ssh keys fixed
+  # attempt 4 — minimal config, no flake
   user_data   = <<-EOF
     #!/bin/bash
     curl -L https://github.com/elitak/nixos-infect/raw/master/nixos-infect | PROVIDER=hetznercloud NIX_CHANNEL=nixos-24.11 bash 2>&1 | tee /tmp/infect.log
