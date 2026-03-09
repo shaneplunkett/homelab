@@ -3,6 +3,7 @@
 .env.*
 *.env
 .envrc
+.claude
 secrets/
 *.secret
 mcp_settings.json
