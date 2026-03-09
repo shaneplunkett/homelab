@@ -1,5 +1,5 @@
 resource "hcloud_ssh_key" "my_key" {
-  name       = "my-ssh-key"
+  name       = "hetzvps"
   public_key = var.ssh_public_key
 }
 
