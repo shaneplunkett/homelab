@@ -50,7 +50,7 @@ All containers use PUID=99/PGID=100 (Unraid nobody/users) for file permissions c
 - **Sonarr TV** — TV show management, develop branch (port 8989)
 - **Anime Sonarr** — separate Sonarr instance for anime (port 8990)
 - **Prowlarr** — indexer management (port 9696)
-- **Overseerr** — request management UI (port 5055)
+- **Seerr** — request management UI (port 5055)
 
 ### Downloads
 - **Deluge** — torrent client (port 8112 web UI, 6881 data)

@@ -84,12 +84,14 @@ services:
     ports:
       - "8080:8080"
 
-  overseerr:
-    image: docker.io/sctx/overseerr:latest
-    container_name: overseerr
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    container_name: seerr
     restart: always
+    init: true
     environment:
       - LOG_LEVEL=info
+      - TZ=Australia/Melbourne
     volumes:
       - /var/lib/containers/overseerr:/app/config:Z
     ports:
