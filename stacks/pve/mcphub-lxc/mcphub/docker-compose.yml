@@ -62,6 +62,19 @@ services:
       - mcphub
     restart: unless-stopped
 
+  obsidian-sync:
+    build:
+      context: .
+      dockerfile: Dockerfile.obsidian-sync
+    environment:
+      OBSIDIAN_AUTH_TOKEN: ${OBSIDIAN_AUTH_TOKEN:-}
+    volumes:
+      - obsidian_vault:/vault
+      - obsidian_config:/root/.config/obsidian-headless
+    networks:
+      - mcphub
+    restart: unless-stopped
+
   mcphub:
     image: samanhappy/mcphub:latest
     ports:
@@ -78,6 +91,7 @@ services:
       - mcphub-data:/app/data
       - /opt/mcphub/mcp-memory:/data/memory
       - /opt/mcphub/.google_workspace_mcp/credentials:/root/.google_workspace_mcp/credentials
+      - obsidian_vault:/data/obsidian-vault
     networks:
       - mcphub
     restart: unless-stopped
@@ -87,6 +101,8 @@ volumes:
   mcphub-data:
   neo4j_data:
   neo4j_logs:
+  obsidian_vault:
+  obsidian_config:
 
 networks:
   mcphub:

@@ -55,6 +55,7 @@ The core MCP infrastructure — MCPHub, Graphiti knowledge graph, Neo4j, pgvecto
 - **Graphiti MCP** — episodic knowledge graph server (custom image)
 - **Neo4j 5.26** — graph database backing Graphiti
 - **PostgreSQL 17** (pgvector) — vector storage for MCPHub
+- **Obsidian Sync** — headless Obsidian Sync client (`obsidian-headless`) keeping the vault synced continuously. MCP access via `@mauricio.wolff/mcp-obsidian` spawned by MCPHub as a stdio server against the shared vault volume. Requires one-time interactive setup (`ob login` + `ob sync-setup`) after first deploy.
 
 **Deploy:**
 ```bash
