@@ -22,6 +22,7 @@ Documentation of homelab infrastructure, including docker compose configs, Proxm
 | macos-tahoe   | VM   | PVE     | macOS Tahoe — Apple MCP servers            |
 | plex          | LXC  | Cube    | Plex Media Server (iGPU transcoding)      |
 | uptime-kuma   | LXC  | PVE     | Uptime Kuma monitoring                    |
+| dockhand      | LXC  | PVE     | Dockhand Docker management UI             |
 
 ## Backups
 

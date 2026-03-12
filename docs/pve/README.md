@@ -17,3 +17,5 @@ Primary Proxmox host.
 | 101 | LXC  | proxy        | 192.168.1.176   | Nginx Proxy Manager (reverse proxy, SSL)   |
 | 105 | LXC  | mcphub       | 192.168.1.195   | MCPHub, Graphiti, Open Wearables           |
 | 106 | VM   | macos-tahoe  | 192.168.1.205   | macOS Tahoe — Apple MCP servers for Vex    |
+| —   | LXC  | uptime-kuma  | DHCP            | Uptime Kuma monitoring                     |
+| —   | LXC  | dockhand     | DHCP            | Dockhand Docker management UI              |
