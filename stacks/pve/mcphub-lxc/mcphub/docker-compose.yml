@@ -96,6 +96,16 @@ services:
       - mcphub
     restart: unless-stopped
 
+  hawser:
+    image: ghcr.io/finsys/hawser:latest
+    container_name: hawser
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - hawser_stacks:/data/stacks
+    ports:
+      - "2376:2376"
+
 volumes:
   pgdata:
   mcphub-data:
@@ -103,6 +113,7 @@ volumes:
   neo4j_logs:
   obsidian_vault:
   obsidian_config:
+  hawser_stacks:
 
 networks:
   mcphub:

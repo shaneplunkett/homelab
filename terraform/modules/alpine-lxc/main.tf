@@ -72,6 +72,10 @@ resource "proxmox_virtual_environment_container" "this" {
           chmod 700 /home/shane/.ssh && \
           chmod 600 /home/shane/.ssh/authorized_keys && \
 
+          # Unlock account (adduser -D locks it, which blocks SSH pubkey auth)
+          passwd -u shane && \
+          chmod 755 /home/shane && \
+
           # Lock down root SSH
           sed -i \"s/^#*PermitRootLogin.*/PermitRootLogin no/\" /etc/ssh/sshd_config && \
           sed -i \"s/^#*PasswordAuthentication.*/PasswordAuthentication no/\" /etc/ssh/sshd_config && \
@@ -86,5 +90,36 @@ resource "proxmox_virtual_environment_container" "this" {
           rc-service crond start \
         '"
     EOT
+  }
+
+  # When nesting (Docker-in-LXC) is enabled, delegate cgroup v2 controllers
+  # so that docker stats reports CPU/memory correctly
+  provisioner "local-exec" {
+    command = var.nesting ? join("", [
+      "ssh -o StrictHostKeyChecking=no shane@${var.node_ip} \"",
+      "sudo pct exec ${self.vm_id} -- sh -c '",
+      "cat > /etc/init.d/cgroup-delegate << \\\"INITEOF\\\"\\n",
+      "#!/sbin/openrc-run\\n",
+      "\\n",
+      "description=\\\\\\\"Delegate cgroup v2 controllers for Docker stats\\\\\\\"\\n",
+      "\\n",
+      "depend() {\\n",
+      "    before docker\\n",
+      "}\\n",
+      "\\n",
+      "start() {\\n",
+      "    ebegin \\\\\\\"Delegating cgroup controllers\\\\\\\"\\n",
+      "    mkdir -p /sys/fs/cgroup/init.scope\\n",
+      "    for pid in \\$(cat /sys/fs/cgroup/cgroup.procs); do\\n",
+      "        echo \\$pid > /sys/fs/cgroup/init.scope/cgroup.procs 2>/dev/null || true\\n",
+      "    done\\n",
+      "    echo \\\\\\\"+cpuset +cpu +io +memory +pids\\\\\\\" > /sys/fs/cgroup/cgroup.subtree_control\\n",
+      "    eend \\$?\\n",
+      "}\\n",
+      "INITEOF\\n",
+      "chmod +x /etc/init.d/cgroup-delegate && ",
+      "rc-update add cgroup-delegate default",
+      "'\""
+    ]) : "echo 'nesting disabled, skipping cgroup delegation'"
   }
 }
