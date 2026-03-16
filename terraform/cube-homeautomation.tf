@@ -1,8 +1,8 @@
 module "home-automation" {
   source         = "./modules/alpine-lxc"
-  hostname       = "dockhand"
-  node_name      = local.pve.name
-  node_ip        = local.pve.ip
+  hostname       = "home-automation"
+  node_name      = local.cube.name
+  node_ip        = local.cube.ip
   ip             = "dhcp"
   cores          = 2
   memory         = 2048
