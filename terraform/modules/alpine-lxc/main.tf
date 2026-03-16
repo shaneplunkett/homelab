@@ -51,7 +51,6 @@ resource "proxmox_virtual_environment_container" "this" {
 
   features {
     nesting = var.nesting
-    keyctl  = var.tailscale
   }
 
   # Provision via pct exec on the host — works both locally and in CI
@@ -129,7 +128,7 @@ resource "proxmox_virtual_environment_container" "this" {
   provisioner "local-exec" {
     command = var.tailscale ? join("", [
       "ssh -o StrictHostKeyChecking=no shane@${var.node_ip} \"",
-      "sudo pct set ${self.vm_id} --dev0 /dev/net/tun && ",
+      "sudo pct set ${self.vm_id} --dev0 /dev/net/tun --features keyctl=1,nesting=1 && ",
       "sudo pct reboot ${self.vm_id} && sleep 10 && ",
       "sudo pct exec ${self.vm_id} -- sh -c '",
       "apk add --no-cache tailscale && ",
