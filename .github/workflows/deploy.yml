@@ -18,4 +18,4 @@ jobs:
           tags: tag:ci
 
       - name: Trigger Dockhand webhook
-        run: curl -sf "https://docker.shaneplunkett.com/api/git/stacks/4/webhook?secret=${{ secrets.DOCKHAND_WEBHOOK_SECRET }}"
+        run: curl -sfk "https://proxy.tail1d49f8.ts.net/api/git/stacks/4/webhook?secret=${{ secrets.DOCKHAND_WEBHOOK_SECRET }}" -H "Host: docker.shaneplunkett.com"
