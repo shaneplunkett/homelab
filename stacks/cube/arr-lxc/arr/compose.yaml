@@ -135,3 +135,6 @@ services:
     ports:
       - 5299:5299
     restart: unless-stopped
+
+volumes:
+  hawser_stacks:
