@@ -120,7 +120,7 @@ services:
       - TZ=Australia/Melbourne
       - SOLID_QUEUE_IN_PUMA=true
     volumes:
-      - /var/lib/containers/shelfarr:/config:Z
+      - /var/lib/containers/shelfarr:/rails/storage:Z
       - /mnt/media:/Media:Z
     ports:
       - "8085:3000"
