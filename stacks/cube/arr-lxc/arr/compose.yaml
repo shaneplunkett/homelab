@@ -133,6 +133,7 @@ services:
       - PUID=99
       - PGID=100
       - TZ=Australia/Melbourne
+      - NETWORK_SHARE_MODE=true
     volumes:
       - /var/lib/containers/calibre-web-automated:/config:Z
       - /mnt/media/library:/calibre-library:Z
