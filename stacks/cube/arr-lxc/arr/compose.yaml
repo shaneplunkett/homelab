@@ -110,16 +110,6 @@ services:
       - /mnt/programs:/media:ro
     network_mode: host
 
-  hawser:
-    image: ghcr.io/finsys/hawser:latest
-    container_name: hawser
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - hawser_stacks:/data/stacks
-    ports:
-      - "2376:2376"
-
   lazylibrarian:
     image: lscr.io/linuxserver/lazylibrarian:latest
     container_name: lazylibrarian
@@ -135,6 +125,3 @@ services:
     ports:
       - 5299:5299
     restart: unless-stopped
-
-volumes:
-  hawser_stacks:
