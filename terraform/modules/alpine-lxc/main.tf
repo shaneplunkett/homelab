@@ -54,13 +54,6 @@ resource "proxmox_virtual_environment_container" "this" {
     keyctl  = var.tailscale
   }
 
-  dynamic "device" {
-    for_each = var.tailscale ? [1] : []
-    content {
-      path = "/dev/net/tun"
-    }
-  }
-
   # Provision via pct exec on the host — works both locally and in CI
   provisioner "local-exec" {
     command = <<-EOT
@@ -132,10 +125,12 @@ resource "proxmox_virtual_environment_container" "this" {
     ]) : "echo 'nesting disabled, skipping cgroup delegation'"
   }
 
-  # Install and enable Tailscale when requested
+  # Configure TUN device and install Tailscale when requested
   provisioner "local-exec" {
     command = var.tailscale ? join("", [
       "ssh -o StrictHostKeyChecking=no shane@${var.node_ip} \"",
+      "sudo pct set ${self.vm_id} --dev0 /dev/net/tun && ",
+      "sudo pct reboot ${self.vm_id} && sleep 10 && ",
       "sudo pct exec ${self.vm_id} -- sh -c '",
       "apk add --no-cache tailscale && ",
       "rc-update add tailscale default && ",
