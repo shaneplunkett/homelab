@@ -122,7 +122,7 @@ services:
       - /var/lib/containers/shelfarr:/config:Z
       - /mnt/media:/Media:Z
     ports:
-      - "8085:8085"
+      - "8085:3000"
 
   calibre-web-automated:
     image: crocodilestick/calibre-web-automated:latest
