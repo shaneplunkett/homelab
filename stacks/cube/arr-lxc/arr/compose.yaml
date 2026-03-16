@@ -118,6 +118,7 @@ services:
       - PUID=99
       - PGID=100
       - TZ=Australia/Melbourne
+      - SOLID_QUEUE_IN_PUMA=true
     volumes:
       - /var/lib/containers/shelfarr:/config:Z
       - /mnt/media:/Media:Z
