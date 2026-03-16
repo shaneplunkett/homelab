@@ -120,5 +120,18 @@ services:
     ports:
       - "2376:2376"
 
-volumes:
-  hawser_stacks:
+  lazylibrarian:
+    image: lscr.io/linuxserver/lazylibrarian:latest
+    container_name: lazylibrarian
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - DOCKER_MODS=linuxserver/mods:lazylibrarian-ffmpeg
+    volumes:
+      - /path/to/lazylibrarian/data:/config
+      - /mnt/downloads:/downloads
+      - /mnt/media/ebooks:/books
+    ports:
+      - 5299:5299
+    restart: unless-stopped
