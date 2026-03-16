@@ -1,3 +1,26 @@
+locals {
+  cgroup_delegate_script = base64encode(<<-SCRIPT
+#!/sbin/openrc-run
+
+description="Delegate cgroup v2 controllers for Docker stats"
+
+depend() {
+    before docker
+}
+
+start() {
+    ebegin "Delegating cgroup controllers"
+    mkdir -p /sys/fs/cgroup/init.scope
+    for pid in $(cat /sys/fs/cgroup/cgroup.procs); do
+        echo $pid > /sys/fs/cgroup/init.scope/cgroup.procs 2>/dev/null || true
+    done
+    echo "+cpuset +cpu +io +memory +pids" > /sys/fs/cgroup/cgroup.subtree_control
+    eend $?
+}
+SCRIPT
+  )
+}
+
 resource "proxmox_virtual_environment_container" "this" {
   node_name     = var.node_name
   vm_id         = var.vm_id
@@ -96,32 +119,7 @@ resource "proxmox_virtual_environment_container" "this" {
   # When nesting (Docker-in-LXC) is enabled, delegate cgroup v2 controllers
   # so that docker stats reports CPU/memory correctly
   provisioner "local-exec" {
-    command = var.nesting ? join("", [
-      "ssh -o StrictHostKeyChecking=no shane@${var.node_ip} \"",
-      "sudo pct exec ${self.vm_id} -- sh -c '",
-      "cat > /etc/init.d/cgroup-delegate << \\\"INITEOF\\\"\\n",
-      "#!/sbin/openrc-run\\n",
-      "\\n",
-      "description=\\\\\\\"Delegate cgroup v2 controllers for Docker stats\\\\\\\"\\n",
-      "\\n",
-      "depend() {\\n",
-      "    before docker\\n",
-      "}\\n",
-      "\\n",
-      "start() {\\n",
-      "    ebegin \\\\\\\"Delegating cgroup controllers\\\\\\\"\\n",
-      "    mkdir -p /sys/fs/cgroup/init.scope\\n",
-      "    for pid in \\$(cat /sys/fs/cgroup/cgroup.procs); do\\n",
-      "        echo \\$pid > /sys/fs/cgroup/init.scope/cgroup.procs 2>/dev/null || true\\n",
-      "    done\\n",
-      "    echo \\\\\\\"+cpuset +cpu +io +memory +pids\\\\\\\" > /sys/fs/cgroup/cgroup.subtree_control\\n",
-      "    eend \\$?\\n",
-      "}\\n",
-      "INITEOF\\n",
-      "chmod +x /etc/init.d/cgroup-delegate && ",
-      "rc-update add cgroup-delegate default",
-      "'\""
-    ]) : "echo 'nesting disabled, skipping cgroup delegation'"
+    command = var.nesting ? "ssh -o StrictHostKeyChecking=no shane@${var.node_ip} \"sudo pct exec ${self.vm_id} -- sh -c 'echo ${local.cgroup_delegate_script} | base64 -d > /etc/init.d/cgroup-delegate && chmod +x /etc/init.d/cgroup-delegate && rc-update add cgroup-delegate default'\"" : "echo 'nesting disabled, skipping cgroup delegation'"
   }
 
   # Configure TUN device and install Tailscale when requested
