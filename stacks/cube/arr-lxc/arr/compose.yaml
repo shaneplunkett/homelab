@@ -110,18 +110,31 @@ services:
       - /mnt/programs:/media:ro
     network_mode: host
 
-  lazylibrarian:
-    image: lscr.io/linuxserver/lazylibrarian:latest
-    container_name: lazylibrarian
+  shelfarr:
+    image: ghcr.io/pedro-revez-silva/shelfarr:latest
+    container_name: shelfarr
+    restart: always
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-      - DOCKER_MODS=linuxserver/mods:lazylibrarian-ffmpeg
+      - PUID=99
+      - PGID=100
+      - TZ=Australia/Melbourne
     volumes:
-      - /path/to/lazylibrarian/data:/config
-      - /mnt/downloads:/downloads
-      - /mnt/media/ebooks:/books
+      - /var/lib/containers/shelfarr:/config:Z
+      - /mnt/media:/Media:Z
     ports:
-      - 5299:5299
-    restart: unless-stopped
+      - "8085:8085"
+
+  calibre-web-automated:
+    image: crocodilestick/calibre-web-automated:latest
+    container_name: calibre-web-automated
+    restart: always
+    environment:
+      - PUID=99
+      - PGID=100
+      - TZ=Australia/Melbourne
+    volumes:
+      - /var/lib/containers/calibre-web-automated:/config:Z
+      - /mnt/media/library:/calibre-library:Z
+      - /mnt/media/downloads/books-ingest:/cwa-book-ingest:Z
+    ports:
+      - "8083:8083"
