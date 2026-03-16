@@ -32,9 +32,10 @@ resource "proxmox_virtual_environment_container" "this" {
   }
 
   network_interface {
-    name     = "eth0"
-    bridge   = "vmbr0"
-    firewall = true
+    name        = "eth0"
+    bridge      = "vmbr0"
+    firewall    = true
+    mac_address = var.mac_address
   }
 
   initialization {
@@ -50,6 +51,14 @@ resource "proxmox_virtual_environment_container" "this" {
 
   features {
     nesting = var.nesting
+    keyctl  = var.tailscale
+  }
+
+  dynamic "device" {
+    for_each = var.tailscale ? [1] : []
+    content {
+      path = "/dev/net/tun"
+    }
   }
 
   # Provision via pct exec on the host — works both locally and in CI
@@ -121,5 +130,17 @@ resource "proxmox_virtual_environment_container" "this" {
       "rc-update add cgroup-delegate default",
       "'\""
     ]) : "echo 'nesting disabled, skipping cgroup delegation'"
+  }
+
+  # Install and enable Tailscale when requested
+  provisioner "local-exec" {
+    command = var.tailscale ? join("", [
+      "ssh -o StrictHostKeyChecking=no shane@${var.node_ip} \"",
+      "sudo pct exec ${self.vm_id} -- sh -c '",
+      "apk add --no-cache tailscale && ",
+      "rc-update add tailscale default && ",
+      "service tailscale start",
+      "'\""
+    ]) : "echo 'tailscale disabled, skipping'"
   }
 }

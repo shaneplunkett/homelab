@@ -74,3 +74,15 @@ variable "ssh_public_key" {
   type        = string
   description = "SSH public key content to add for shane user"
 }
+
+variable "tailscale" {
+  type        = bool
+  default     = false
+  description = "Install Tailscale and enable TUN device passthrough"
+}
+
+variable "mac_address" {
+  type        = string
+  default     = null
+  description = "MAC address for the network interface (preserves DHCP reservations)"
+}

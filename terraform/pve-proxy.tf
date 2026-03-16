@@ -1,60 +1,14 @@
-resource "proxmox_virtual_environment_container" "proxy" {
-  description   = "Nginx Proxy"
-  node_name     = local.pve.name
-  start_on_boot = true
-  unprivileged  = true
-  lifecycle {
-    ignore_changes = [operating_system[0].template_file_id]
-  }
-  console {
-    enabled   = true
-    tty_count = 2
-    type      = "tty"
-  }
-
-  operating_system {
-    template_file_id = "local:vztmpl/alpine-3.22-default_20250617_amd64.tar.xz"
-    type             = "alpine"
-  }
-  cpu {
-    architecture = "amd64"
-    cores        = 2
-    units        = 1024
-  }
-
-  memory {
-    dedicated = 1024
-    swap      = 512
-  }
-
-  disk {
-    acl           = false
-    datastore_id  = "local-lvm"
-    mount_options = []
-    quota         = false
-    replicate     = false
-    size          = 8
-  }
-
-  network_interface {
-    bridge      = "vmbr0"
-    enabled     = true
-    firewall    = true
-    mac_address = "BC:24:11:65:53:9F"
-    mtu         = 0
-    name        = "eth0"
-    rate_limit  = 0
-    vlan_id     = 0
-  }
-  initialization {
-    entrypoint = null
-    hostname   = "proxy"
-
-    ip_config {
-      ipv4 {
-        address = "dhcp"
-      }
-    }
-  }
+module "proxy" {
+  source         = "./modules/alpine-lxc"
+  hostname       = "proxy"
+  node_name      = local.pve.name
+  node_ip        = local.pve.ip
+  ip             = "dhcp"
+  mac_address    = "BC:24:11:65:53:9F"
+  cores          = 2
+  memory         = 1024
+  disk_size      = 8
+  nesting        = true
+  tailscale      = true
+  ssh_public_key = var.ssh_public_key != "" ? var.ssh_public_key : file("~/.ssh/id_ed25519.pub")
 }
-
