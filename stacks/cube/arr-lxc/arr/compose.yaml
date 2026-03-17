@@ -140,3 +140,27 @@ services:
       - /mnt/media/downloads/books-ingest:/cwa-book-ingest:Z
     ports:
       - "8083:8083"
+
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    restart: always
+    environment:
+      - PUID=99
+      - PGID=100
+      - TZ=Australia/Melbourne
+    volumes:
+      - /var/lib/containers/tautulli:/config:Z
+    ports:
+      - "8181:8181"
+
+  maintainerr:
+    image: ghcr.io/jorenn92/maintainerr:latest
+    container_name: maintainerr
+    restart: always
+    environment:
+      - TZ=Australia/Melbourne
+    volumes:
+      - /var/lib/containers/maintainerr:/opt/data:Z
+    ports:
+      - "6246:6246"
