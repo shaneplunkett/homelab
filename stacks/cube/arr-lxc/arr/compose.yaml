@@ -155,7 +155,7 @@ services:
       - "8181:8181"
 
   maintainerr:
-    image: ghcr.io/jorenn92/maintainerr:latest
+    image: ghcr.io/maintainerr/maintainerr:latest
     container_name: maintainerr
     restart: always
     environment:
