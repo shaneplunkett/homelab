@@ -10,7 +10,7 @@ Alpine LXC container on PVE running the Satisfactory dedicated server (experimen
 - **RAM:** 24 GB
 - **Swap:** 4 GB
 - **Disk:** 50 GB (local-lvm)
-- **Network:** DHCP on `vmbr0`
+- **Network:** DHCP on `vmbr0`, ports `7777/udp` (game traffic) + `7777/tcp` (HTTPS Server API)
 - **Boot on start:** yes
 - **Branch:** experimental (`STEAMBETA=true`)
 
@@ -135,7 +135,7 @@ echo "0 */6 * * * /usr/local/bin/satisfactory-backup.sh >> /var/log/satisfactory
 
 ## Gotchas
 
-- **Single port (UDP 7777)** — since v1.0 the old 15000/15777 split is gone. Don't forward those.
+- **Two ports on 7777** — UDP for game traffic, TCP for the HTTPS Server API. Forwarding only UDP gives "Failed to Connect to the Server API". Since v1.0 the old 15000/15777 split is gone — don't forward those.
 - **First boot is slow** — wolveix downloads via SteamCMD, can take 10+ min on first run.
 - **Experimental drift** — when an experimental patch lands, all clients must update before reconnecting. Pin `SKIPUPDATE=true` for predictability mid-session.
 - **No client port-forward needed** for LAN-only play.
