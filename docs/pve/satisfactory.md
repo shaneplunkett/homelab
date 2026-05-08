@@ -10,7 +10,7 @@ Alpine LXC container on PVE running the Satisfactory dedicated server (experimen
 - **RAM:** 24 GB
 - **Swap:** 4 GB
 - **Disk:** 50 GB (local-lvm)
-- **Network:** DHCP on `vmbr0`, ports `7777/udp` (game traffic) + `7777/tcp` (HTTPS Server API)
+- **Network:** DHCP on `vmbr0`, ports `7777/udp` (game traffic) + `7777/tcp` (HTTPS Server API). Docker container uses `network_mode: host` to avoid UDP NAT timeout issues — the server binds straight to the LXC's interface.
 - **Boot on start:** yes
 - **Branch:** experimental (`STEAMBETA=true`)
 
@@ -135,7 +135,9 @@ echo "0 */6 * * * /usr/local/bin/satisfactory-backup.sh >> /var/log/satisfactory
 
 ## Gotchas
 
-- **Two ports on 7777** — UDP for game traffic, TCP for the HTTPS Server API. Forwarding only UDP gives "Failed to Connect to the Server API". Since v1.0 the old 15000/15777 split is gone — don't forward those.
+- **Two ports on 7777** — UDP for game traffic, TCP for the HTTPS Server API. Since v1.0 the old 15000/15777 split is gone — don't forward those.
+- **Use `network_mode: host`, not Docker bridge** — Satisfactory's UDP traffic is heavy enough that Docker's NAT path drops packets and triggers 30s `ConnectionTimeout` mid-session. Host networking sidesteps NAT entirely and is the recommended config for most game-server-in-Docker setups. `iptables`/`conntrack` issues with bridge mode also affect things like 7 Days to Die, Ark, Valheim — same fix applies.
+- **Bump UDP socket buffers** — Alpine LXC default `net.core.rmem_max` is below what the server asks for; set to ≥2 MB in `/etc/sysctl.conf` (`net.core.rmem_max=2621440`, `net.core.wmem_max=2621440`).
 - **First boot is slow** — wolveix downloads via SteamCMD, can take 10+ min on first run.
 - **Experimental drift** — when an experimental patch lands, all clients must update before reconnecting. Pin `SKIPUPDATE=true` for predictability mid-session.
 - **No client port-forward needed** for LAN-only play.
