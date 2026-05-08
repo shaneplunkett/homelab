@@ -1,0 +1,26 @@
+services:
+  satisfactory:
+    image: wolveix/satisfactory-server:latest
+    container_name: satisfactory
+    hostname: satisfactory
+    restart: unless-stopped
+    ports:
+      - "7777:7777/udp"
+    volumes:
+      - ./config:/config
+    environment:
+      MAXPLAYERS: "8"
+      PUID: "1000"
+      PGID: "1000"
+      STEAMBETA: "true"
+      AUTOPAUSE: "true"
+      AUTOSAVENUM: "10"
+      AUTOSAVEINTERVAL: "300"
+      AUTOSAVEONDISCONNECT: "true"
+      DISABLESEASONALEVENTS: "false"
+      ROOTLESS: "false"
+      SKIPUPDATE: "false"
+      TIMEOUT: "30"
+      LOG: "true"
+    mem_limit: 20g
+    mem_reservation: 8g

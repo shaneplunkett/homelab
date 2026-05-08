@@ -23,6 +23,7 @@ Documentation of homelab infrastructure, including docker compose configs, Proxm
 | plex          | LXC  | Cube    | Plex Media Server (iGPU transcoding)      |
 | uptime-kuma   | LXC  | PVE     | Uptime Kuma monitoring                    |
 | dockhand      | LXC  | PVE     | Dockhand Docker management UI             |
+| satisfactory  | LXC  | PVE     | Satisfactory dedicated server (experimental) |
 
 ## Backups
 
