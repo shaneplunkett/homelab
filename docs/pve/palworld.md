@@ -89,11 +89,13 @@ Terraform can process the `moved` block from `module.satisfactory` to
   PalServer as PID 1 so Docker can stop it cleanly
 - `backup.sh` — a consistent save backup to Hetzner via restic
 
-The Compose launch arguments declare UDP port 8211, an eight-player cap, and
-the performance arguments used by Pocketpair's official sample. Save and
-configuration data persist beneath `/opt/palworld/Saved`. Compose overrides
-Docker's default stop signal with `SIGINT`, which is the same signal as
-Ctrl+C and lets PalServer save and exit cleanly.
+The Compose launch arguments declare UDP port 8211 and an eight-player cap.
+The legacy `-useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS`
+arguments are deliberately omitted: Pocketpair's current v1.0 documentation
+says leaving them unset may improve performance. Save and configuration data
+persist beneath `/opt/palworld/Saved`. Compose overrides Docker's default stop
+signal with `SIGINT`, which is the same signal as Ctrl+C and lets PalServer
+save and exit cleanly.
 
 ## Bootstrap
 

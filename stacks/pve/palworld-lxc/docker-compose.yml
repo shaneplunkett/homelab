@@ -10,9 +10,6 @@ services:
     command:
       - -port=8211
       - -players=8
-      - -useperfthreads
-      - -NoAsyncLoadingThread
-      - -UseMultithreadForDS
     ports:
       - "8211:8211/udp"
     volumes:
