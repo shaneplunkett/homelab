@@ -101,9 +101,11 @@ After Terraform creates the LXC:
 
 ```bash
 ssh shane@pve
-sudo pct exec 106 -- apk add --no-cache docker docker-cli-compose restic openssh-client curl
+sudo pct exec 106 -- apk add --no-cache docker docker-cli-compose restic openssh-client curl tzdata
 sudo pct exec 106 -- rc-update add docker default
 sudo pct exec 106 -- service docker start
+sudo pct exec 106 -- ln -snf /usr/share/zoneinfo/Australia/Melbourne /etc/localtime
+sudo pct exec 106 -- sh -c 'echo Australia/Melbourne > /etc/timezone'
 
 sudo pct exec 106 -- mkdir -p /opt/palworld/Saved
 # Copy docker-compose.yml, palserver-entrypoint.sh, and backup.sh from
@@ -123,7 +125,8 @@ sudo pct exec 106 -- sh -c \
 # First deployment only: use `restic init` with the same environment instead.
 
 sudo pct exec 106 -- sh -c \
-  '(crontab -l | grep -v "/opt/palworld/backup.sh"; echo "0 */6 * * * /opt/palworld/backup.sh >> /var/log/palworld-backup.log 2>&1") | crontab -'
+  '(crontab -l | grep -v "/opt/palworld/backup.sh"; echo "0 4 * * * /opt/palworld/backup.sh >> /var/log/palworld-backup.log 2>&1") | crontab -'
+sudo pct exec 106 -- service crond restart
 sudo pct exec 106 -- docker compose --project-directory /opt/palworld up -d
 ```
 
@@ -204,7 +207,7 @@ The script:
 The controlled stop avoids taking a save snapshot while Palworld is writing
 world data.
 
-- **Schedule:** every 6 hours
+- **Schedule:** daily at 04:00 Australia/Melbourne
 - **Retention:** keep last 8, 14 daily, and 4 weekly
 - **Credentials:** `/root/.restic-password` plus the root SSH key; never store
   either in Git
@@ -214,7 +217,7 @@ world data.
 Cron remains host state and must be restored after an LXC rebuild:
 
 ```cron
-0 */6 * * * /opt/palworld/backup.sh >> /var/log/palworld-backup.log 2>&1
+0 4 * * * /opt/palworld/backup.sh >> /var/log/palworld-backup.log 2>&1
 ```
 
 ## Gotchas
