@@ -1,0 +1,26 @@
+services:
+  palworld-server:
+    # Keep this tag aligned with the current game version.
+    # https://github.com/pocketpairjp/palworld-dedicated-server-docker/pkgs/container/palserver
+    image: ghcr.io/pocketpairjp/palserver:v1.0.2.101103
+    container_name: palworld-server
+    hostname: palworld
+    restart: unless-stopped
+    entrypoint: /pal/palserver-entrypoint.sh
+    command:
+      - -port=8211
+      - -players=8
+      - -useperfthreads
+      - -NoAsyncLoadingThread
+      - -UseMultithreadForDS
+    ports:
+      - "8211:8211/udp"
+    volumes:
+      - ./palserver-entrypoint.sh:/pal/palserver-entrypoint.sh:ro
+      - ./Saved:/pal/Package/Pal/Saved
+    # The entrypoint runs PalServer as PID 1 so this Ctrl+C-equivalent signal
+    # reaches the game and flushes the world save before exit.
+    stop_signal: SIGINT
+    stop_grace_period: 2m
+    mem_limit: 20g
+    mem_reservation: 8g

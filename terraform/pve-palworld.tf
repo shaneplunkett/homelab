@@ -1,9 +1,16 @@
-module "satisfactory" {
+moved {
+  from = module.satisfactory
+  to   = module.palworld
+}
+
+module "palworld" {
   source         = "./modules/alpine-lxc"
-  hostname       = "satisfactory"
+  hostname       = "palworld"
   node_name      = local.pve.name
   node_ip        = local.pve.ip
+  vm_id          = 106
   ip             = "dhcp"
+  mac_address    = "BC:24:11:81:EA:CC"
   cores          = 6
   memory         = 24576
   swap           = 4096
