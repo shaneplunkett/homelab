@@ -2,7 +2,7 @@ services:
   palworld-server:
     # Keep this tag aligned with the current game version.
     # https://github.com/pocketpairjp/palworld-dedicated-server-docker/pkgs/container/palserver
-    image: ghcr.io/pocketpairjp/palserver:v1.0.2.101103
+    image: ghcr.io/pocketpairjp/palserver:v1.0.3.101283
     container_name: palworld-server
     hostname: palworld
     restart: unless-stopped
