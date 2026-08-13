@@ -35,6 +35,11 @@ pointing straight at this LXC (192.168.1.96) — it deliberately bypasses the
 NPM wildcard because game traffic is raw UDP, not HTTP. Joining by IP
 (`192.168.1.96:8211`) still works.
 
+Verified in the 1.0 client (2026-08-13): hostnames work, but the `:8211`
+port is **mandatory** — the join dialog's format validation rejects any
+entry without a port ("Format Error"). Palworld has no SRV-record support,
+so a port-less connection isn't possible.
+
 No router port-forward is declared. Add one separately only if the server
 should be reachable from outside the LAN.
 
