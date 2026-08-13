@@ -19,3 +19,4 @@ Primary Proxmox host.
 | 106 | VM   | macos-tahoe  | 192.168.1.205   | macOS Tahoe — Apple MCP servers for Vex    |
 | —   | LXC  | uptime-kuma  | DHCP            | Uptime Kuma monitoring                     |
 | —   | LXC  | dockhand     | DHCP            | Dockhand Docker management UI              |
+| 109 | LXC  | technitium   | 192.168.1.5     | Technitium DNS (resolver, ad blocking)     |
