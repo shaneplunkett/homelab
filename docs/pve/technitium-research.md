@@ -548,8 +548,17 @@ Tailscale's docs:
   `tailscale up --advertise-routes=192.168.1.0/24`, approve the route in
   the admin console, and disable key expiry on server nodes
   ([subnet routers](https://tailscale.com/docs/features/subnet-routers)).
-  **Linux tailnet clients need `--accept-routes`** (desktop, cube,
-  hetzvps); macOS/iOS accept approved routes automatically.
+  **`--accept-routes` belongs ONLY on Linux devices that live outside the
+  LAN** (hetzvps). Learned the hard way (2026-08-13): enabling it on a
+  LAN-resident machine (desktop, cube) makes the kernel route local
+  traffic through the tunnel via pve — small packets survive the hairpin,
+  but MTU-sensitive UDP (game traffic) times out, and once any machine
+  flips back the asymmetry can black-hole LAN TCP entirely (cube was
+  unreachable over LAN until fixed via Tailscale SSH). macOS/iOS accept
+  routes automatically and hairpin the same way at home — imperceptible
+  for light use, but suspect it first if Mac LAN transfers feel slow.
+  Note: pve also needed `net.ipv4.ip_forward=1` (persisted in
+  `/etc/sysctl.d/99-tailscale.conf`).
 - **Tailnet DNS**: either set Technitium's Tailscale IP as the tailnet's
   global nameserver with **Override DNS servers** (all devices use it
   exclusively, everywhere — internal names + ad blocking on the go), or
