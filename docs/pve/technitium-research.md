@@ -6,6 +6,23 @@
 repo/changelog, Docker Hub, author's blog, and the competing projects' own
 docs). No test deployment was made.
 
+> **As built (2026-08-13):** deployed same day. LXC 109 `technitium` at
+> 192.168.1.5 (tailnet: 100.98.28.127, `tag:infra`), image pinned `15.4.0`,
+> compose at `/opt/technitium`, admin password in Bitwarden
+> (`technitium-dns`). Primary zone `shaneplunkett.com` with wildcard →
+> 192.168.1.176 + `redbook` CNAME; stale `auth`/`mcp-memory`/`pihole`
+> dropped. Blocklists: StevenBlack + OISD big (~180 MiB resident).
+> LAN DHCP DNS and Tailscale global nameserver (Override on) both point at
+> it; MagicDNS retained. Deltas from plan: a pre-existing Tailscale split
+> DNS entry `shaneplunkett.com → 192.168.1.1` had to be deleted (it beat
+> the global nameserver and would have broken tailnet resolution once the
+> Unifi records were removed), and `net.ipv4.ip_forward` needed enabling on
+> pve for the subnet route. The 16 Unifi static A records and 4 dead
+> Cloudflare CNAMEs (`collabora`, `kimai`, `nextcloud`, `overseerr`) are
+> deleted. Daily restic backup to the Hetzner storage box via
+> `stacks/pve/technitium-lxc/backup.sh`. Remaining: SHA-56 (second
+> clustered instance).
+
 ## TL;DR
 
 - Technitium DNS Server is a **GPLv3, cross-platform C#/.NET DNS server** that

@@ -41,24 +41,20 @@ Note: `nesting=1` is required for Docker-in-LXC.
 - **HTTPS:** port 443
 - **Image:** `jc21/nginx-proxy-manager:latest`
 
-Compose file at `/root/docker-compose.yaml`:
+Compose file is repo-managed at `stacks/pve/proxy-lxc/npm/docker-compose.yml`.
+Data lives on the LXC under `/var/lib/containers/npm/`:
 
-```yaml
-services:
-  app:
-    image: 'jc21/nginx-proxy-manager:latest'
-    restart: unless-stopped
-    ports:
-      - '80:80'
-      - '443:443'
-      - '81:81'
-    volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
-```
+- `/var/lib/containers/npm/data` → `/data` (NPM config, generated nginx configs)
+- `/var/lib/containers/npm/letsencrypt` → `/etc/letsencrypt` (certs; wildcard
+  `*.shaneplunkett.com` + `*.shaneplunkett.dev` renewed via Cloudflare DNS-01)
 
 **Deploy:**
 ```bash
-cd /root
 docker compose up -d
 ```
+
+## DNS
+
+Internal `*.shaneplunkett.com` names resolve to this LXC via a wildcard record
+in Technitium DNS (192.168.1.5) — see `docs/pve/technitium-research.md`. New
+services need only an NPM proxy-host entry; no DNS change required.
