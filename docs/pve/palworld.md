@@ -23,11 +23,17 @@ headroom beneath the LXC's 24 GB memory limit.
 
 ## Connecting
 
-The server is LAN-only. In Palworld, join a multiplayer game by IP:
+The server is LAN-only (also reachable over the tailnet via the subnet
+route). In Palworld, join a multiplayer game with:
 
 ```text
-192.168.1.96:8211
+palworld.shaneplunkett.com:8211
 ```
+
+The name is an explicit A record in the Technitium `shaneplunkett.com` zone
+pointing straight at this LXC (192.168.1.96) — it deliberately bypasses the
+NPM wildcard because game traffic is raw UDP, not HTTP. Joining by IP
+(`192.168.1.96:8211`) still works.
 
 No router port-forward is declared. Add one separately only if the server
 should be reachable from outside the LAN.
