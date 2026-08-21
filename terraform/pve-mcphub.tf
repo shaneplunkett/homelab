@@ -33,7 +33,8 @@ resource "proxmox_virtual_environment_container" "mcphub" {
     mount_options = []
     quota         = false
     replicate     = false
-    size          = 32
+    # grown out-of-band via pct resize; proxmox can't shrink, so keep in sync
+    size          = 64
   }
 
   network_interface {
