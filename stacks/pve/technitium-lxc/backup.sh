@@ -71,6 +71,8 @@ wget -qO- "$API/user/logout?token=$TOKEN" >/dev/null 2>&1 || true
 
 log "Copying config volume (raw)."
 cp -r /var/lib/docker/volumes/technitium_config/_data "$BACKUP_DIR/technitium/config-volume"
+# query log db is ephemeral operational data; keep its churn out of restic
+find "$BACKUP_DIR/technitium/config-volume/apps" -name 'querylogs.db*' -delete 2>/dev/null || true
 
 log "Copying stack config."
 cp /opt/technitium/docker-compose.yml "$BACKUP_DIR/config/technitium-docker-compose.yml"

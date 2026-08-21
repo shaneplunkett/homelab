@@ -22,6 +22,35 @@ docs). No test deployment was made.
 > deleted. Daily restic backup to the Hetzner storage box via
 > `stacks/pve/technitium-lxc/backup.sh`. Remaining: SHA-56 (second
 > clustered instance).
+>
+> **Added 2026-08-21:** Query Logs (Sqlite) DNS app v9.1.1 installed via the
+> app store — searchable query logs were missing entirely (no DNS apps were
+> installed, so the Logs → Query Logs view had no backend). Config bumped
+> from the 10,000-record default to 1,000,000 records / 7 days, with
+> `enableVacuum: true` so SQLite reclaims file space after the age purge.
+> The app and its `querylogs.db` live in the `config` volume, so the
+> existing restic backup covers it. Disk maths on the 8 GB rootfs: ~1,100
+> queries/hr → ~185k rows per 7-day window (well under the 1M ceiling,
+> ~60–80 MB on disk); dashboard stats bounded at ~1.2 GB/yr
+> (`maxStatFileDays` 365); text query logging off; Docker json-log
+> negligible. Nothing is unbounded.
+>
+> **Baseline hardening (2026-08-21):** LXC memory 1 GB → 2 GB (idle ~344 MB;
+> blocklists double in RAM during daily updates and .NET has known
+> memory-growth issues). Compose gained a healthcheck (`dig @127.0.0.1
+> technitium`, 30s interval) and json-log rotation (10 MB × 3); Docker only
+> *marks* unhealthy, so `/usr/local/bin/technitium-autoheal.sh` (in
+> `stacks/pve/technitium-lxc/autoheal.sh`) runs from root's crontab every
+> 2 min and restarts the container when unhealthy. `backup.sh` now strips
+> `querylogs.db*` from the raw volume copy — ephemeral data, kept out of
+> restic churn. Module fix: `alpine-lxc` now ignores `device_passthrough`
+> drift; the tailscale provisioner adds `/dev/net/tun` via `pct` outside
+> terraform, and plans were trying to remove it (which would have broken
+> tailscale). Audit found already-good defaults: DNSSEC validation, private
+> recursion ACL, 600 qpm/client rate limiting, serve-stale, daily blocklist
+> auto-update, DNS-app auto-update. Still open: Kuma monitor that actually
+> resolves DNS against 192.168.1.5, optional PTR zone for 192.168.1.0/24,
+> optional console TLS.
 
 ## TL;DR
 

@@ -19,6 +19,18 @@ services:
     sysctls:
       # recursive resolver needs a wide ephemeral source-port range (bridge mode)
       - net.ipv4.ip_local_port_range=1024 65535
+    healthcheck:
+      # real DNS query against the server's own zone; dig ships in the image
+      test: ["CMD", "dig", "@127.0.0.1", "+time=3", "+tries=1", "technitium"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     volumes:
       - config:/etc/dns
 

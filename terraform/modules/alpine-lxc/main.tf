@@ -135,4 +135,11 @@ resource "proxmox_virtual_environment_container" "this" {
       "'\""
     ]) : "echo 'tailscale disabled, skipping'"
   }
+
+  # The tailscale provisioner above adds /dev/net/tun via pct outside
+  # terraform; without this, every later plan tries to remove the device
+  # (which would break tailscale on the container)
+  lifecycle {
+    ignore_changes = [device_passthrough]
+  }
 }
