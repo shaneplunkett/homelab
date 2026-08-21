@@ -2,7 +2,7 @@
 
 ## Summary
 
-Cloud infrastructure hosted on Hetzner, managed via Terraform (state in Terraform Cloud, applied via GitHub Actions).
+Cloud infrastructure hosted on Hetzner, managed via Terraform (state in Terraform Cloud, applied locally via the terraform CLI).
 
 | Resource    | Type        | Location  | Purpose                        |
 |-------------|-------------|-----------|--------------------------------|
@@ -11,11 +11,14 @@ Cloud infrastructure hosted on Hetzner, managed via Terraform (state in Terrafor
 
 ## Terraform
 
-All resources defined in `terraform/hetzner.tf`. Provider token stored as `HCLOUD_TOKEN` in GitHub Actions secrets.
+All resources defined in `terraform/hetzner.tf`. Provider token supplied via
+`TF_VAR_hcloud_token` in the repo-root `.envrc`.
 
-**Apply:** push to `main` with changes in `terraform/` — GitHub Actions runs plan + apply automatically.
+**Apply:** run `terraform plan` / `terraform apply` locally from `terraform/`.
+The push-triggered GitHub Actions workflow (`infra.yml`) was removed 2026-08-21
+ahead of a CI rework — applies are manual until that lands.
 
-**Local plan:** requires `.envrc` with:
+**Local plan:** requires the repo-root `.envrc` (direnv), including:
 ```bash
 export TF_VAR_ssh_public_key="$(cat ~/.ssh/id_ed25519.pub)"
 ```
