@@ -20,10 +20,9 @@ Primary Proxmox host.
 | 107 | LXC  | uptime-kuma  | 192.168.1.55 (DHCP) | Uptime Kuma monitoring                 |
 | 108 | LXC  | dockhand     | 192.168.1.158 (DHCP) | Dockhand Docker management UI         |
 | 109 | LXC  | technitium   | 192.168.1.5     | Technitium DNS (resolver, ad blocking)     |
-| 110 | LXC  | gitea        | 192.168.1.189 (DHCP) | Gitea — **not in terraform** (created out-of-band) |
 
 Table verified against `pct list` / `qm list` 2026-08-21. The macos-tahoe VM
 (previously 106) no longer exists; `docs/pve/macos-tahoe.md` kept for
-reference. Gitea's MAC was regenerated 2026-08-21 — it was a duplicate of
-proxy's (copy-paste in the since-removed gitea terraform), which had both
-containers fighting over 192.168.1.176 via DHCP.
+reference. An out-of-band, empty gitea LXC (110) was destroyed the same day —
+it had proxy's MAC copy-pasted (from the since-removed gitea terraform),
+which had both containers fighting over 192.168.1.176 via DHCP.
