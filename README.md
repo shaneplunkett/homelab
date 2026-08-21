@@ -19,7 +19,8 @@ Documentation of homelab infrastructure, including docker compose configs, Proxm
 | arr             | LXC  | Cube    | Media automation (*arr stack, Overseerr)   |
 | home-automation | LXC  | Cube    | Home automation                            |
 | proxy           | LXC  | PVE     | Nginx Proxy Manager                        |
-| technitium      | LXC  | PVE     | Technitium DNS — resolver, ad blocking, local zone (192.168.1.5) |
+| technitium      | LXC  | PVE     | Technitium DNS primary — resolver, ad blocking, local zone (192.168.1.5) |
+| technitium2     | LXC  | Cube    | Technitium DNS secondary — clustered with primary (192.168.1.4) |
 | mcphub          | LXC  | PVE     | MCPHub, Graphiti, Open Wearables           |
 | macos-tahoe     | VM   | PVE     | macOS Tahoe — Apple MCP servers            |
 | unraid          | VM   | PVE     | Unraid NAS, media storage                  |
@@ -30,11 +31,14 @@ Documentation of homelab infrastructure, including docker compose configs, Proxm
 
 ## Networking
 
-Technitium DNS (192.168.1.5) serves the LAN (via Unifi DHCP) and the tailnet
-(global nameserver) — recursive resolution, ad blocking, and a local
+Technitium DNS serves the LAN (via Unifi DHCP) and the tailnet (global
+nameservers) — recursive resolution, ad blocking, and a local
 `shaneplunkett.com` zone whose wildcard points at Nginx Proxy Manager for
-TLS and per-service routing. The pve node is a Tailscale subnet router, so
-tailnet devices reach LAN addresses directly. See
+TLS and per-service routing. Two clustered nodes on separate hardware:
+primary on pve (192.168.1.5) and secondary on cube (192.168.1.4), with
+zones/blocklists/settings synced from the primary — either node keeps the
+network resolving if the other is down. The pve node is a Tailscale subnet
+router, so tailnet devices reach LAN addresses directly. See
 [docs/pve/technitium-research.md](docs/pve/technitium-research.md).
 
 ## Backups

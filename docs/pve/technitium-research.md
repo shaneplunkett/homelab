@@ -20,8 +20,8 @@ docs). No test deployment was made.
 > pve for the subnet route. The 16 Unifi static A records and 4 dead
 > Cloudflare CNAMEs (`collabora`, `kimai`, `nextcloud`, `overseerr`) are
 > deleted. Daily restic backup to the Hetzner storage box via
-> `stacks/pve/technitium-lxc/backup.sh`. Remaining: SHA-56 (second
-> clustered instance).
+> `stacks/pve/technitium-lxc/backup.sh`. SHA-56 (second clustered
+> instance) done 2026-08-21 — see the Clustered note below.
 >
 > **Added 2026-08-21:** Query Logs (Sqlite) DNS app v9.1.1 installed via the
 > app store — searchable query logs were missing entirely (no DNS apps were
@@ -51,6 +51,39 @@ docs). No test deployment was made.
 > auto-update, DNS-app auto-update. Still open: Kuma monitor that actually
 > resolves DNS against 192.168.1.5, optional PTR zone for 192.168.1.0/24,
 > optional console TLS.
+
+> **Clustered (2026-08-21, SHA-56):** second instance `technitium2` deployed —
+> LXC 110 on cube at 192.168.1.4 (static, tailnet: 100.94.164.24, `tag:infra`,
+> `--accept-dns=false`, no `--accept-routes`), same pinned `15.4.0`, compose at
+> `/opt/technitium`, same admin password (auth config syncs). Cluster domain
+> `cluster.shaneplunkett.com` (initialised via
+> `/api/admin/cluster/init` on the primary; joined via
+> `/api/admin/cluster/initJoin` on the secondary with
+> `primaryNodeIpAddress=192.168.1.5` + ignore-cert-errors, since the cluster
+> zone isn't publicly resolvable). Server domains were renamed by cluster init
+> to `technitium.cluster.shaneplunkett.com` / `technitium2.…` — the bare
+> `technitium` self-name went NXDOMAIN, so both compose healthchecks now dig
+> the node FQDN. Cluster init auto-enabled the TLS web service on 53443
+> (node-to-node DANE-EE sync), so both composes publish `53443:53443/tcp`.
+> Zones do NOT sync by default: `shaneplunkett.com` had to be registered as a
+> member of `cluster-catalog.cluster.shaneplunkett.com`
+> (`/api/zones/options/set?zone=shaneplunkett.com&catalog=…`); it now serves
+> from both nodes as Primary/Secondary. Settings, blocklists, and DNS apps
+> synced automatically. Advertised everywhere: Unifi LAN DHCP `dhcpd_dns_2 =
+> 192.168.1.4` and tailnet global nameservers `[100.98.28.127,
+> 100.94.164.24]`. Failover tested: with the primary container stopped,
+> internal + public names resolved via .4. Secondary has the same
+> autoheal cron; it has no restic backup — its config is synced state,
+> restorable by re-joining the cluster (the primary's daily backup remains
+> the source of truth).
+>
+> **Upgrade runbook (lock-step):** cluster nodes must run the same release.
+> Bump the pinned image tag in BOTH compose files
+> (`stacks/pve/technitium-lxc`, `stacks/cube/technitium2-lxc`) in one change,
+> read the changelog first (v14.2 and v15.0 both broke cluster compat),
+> export a config backup zip from the primary, then recreate primary first
+> and secondary immediately after, within one maintenance window. Expect the
+> occasional .NET memory-growth restart after upgrades.
 
 ## TL;DR
 

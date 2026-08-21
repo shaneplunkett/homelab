@@ -23,7 +23,9 @@ Proxmox handles mount lifecycle, reconnection, and health — visible in the web
 
 ## Resources
 
-| ID  | Type | Name | IP            | Purpose                                      |
-|-----|------|------|---------------|----------------------------------------------|
-| 103 | LXC  | arr  | 192.168.1.90  | Media automation (*arr stack, downloads, Overseerr) |
-| 104 | LXC  | plex | 192.168.1.237 | Plex Media Server (iGPU hardware transcoding) |
+| ID  | Type | Name        | IP            | Purpose                                      |
+|-----|------|-------------|---------------|----------------------------------------------|
+| 102 | LXC  | home-automation | 192.168.1.229 (DHCP) | Home automation                       |
+| 103 | LXC  | arr         | 192.168.1.90  | Media automation (*arr stack, downloads, Overseerr) |
+| 104 | LXC  | plex        | 192.168.1.237 | Plex Media Server (iGPU hardware transcoding) |
+| 110 | LXC  | technitium2 | 192.168.1.4   | Technitium DNS secondary (clustered with pve primary) |

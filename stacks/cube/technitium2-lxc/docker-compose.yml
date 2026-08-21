@@ -1,8 +1,9 @@
 services:
   dns-server:
+    # cluster nodes must run the same release as the primary (lock-step upgrades)
     image: technitium/dns-server:15.4.0
     container_name: technitium
-    hostname: technitium
+    hostname: technitium2
     restart: unless-stopped
     ports:
       - "5380:5380/tcp" # web console
@@ -10,7 +11,7 @@ services:
       - "53:53/udp"
       - "53:53/tcp"
     environment:
-      DNS_SERVER_DOMAIN: technitium.cluster.shaneplunkett.com
+      DNS_SERVER_DOMAIN: technitium2.cluster.shaneplunkett.com
       DNS_SERVER_RECURSION: AllowOnlyForPrivateNetworks
       DNS_SERVER_ADMIN_PASSWORD_FILE: /run/secrets/admin-password
       # keep only the last hour of stats in memory; dashboard history is on disk
@@ -22,7 +23,7 @@ services:
       - net.ipv4.ip_local_port_range=1024 65535
     healthcheck:
       # real DNS query against the server's own zone; dig ships in the image
-      test: ["CMD", "dig", "@127.0.0.1", "+time=3", "+tries=1", "technitium.cluster.shaneplunkett.com"]
+      test: ["CMD", "dig", "@127.0.0.1", "+time=3", "+tries=1", "technitium2.cluster.shaneplunkett.com"]
       interval: 30s
       timeout: 10s
       retries: 3
