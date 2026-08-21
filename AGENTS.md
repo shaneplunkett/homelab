@@ -2,7 +2,7 @@
 
 ### Issue tracker
 
-Issues and PRDs live in Linear (workspace `metrokitten`, team `SHA`), managed with the `linear` CLI.
+Issues and PRDs live in Linear (workspace `metrokitten`, team `SHA`), managed via the Linear MCP by default, with the `linear` CLI as fallback.
 See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
