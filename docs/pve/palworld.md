@@ -1,9 +1,29 @@
-# Palworld Dedicated Server LXC
+# Palworld Dedicated Server LXC (retired)
 
 ## Summary
 
-Alpine LXC container on PVE running the official Palworld dedicated-server
-Docker image.
+The Palworld dedicated server was retired on 4 September 2026 after the
+hard-mode run was completed. The Docker service was stopped cleanly before a
+final archive was taken, and LXC 106 was then removed through Terraform.
+
+The complete local archive, including Palworld's internal save history, is on
+the PVE host at:
+
+```text
+/var/lib/vz/dump/palworld-final-20260904/palworld-hardmode-final-20260904T210734+1000.tar.gz
+```
+
+A compact current-world archive is stored alongside it and was uploaded to
+the Hetzner Storage Box at:
+
+```text
+palworld-final-archives/palworld-hardmode-final-current-20260904T210734+1000.tar.gz
+```
+
+Both local archives passed gzip and SHA-256 verification. The offsite archive
+was downloaded again and matched its original SHA-256 checksum.
+
+The retired LXC had the following configuration:
 
 - **VMID:** 106
 - **Hostname:** palworld
@@ -21,10 +41,10 @@ The sizing is intentionally unchanged from the retired Satisfactory LXC. It
 exceeds Palworld's official 4-core and 16 GB recommendations while leaving
 headroom beneath the LXC's 24 GB memory limit.
 
-## Connecting
+## Historical connection details
 
-The server is LAN-only (also reachable over the tailnet via the subnet
-route). In Palworld, join a multiplayer game with:
+The server was LAN-only (also reachable over the tailnet via the subnet
+route). While active, Palworld clients connected with:
 
 ```text
 palworld.shaneplunkett.com:8211
@@ -45,9 +65,10 @@ should be reachable from outside the LAN.
 
 ## Infrastructure
 
-`terraform/pve-palworld.tf` declares the LXC. VMID 106 and the former
-Satisfactory LXC's MAC address are explicit so the replacement retains its
-DHCP reservation instead of silently moving to a new address.
+Until retirement, `terraform/pve-palworld.tf` declared the LXC. Removing that
+module from the configuration made Terraform destroy LXC 106 and prevents a
+later apply from recreating it. VMID 106 and the former Satisfactory LXC's MAC
+address had been explicit so the replacement retained its DHCP reservation.
 
 ### Destructive migration gate
 
@@ -91,9 +112,9 @@ it. The extra old-module target is needed only for this first replacement so
 Terraform can process the `moved` block from `module.satisfactory` to
 `module.palworld`.
 
-## Stack
+## Preserved stack
 
-`stacks/pve/palworld-lxc/` contains:
+`stacks/pve/palworld-lxc/` is retained as a recovery reference and contains:
 
 - `docker-compose.yml` — the version-pinned official Palworld image
 - `palserver-entrypoint.sh` — an adapted ownership-fixing entrypoint that runs
