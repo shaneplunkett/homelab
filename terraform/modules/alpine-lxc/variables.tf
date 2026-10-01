@@ -81,6 +81,12 @@ variable "tailscale" {
   description = "Install Tailscale and enable TUN device passthrough"
 }
 
+variable "tailscale_accept_routes" {
+  type        = bool
+  default     = false
+  description = "Accept Tailscale subnet routes (see modules/tailscale-lan); leave off for LAN-resident containers"
+}
+
 variable "mac_address" {
   type        = string
   default     = null

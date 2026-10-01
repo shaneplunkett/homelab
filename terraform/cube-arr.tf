@@ -90,3 +90,10 @@ resource "proxmox_virtual_environment_container" "arr" {
     volume        = "/mnt/pve/unraid-programs"
   }
 }
+
+module "arr_hawser" {
+  source     = "./modules/hawser"
+  node_ip    = local.cube.ip
+  vm_id      = proxmox_virtual_environment_container.arr.id # vm_id is null in state (imported)
+  agent_name = "cube-arr"
+}

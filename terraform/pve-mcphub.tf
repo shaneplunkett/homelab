@@ -34,7 +34,7 @@ resource "proxmox_virtual_environment_container" "mcphub" {
     quota         = false
     replicate     = false
     # grown out-of-band via pct resize; proxmox can't shrink, so keep in sync
-    size          = 64
+    size = 64
   }
 
   network_interface {
@@ -59,3 +59,9 @@ resource "proxmox_virtual_environment_container" "mcphub" {
   }
 }
 
+
+module "mcphub_tailscale_lan" {
+  source  = "./modules/tailscale-lan"
+  node_ip = local.pve.ip
+  vm_id   = proxmox_virtual_environment_container.mcphub.id
+}

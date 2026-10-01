@@ -619,6 +619,8 @@ Tailscale's docs:
   unreachable over LAN until fixed via Tailscale SSH). macOS/iOS accept
   routes automatically and hairpin the same way at home — imperceptible
   for light use, but suspect it first if Mac LAN transfers feel slow.
+  LXCs now enforce this at boot via `terraform/modules/tailscale-lan`
+  (added after mcphub hit it on 2026-10-01).
   Note: pve also needed `net.ipv4.ip_forward=1` (persisted in
   `/etc/sysctl.d/99-tailscale.conf`).
 - **Tailnet DNS**: either set Technitium's Tailscale IP as the tailnet's

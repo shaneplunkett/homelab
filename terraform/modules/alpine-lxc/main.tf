@@ -143,3 +143,11 @@ resource "proxmox_virtual_environment_container" "this" {
     ignore_changes = [device_passthrough]
   }
 }
+
+module "tailscale_lan" {
+  count         = var.tailscale ? 1 : 0
+  source        = "../tailscale-lan"
+  node_ip       = var.node_ip
+  vm_id         = proxmox_virtual_environment_container.this.id
+  accept_routes = var.tailscale_accept_routes
+}
