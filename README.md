@@ -47,6 +47,15 @@ MCPHub and vex-brain data backed up every 4 hours, and Technitium DNS config
 daily, via restic to a Hetzner Storage Box in Helsinki. See
 [docs/hetzner/backups.md](docs/hetzner/backups.md).
 
+## Updates
+
+Every Alpine LXC runs a nightly `apk -U upgrade` via apk-cron
+(`terraform/modules/lxc-baseline`). Tailscale comes from Alpine edge so it
+stays current (`terraform/modules/tailscale-lan`). To move to a new Alpine
+release, bump `alpine_branch` in `modules/lxc-baseline/variables.tf`, apply
+one container at a time with `-target`, and reboot each. Plex (Ubuntu) uses
+unattended-upgrades.
+
 ## Structure
 
 Folder per host, subfolders per resource on host. Each subfolder has a README and docker compose if relevant. Hetzner cloud resources managed via Terraform in `terraform/`.
