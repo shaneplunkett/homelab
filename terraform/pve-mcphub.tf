@@ -65,3 +65,9 @@ module "mcphub_tailscale_lan" {
   node_ip = local.pve.ip
   vm_id   = proxmox_virtual_environment_container.mcphub.id
 }
+
+module "mcphub_baseline" {
+  source  = "./modules/lxc-baseline"
+  node_ip = local.pve.ip
+  vm_id   = proxmox_virtual_environment_container.mcphub.id
+}

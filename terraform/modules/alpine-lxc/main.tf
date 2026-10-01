@@ -103,15 +103,7 @@ resource "proxmox_virtual_environment_container" "this" {
           # Lock down root SSH
           sed -i \"s/^#*PermitRootLogin.*/PermitRootLogin no/\" /etc/ssh/sshd_config && \
           sed -i \"s/^#*PasswordAuthentication.*/PasswordAuthentication no/\" /etc/ssh/sshd_config && \
-          rc-service sshd restart && \
-
-          # Auto-updates via periodic
-          apk add --no-cache apk-cron && \
-          echo \"#!/bin/sh\" > /etc/periodic/daily/apk-update && \
-          echo \"apk update && apk upgrade\" >> /etc/periodic/daily/apk-update && \
-          chmod +x /etc/periodic/daily/apk-update && \
-          rc-update add crond default && \
-          rc-service crond start \
+          rc-service sshd restart \
         '"
     EOT
   }
@@ -150,4 +142,12 @@ module "tailscale_lan" {
   node_ip       = var.node_ip
   vm_id         = proxmox_virtual_environment_container.this.id
   accept_routes = var.tailscale_accept_routes
+}
+
+# Auto-updates etc. (kept outside the create-time provisioner so changes
+# reach existing containers)
+module "baseline" {
+  source  = "../lxc-baseline"
+  node_ip = var.node_ip
+  vm_id   = proxmox_virtual_environment_container.this.id
 }

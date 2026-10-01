@@ -97,3 +97,9 @@ module "arr_hawser" {
   vm_id      = proxmox_virtual_environment_container.arr.id # vm_id is null in state (imported)
   agent_name = "cube-arr"
 }
+
+module "arr_baseline" {
+  source  = "./modules/lxc-baseline"
+  node_ip = local.cube.ip
+  vm_id   = proxmox_virtual_environment_container.arr.id
+}
