@@ -1,26 +1,3 @@
-resource "hcloud_ssh_key" "my_key" {
-  name       = "hetzvps"
-  public_key = var.ssh_public_key
-}
-
-resource "hcloud_server" "hetzvps" {
-  name        = "hetzvps"
-  image       = "ubuntu-24.04"
-  server_type = "cax11"
-  location    = "nbg1"
-  user_data   = <<-EOF
-    #!/bin/bash
-    curl -L https://github.com/elitak/nixos-infect/raw/master/nixos-infect | PROVIDER=hetznercloud NIX_CHANNEL=nixos-24.11 bash 2>&1 | tee /tmp/infect.log
-  EOF
-  public_net {
-    ipv4_enabled = true
-    ipv6_enabled = true
-  }
-  ssh_keys = [
-    hcloud_ssh_key.my_key.id
-  ]
-}
-
 resource "hcloud_storage_box" "backups" {
   name             = "backups"
   storage_box_type = "bx11"

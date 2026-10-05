@@ -6,7 +6,6 @@ Cloud infrastructure hosted on Hetzner, managed via Terraform (state in Terrafor
 
 | Resource    | Type        | Location  | Purpose                        |
 |-------------|-------------|-----------|--------------------------------|
-| hetzvps     | cax11 VPS   | Nuremberg | Tailscale exit node, NixOS     |
 | backups     | bx11 Storage Box | Helsinki | Restic backup target      |
 
 ## Terraform

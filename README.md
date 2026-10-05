@@ -10,7 +10,6 @@ Documentation of homelab infrastructure, including docker compose configs, Proxm
 |------|-----------------------------------|-----------------------------|
 | PVE  | Ryzen 9 7900, 96 GB RAM, 1 TB NVMe | Primary Proxmox node       |
 | Cube | Intel (UHD 630), 32 GB RAM, 2x 1 TB NVMe | Secondary Proxmox node |
-| hetzvps | Hetzner cax11 (2 vCPU ARM, 4 GB RAM) | Tailscale exit node (NixOS) |
 
 ## Services
 

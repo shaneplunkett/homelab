@@ -611,7 +611,8 @@ Tailscale's docs:
   the admin console, and disable key expiry on server nodes
   ([subnet routers](https://tailscale.com/docs/features/subnet-routers)).
   **`--accept-routes` belongs ONLY on Linux devices that live outside the
-  LAN** (hetzvps). Learned the hard way (2026-08-13): enabling it on a
+  LAN** (a cloud VPS, say), which need the subnet router to reach LAN
+  addresses. Learned the hard way (2026-08-13): enabling it on a
   LAN-resident machine (desktop, cube) makes the kernel route local
   traffic through the tunnel via pve — small packets survive the hairpin,
   but MTU-sensitive UDP (game traffic) times out, and once any machine
