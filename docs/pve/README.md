@@ -17,7 +17,6 @@ Primary Proxmox host.
 | 101 | LXC  | proxy        | 192.168.1.176   | Nginx Proxy Manager (reverse proxy, SSL)   |
 | 105 | LXC  | mcphub       | 192.168.1.195   | MCPHub, Graphiti, Open Wearables           |
 | 106 | LXC  | satisfactory | 192.168.1.96 (DHCP, pinned MAC) | Satisfactory dedicated server |
-| 107 | LXC  | uptime-kuma  | 192.168.1.55 (DHCP) | Uptime Kuma monitoring                 |
 | 108 | LXC  | dockhand     | 192.168.1.158 (DHCP) | Dockhand Docker management UI         |
 | 109 | LXC  | technitium   | 192.168.1.5     | Technitium DNS (resolver, ad blocking)     |
 
