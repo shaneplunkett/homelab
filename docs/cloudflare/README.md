@@ -46,3 +46,5 @@ Account and Zone permissions need separate policies. The Zone ones only take eff
 - The local Technitium serves its own `shaneplunkett.com` zone, so LAN lookups don't match the public answer. Ask public DNS instead, e.g. `dig @1.1.1.1` or `doggo @https://cloudflare-dns.com/dns-query`.
 - The `cf` CLI is beta. Non-interactive deletes without `--force` print `Aborted.` and exit 0, so check the result rather than the exit code.
 - The legacy Registrar `domains` list endpoint reached end of life on 27 September 2026. Use `GET /accounts/{id}/registrar/registrations/{domain}` for `auto_renew` and `expires_at`.
+- If the MCP server ever fails auth (for example, rbw was locked), Claude Code caches it as needing auth and stops connecting, even after the token works again. Remove the `cloudflare` key from `~/.claude/mcp-needs-auth-cache.json` and start a new session.
+- T3 Code runs Claude with `CLAUDE_CONFIG_DIR=~/.claude`, so folder trust lives in `~/.claude/.claude.json`, not `~/.claude.json`. The `headersHelper` only runs once that file has `hasTrustDialogAccepted: true` for the repo.
