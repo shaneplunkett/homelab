@@ -5,7 +5,6 @@ BACKUP_DIR="${BACKUP_DIR:-/opt/technitium/backup-staging}"
 RESTIC_REPOSITORY="${RESTIC_REPOSITORY:-sftp:u558795@u558795.your-storagebox.de:./backups}"
 RESTIC_PASSWORD_FILE="${RESTIC_PASSWORD_FILE:-/opt/technitium/.restic-password}"
 SFTP_OPTS="${SFTP_OPTS:-sftp.args=-p 23}"
-KUMA_PUSH_URL_FILE="${KUMA_PUSH_URL_FILE:-/opt/technitium/.backup-kuma-url}"
 RUN_RESTIC_PRUNE="${RUN_RESTIC_PRUNE:-true}"
 ADMIN_PASSWORD_FILE="${ADMIN_PASSWORD_FILE:-/opt/technitium/admin-password.txt}"
 API="http://127.0.0.1:5380/api"
@@ -17,24 +16,13 @@ log() {
   echo "[$(date '+%Y-%m-%dT%H:%M:%S%z')] $*"
 }
 
-ping_kuma() {
-  push_status="$1"
-  push_msg="$2"
-
-  if [ -s "$KUMA_PUSH_URL_FILE" ]; then
-    wget -qO- "$(cat "$KUMA_PUSH_URL_FILE")?status=$push_status&msg=$push_msg" >/dev/null 2>&1 || true
-  fi
-}
-
 cleanup() {
   exit_status="$?"
   rm -rf "$BACKUP_DIR"
 
   if [ "$exit_status" -eq 0 ]; then
-    ping_kuma up OK
     log "Backup complete."
   else
-    ping_kuma down FAILED
     log "Backup failed with status $exit_status."
   fi
 

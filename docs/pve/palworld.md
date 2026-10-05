@@ -235,8 +235,6 @@ The script:
 2. snapshots `Saved/`, Compose, the entrypoint, and the backup script
 3. applies retention
 4. restarts the server even if restic fails
-5. optionally pushes success or failure to Uptime Kuma when
-   `/opt/palworld/.backup-kuma-url` exists
 
 The controlled stop avoids taking a save snapshot while Palworld is writing
 world data.

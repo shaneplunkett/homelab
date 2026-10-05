@@ -24,8 +24,6 @@ Hetzner Storage Box used as the restic backup target for MCPHub and vex-brain da
 
 **Retention:** keep last 6, 7 daily, 4 weekly
 
-**Monitoring:** push heartbeat to Uptime Kuma on success and an explicit down heartbeat on script failure.
-
 **Script:** repo-managed at `stacks/pve/mcphub-lxc/backup.sh`, installed on the LXC as `/opt/mcphub/backup.sh`.
 
 ## Restic — Technitium
