@@ -459,7 +459,24 @@
           "notes": ""
         }
       ],
-      "cables": [],
+      "cables": [
+        {
+          "id": "cable-3ankai",
+          "from": {
+            "item": "item-58hlsu",
+            "port": "p-fa73l8",
+            "face": "front"
+          },
+          "to": {
+            "item": "item-cae5p5",
+            "port": "p-muvnkb",
+            "face": "front"
+          },
+          "color": "#ff8fb8",
+          "label": "",
+          "notes": ""
+        }
+      ],
       "stickies": [
         {
           "id": "note-ezo439",
