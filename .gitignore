@@ -29,3 +29,7 @@ Thumbs.db
 *.tfstate
 *.tfstate.backup
 generated.tf
+
+# Nix / direnv
+.direnv/
+result

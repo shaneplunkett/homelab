@@ -14,3 +14,8 @@ See `docs/agents/triage-labels.md`.
 
 This is a single-context repo.
 See `docs/agents/domain.md`.
+
+## Cloudflare
+
+Use the `cloudflare` MCP server first, then `cf` from the dev shell. Wrangler is only for Workers and Pages.
+See `docs/cloudflare/README.md`.

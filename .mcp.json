@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "cloudflare": {
+      "type": "http",
+      "url": "https://mcp.cloudflare.com/mcp",
+      "headersHelper": "tools/cloudflare/mcp-headers.sh"
+    }
+  }
+}

@@ -7,6 +7,18 @@
       "skillPath": "skills/engineering/ask-matt/SKILL.md",
       "computedHash": "cacd2e77c8c0b456133a60be07493dd091ace65f52b02f90cbb8f75de15989f5"
     },
+    "cloudflare": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloudflare/SKILL.md",
+      "computedHash": "6f0a70840cad114f020e5950874f255b22e669f07036cf4f81d8f733ae0233a0"
+    },
+    "cloudflare-one": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloudflare-one/SKILL.md",
+      "computedHash": "9394299fdb45f0803d285c25f09bed8b471f21fe0bf4e78f3573620096f30939"
+    },
     "code-review": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -120,6 +132,18 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/wayfinder/SKILL.md",
       "computedHash": "3eb72cd9abdfaa00e10fa69f0b4410ff8639a6cf4eb9e5d187b289c3aa9be2fc"
+    },
+    "workers-best-practices": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "skillPath": "skills/workers-best-practices/SKILL.md",
+      "computedHash": "e1c30e93854345114dfa6a0a077363119eb99c03e5c64a8f2109349802e1f2aa"
+    },
+    "wrangler": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "skillPath": "skills/wrangler/SKILL.md",
+      "computedHash": "6d2bade1438d89034a750b1ddf30d0e5b62823306eccf85a5b25ccc4352ff8a9"
     },
     "writing-great-skills": {
       "source": "mattpocock/skills",
