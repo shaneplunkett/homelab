@@ -41,6 +41,11 @@ network resolving if the other is down. The pve node is a Tailscale subnet
 router, so tailnet devices reach LAN addresses directly. See
 [docs/pve/technitium-research.md](docs/pve/technitium-research.md).
 
+## Tools
+
+- [minirack](tools/minirack/README.md): a visual planner for the 10" minirack
+  layout and cabling. Run `bun tools/minirack/server.ts`.
+
 ## Backups
 
 MCPHub and vex-brain data backed up every 4 hours, and Technitium DNS config

@@ -1,0 +1,484 @@
+{
+  "version": 1,
+  "layouts": [
+    {
+      "id": "layout-4ymffz",
+      "name": "My minirack",
+      "rackUnits": 8,
+      "filament": "#cdb8f2",
+      "notes": "",
+      "items": [
+        {
+          "id": "item-58hlsu",
+          "template": "ucg-max",
+          "name": "Cloud Gateway Max",
+          "color": "#eef0f4",
+          "heightU": 1,
+          "width": "full",
+          "side": null,
+          "u": 3,
+          "parked": false,
+          "ports": [
+            {
+              "id": "p-fa73l8",
+              "kind": "rj45",
+              "face": "both",
+              "label": "Left keystone",
+              "pos": "left"
+            },
+            {
+              "id": "p-k0mhmo",
+              "kind": "rj45",
+              "face": "both",
+              "label": "Right keystone",
+              "pos": "right"
+            },
+            {
+              "id": "p-dkpjfj",
+              "kind": "rj45",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-7kzxzt",
+              "kind": "rj45",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-ji0i5l",
+              "kind": "rj45",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-htio1x",
+              "kind": "rj45",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-xd33z9",
+              "kind": "rj45",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-sh5hv4",
+              "kind": "power",
+              "face": "rear",
+              "label": ""
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "item-1fijvr",
+          "template": "patch-12",
+          "name": "Patch panel · 12",
+          "color": "#4a4458",
+          "heightU": 1,
+          "width": "full",
+          "side": null,
+          "u": 7,
+          "parked": false,
+          "ports": [
+            {
+              "id": "p-vptov4",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-5ohhb9",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-eskr9v",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-6btg2f",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-sefmkb",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-h1aeia",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-e9yhoi",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-5wbxuy",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-u8146j",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-8meb2s",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-jau6ub",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-fymdo2",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "item-0emsrv",
+          "template": "usw-lite-8",
+          "name": "USW Lite 8 PoE",
+          "color": "#eef0f4",
+          "heightU": 1,
+          "width": "full",
+          "side": null,
+          "u": 6,
+          "parked": false,
+          "ports": [
+            {
+              "id": "p-c84g8u",
+              "kind": "rj45",
+              "face": "front",
+              "label": ""
+            },
+            {
+              "id": "p-ilfaej",
+              "kind": "rj45",
+              "face": "front",
+              "label": ""
+            },
+            {
+              "id": "p-merxeb",
+              "kind": "rj45",
+              "face": "front",
+              "label": ""
+            },
+            {
+              "id": "p-oedv3d",
+              "kind": "rj45",
+              "face": "front",
+              "label": ""
+            },
+            {
+              "id": "p-mqefoj",
+              "kind": "rj45",
+              "face": "front",
+              "label": ""
+            },
+            {
+              "id": "p-8leyhp",
+              "kind": "rj45",
+              "face": "front",
+              "label": ""
+            },
+            {
+              "id": "p-l24pvc",
+              "kind": "rj45",
+              "face": "front",
+              "label": ""
+            },
+            {
+              "id": "p-alycmp",
+              "kind": "rj45",
+              "face": "front",
+              "label": ""
+            },
+            {
+              "id": "p-4zvtw6",
+              "kind": "power",
+              "face": "rear",
+              "label": ""
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "item-2rlw9l",
+          "template": "flex-mini",
+          "name": "USW Flex Mini",
+          "color": "#eef0f4",
+          "heightU": 1,
+          "width": "full",
+          "side": null,
+          "u": 5,
+          "parked": false,
+          "ports": [
+            {
+              "id": "p-mp5fop",
+              "kind": "rj45",
+              "label": "",
+              "face": "front"
+            },
+            {
+              "id": "p-fzgg9e",
+              "kind": "rj45",
+              "label": "",
+              "face": "front"
+            },
+            {
+              "id": "p-qj4ima",
+              "kind": "rj45",
+              "label": "",
+              "face": "front"
+            },
+            {
+              "id": "p-senf6l",
+              "kind": "rj45",
+              "label": "",
+              "face": "front"
+            },
+            {
+              "id": "p-nmlpjk",
+              "kind": "rj45",
+              "label": "",
+              "face": "front"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "item-cae5p5",
+          "template": "patch-12",
+          "name": "Patch panel · 12",
+          "color": "#4a4458",
+          "heightU": 1,
+          "width": "full",
+          "side": null,
+          "u": 4,
+          "parked": false,
+          "ports": [
+            {
+              "id": "p-muvnkb",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-mhea5z",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-b09z6p",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-x8q0uc",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-ay2zal",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-7hg5bj",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-p18ej1",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-a4s5du",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-f7s7j2",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-fl25hu",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-1j9qkd",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            },
+            {
+              "id": "p-r8gnmg",
+              "kind": "rj45",
+              "label": "",
+              "face": "both"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "item-bmo8yc",
+          "template": "jetkvm-1",
+          "name": "JetKVM",
+          "color": "#f6b8d0",
+          "heightU": 1,
+          "width": "full",
+          "side": null,
+          "u": 1,
+          "parked": false,
+          "ports": [
+            {
+              "id": "p-rsk9ed",
+              "kind": "hdmi",
+              "face": "rear",
+              "label": "KVM 1 HDMI"
+            },
+            {
+              "id": "p-78dnpl",
+              "kind": "usb",
+              "face": "rear",
+              "label": "KVM 1 USB-C"
+            },
+            {
+              "id": "p-opfm2z",
+              "kind": "rj45",
+              "face": "rear",
+              "label": "KVM 1 LAN"
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "item-lsn2l5",
+          "template": "pi-x2",
+          "name": "Pi mount · 2 bays",
+          "color": "#b5e6cf",
+          "heightU": 1,
+          "width": "full",
+          "side": null,
+          "u": 8,
+          "parked": false,
+          "ports": [
+            {
+              "id": "p-spwmtu",
+              "kind": "rj45",
+              "face": "front",
+              "label": "Pi 1 LAN",
+              "unit": 1
+            },
+            {
+              "id": "p-yeoy0f",
+              "kind": "usba",
+              "face": "front",
+              "label": "Pi 1 USB-A 1",
+              "unit": 1
+            },
+            {
+              "id": "p-up3jsv",
+              "kind": "usba",
+              "face": "front",
+              "label": "Pi 1 USB-A 2",
+              "unit": 1
+            },
+            {
+              "id": "p-trnbt3",
+              "kind": "power",
+              "face": "rear",
+              "label": "Pi 1 micro-USB power",
+              "unit": 1
+            },
+            {
+              "id": "p-8whxb9",
+              "kind": "rj45",
+              "face": "front",
+              "label": "Pi 2 LAN",
+              "unit": 2
+            },
+            {
+              "id": "p-68r4bj",
+              "kind": "usba",
+              "face": "front",
+              "label": "Pi 2 USB-A 1",
+              "unit": 2
+            },
+            {
+              "id": "p-3y1vz9",
+              "kind": "usba",
+              "face": "front",
+              "label": "Pi 2 USB-A 2",
+              "unit": 2
+            },
+            {
+              "id": "p-wuv6d1",
+              "kind": "power",
+              "face": "rear",
+              "label": "Pi 2 micro-USB power",
+              "unit": 2
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "cables": [],
+      "stickies": [
+        {
+          "id": "note-ezo439",
+          "x": 793.1639404296875,
+          "y": 226.45245361328125,
+          "color": "#fff1a8",
+          "text": "drag your gear into the rack ✿\n\nclick a port, then another port, to plug in a cable"
+        }
+      ]
+    },
+    {
+      "id": "layout-8caq1a",
+      "name": "Layout 2",
+      "rackUnits": 8,
+      "filament": "#f6b8d0",
+      "notes": "",
+      "items": [],
+      "cables": [],
+      "stickies": []
+    }
+  ]
+}
