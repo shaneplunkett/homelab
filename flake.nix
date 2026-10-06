@@ -68,6 +68,7 @@
           imports = [
             ./modules/base.nix
             agenix.nixosModules.default
+            ./modules/agenix
           ];
         };
         #TODO: Figure out not using IPs for declaring targetHost
