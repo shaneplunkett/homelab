@@ -4,12 +4,12 @@ let
 in
 {
   homelab.secrets = [ "gatus-discord" ];
+  systemd.services.gatus.serviceConfig.EnvironmentFile = [ secrets.proxmox-token.path ];
 
   services.gatus = {
     enable = true;
     openFirewall = true;
     environmentFile = secrets.gatus-discord.path;
-    systemd.services.gatus.serviceConfig.EnvironmentFile = [ secrets.proxmox-token.path ];
 
     settings = {
       web.port = 8082;
