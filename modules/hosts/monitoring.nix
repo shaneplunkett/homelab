@@ -4,5 +4,6 @@
     ../services/pve-exporter
     ../services/alertmanager
     ../services/gatus/alerts.nix
+    ../services/grafana
   ];
 }
