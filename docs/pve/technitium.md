@@ -13,9 +13,9 @@ needed extra pieces to cover the same ground.
   (`stacks/pve/technitium-lxc`) and the secondary on cube
   (`stacks/cube/technitium2-lxc`). DHCP and the tailnet both hand out both
   nodes, so either one can keep DNS up alone.
-- The primary is also the Tailscale subnet router for the LAN. Zone records
-  point at LAN addresses only, and remote clients reach them through the
-  route, so there's one zone with one set of answers and no Split Horizon app.
+- Zone records point at LAN addresses only. Remote clients reach them through
+  a Tailscale subnet route for the LAN, so there's one zone with one set of
+  answers and no Split Horizon app.
 - MagicDNS can't serve an owned domain. That's why Technitium is the tailnet's
   global nameserver (with Override on), and MagicDNS stays on for `ts.net`
   names.
