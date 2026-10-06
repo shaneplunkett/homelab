@@ -32,6 +32,10 @@ let
       title = "Sonarr Anime";
       icon = "di:sonarr";
     };
+    docker = {
+      title = "Dockhand";
+      icon = "di:dockhand.png";
+    };
     dashboard.icon = "di:glance";
     status = {
       title = "Gatus";
