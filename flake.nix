@@ -50,6 +50,7 @@
               pkgs.jq
               pkgs.colmena
               agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
+              pkgs.grafana-alloy
             ];
           };
         }
@@ -69,6 +70,7 @@
             ./modules/base.nix
             agenix.nixosModules.default
             ./modules/agenix
+            ./modules/services/alloy
           ];
         };
         #TODO: Figure out not using IPs for declaring targetHost
