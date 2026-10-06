@@ -81,6 +81,11 @@
           imports = [ ./modules/hosts/monitoring.nix ];
           deployment.targetHost = "192.168.1.78";
         };
+
+        ingress = {
+          imports = [ ./modules/hosts/ingress.nix ];
+          deployment.targetHost = "192.168.1.149";
+        };
       };
     };
 
