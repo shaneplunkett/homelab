@@ -14,7 +14,7 @@ in
     dashboard
 
   ];
-  "pve-expoter.age".publicKeys = [
+  "pve-exporter.age".publicKeys = [
     shane
     monitoring
 
