@@ -7,7 +7,7 @@
       }
     ];
 
-    services.prometheus.rulesFiles = [
+    prometheus.rulesFiles = [
       (pkgs.writeText "gatus.rules.json" (
         builtins.toJSON {
           groups = [
