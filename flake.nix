@@ -5,7 +5,10 @@
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    colmena.url = "github:nix-community/colmena/v0.5.0";
+    colmena = {
+      url = "github:nix-community/colmena/v0.5.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
   outputs =
@@ -48,15 +51,17 @@
           modules = [ ./modules/base.nix ];
         };
 
-        colmenaHive = colmena.lib.makeHive {
-          defaults = {
-            imports = [ ./modules/base.nix ];
-          };
-          #TODO: Figure out not using IPs for declaring targetHost
-          dashboard = {
-            imports = [ ./modules/hosts/dashboard.nix ];
-            deployment.targetHost = "192.168.1.152";
-          };
+      };
+
+      colmenaHive = colmena.lib.makeHive {
+        meta.nixpkgs = import nixpkgs { system = "x86_64-linux"; };
+        defaults = {
+          imports = [ ./modules/base.nix ];
+        };
+        #TODO: Figure out not using IPs for declaring targetHost
+        dashboard = {
+          imports = [ ./modules/hosts/dashboard.nix ];
+          deployment.targetHost = "192.168.1.152";
         };
       };
     };
