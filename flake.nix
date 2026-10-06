@@ -38,7 +38,7 @@
       );
 
       nixosConfigurations = {
-        base = nixpkgs.lib.mkNixosSystem {
+        base = nixpkgs.lib.mknixosSystem {
           modules = [ ./modules/base.nix ];
         };
       };
