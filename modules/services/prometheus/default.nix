@@ -6,11 +6,10 @@
     scrapeConfigs = [
       {
         job_name = "node";
-        static_configs = [
-          {
-            targets = lib.mapAttrsToList (_: node: "${node.config.deployment.targetHost}:9100") nodes;
-          }
-        ];
+        static_configs = lib.mapAttrsToList (name: node: {
+          targets = [ "${node.config.deployment.targetHost}:9100" ];
+          labels.host = name;
+        }) nodes;
       }
     ];
   };
