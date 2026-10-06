@@ -7,7 +7,7 @@
       }
     ];
 
-    rulesFiles = [
+    ruleFiles = [
       (pkgs.writeText "gatus.rules.json" (
         builtins.toJSON {
           groups = [

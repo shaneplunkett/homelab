@@ -1,6 +1,6 @@
 { pkgs, ... }: {
 
-  services.prometheus.rules = [
+  services.prometheus.ruleFiles = [
     (pkgs.writeText "pve.rules.json" (
       builtins.toJSON {
         groups = [
