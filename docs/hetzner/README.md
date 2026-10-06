@@ -1,24 +1,29 @@
-# Hetzner Cloud
+# Hetzner
 
-## Summary
+A Hetzner Storage Box is the offsite restic target for homelab backups. It's
+defined in `terraform/hetzner.tf`, with state in Terraform Cloud and applies
+run locally from `terraform/`.
 
-Cloud infrastructure hosted on Hetzner, managed via Terraform (state in Terraform Cloud, applied locally via the terraform CLI).
+## Backups
 
-| Resource    | Type        | Location  | Purpose                        |
-|-------------|-------------|-----------|--------------------------------|
-| backups     | bx11 Storage Box | Helsinki | Restic backup target      |
+Each LXC that backs up runs its own repo-managed script from cron
+(`stacks/**/backup.sh`, installed under `/opt/<service>/`). They share one
+restic repo and password; each LXC has its own SSH key on the box. The
+scripts are the source of truth for what's backed up, when, and for how long.
 
-## Terraform
+Final archives of retired services are kept on the box under
+`<service>-final-archives/`.
 
-All resources defined in `terraform/hetzner.tf`. Provider token supplied via
-`TF_VAR_hcloud_token` in the repo-root `.envrc`.
+## Gotchas
 
-**Apply:** run `terraform plan` / `terraform apply` locally from `terraform/`.
-The push-triggered GitHub Actions workflow (`infra.yml`) was removed 2026-08-21
-ahead of a CI rework — applies are manual until that lands.
-
-**Local plan:** requires the repo-root `.envrc` (direnv), including:
-```bash
-export TF_VAR_ssh_public_key="$(cat ~/.ssh/id_ed25519.pub)"
-```
-Without this, plan wants to destroy/recreate Hetzner resources.
+- **`TF_VAR_ssh_public_key` must be set** (the repo `.envrc` does it). Without
+  it, plan wants to destroy and recreate the Storage Box.
+- **LXC SSH keys are added out-of-band.** Terraform ignores `ssh_keys` changes
+  after creation, so each LXC's key is appended to the box's
+  `authorized_keys` by hand.
+- **SFTP paths must be relative**: `./backups`, not `/backups`.
+- **SSH is on port 23**, not 22.
+- **Cron lives on the LXC**, not in config, so a rebuilt container needs it
+  restored.
+- **A backup only runs while its LXC is healthy.** The restic repo survives
+  losing a container, but new dumps stop until it's back.

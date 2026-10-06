@@ -2,29 +2,19 @@
 
 ## Summary
 
-Primary Proxmox host.
+Primary Proxmox host. It runs the experiments and heavier workloads, keeping
+them away from the always-on services on Cube. Containers and VMs are declared
+in `terraform/pve-*.tf`.
 
-- **CPU:** Ryzen 9 7900 (12 cores / 24 threads)
-- **RAM:** 96 GB
-- **Storage:** 1 TB NVMe (local-lvm thin pool)
-- **IP:** 192.168.1.169
+Per-service docs:
 
-## Resources
+- [unraid.md](unraid.md)
+- [mcphub.md](mcphub.md)
+- [satisfactory.md](satisfactory.md)
+- [technitium.md](technitium.md)
+- [macos-tahoe.md](macos-tahoe.md)
 
-| ID  | Type | Name         | IP              | Purpose                                    |
-|-----|------|--------------|-----------------|--------------------------------------------|
-| 100 | VM   | Unraid       | —               | NAS, media storage (USB boot, PCIe HBA+NVMe) |
-| 101 | LXC  | proxy        | 192.168.1.176   | Nginx Proxy Manager (reverse proxy, SSL)   |
-| 105 | LXC  | mcphub       | 192.168.1.195   | MCPHub, Graphiti, Open Wearables           |
-| 106 | LXC  | satisfactory | 192.168.1.96 (DHCP, pinned MAC) | Satisfactory dedicated server |
-| 108 | LXC  | dockhand     | 192.168.1.158 (DHCP) | Dockhand Docker management UI         |
-| 109 | LXC  | technitium   | 192.168.1.5     | Technitium DNS (resolver, ad blocking)     |
+## Gotchas
 
-Table verified against `pct list` / `qm list` 2026-09-18. The former Palworld
-LXC was replaced with a fresh Satisfactory server at the same VMID and DHCP
-reservation. Palworld's final archives are documented in
-`docs/pve/palworld.md`. The macos-tahoe VM
-(previously 106) no longer exists; `docs/pve/macos-tahoe.md` is kept for
-reference. An out-of-band, empty gitea LXC (110) was destroyed on 2026-08-21 —
-it had proxy's MAC copy-pasted (from the since-removed gitea Terraform),
-which had both containers fighting over 192.168.1.176 via DHCP.
+- Never copy-paste a `mac_address` from one container's Terraform to another.
+  A duplicated MAC once had two containers fighting over the same DHCP lease.

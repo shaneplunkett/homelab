@@ -1,0 +1,53 @@
+# Services
+
+One folder per service. `default.nix` is the NixOS module a host imports, and
+anything bigger (alert rules, templates, widgets) sits in its own file next to
+it. Alert rules for a service live with that service, even when they're loaded
+by Prometheus or Loki on another host.
+
+Glance has its own [README](glance/README.md).
+
+These are the whys the Nix can't say for itself.
+
+## Alertmanager
+
+- The config goes through envsubst so the Discord webhook can come from an
+  env file. That means templates can't contain a `$`, and `checkConfig` is
+  off because the placeholder URL isn't valid at build time.
+- Alerts go to Discord's Slack-compatible endpoint (`<webhook>/slack`), which
+  allows colours, fields and links that the plain Discord format doesn't.
+
+## Prometheus
+
+- Use `ruleFiles` with `pkgs.writeText`, one file per module. `rules` joins
+  every module's strings into one file, so only the first group loads.
+- Inside an LXC, node exporter's CPU numbers come from the host's counters and
+  are wrong. CPU per container comes from the PVE exporter instead.
+
+## Loki
+
+- With `auth_enabled = false` the tenant is called `fake`. The ruler's local
+  storage expects rules under `<dir>/fake/`, hence the odd path.
+- Kernel OOM messages aren't visible inside an LXC. The OOM alert matches
+  systemd's "OOM killer" log line in `init.scope` instead.
+
+## Alloy
+
+- The nixpkgs package links `systemd-minimal-libs`, which can't read the
+  journal, so it silently ships nothing. `LD_LIBRARY_PATH` points it at the
+  full libsystemd.
+- `config.alloy` has its own formatter: `alloy fmt` from the dev shell.
+
+## Gatus
+
+- Conditions only compare integers, so fractional values (like CPU ratios)
+  can't be checked there. Leave those to Prometheus.
+- Gatus watches the monitoring stack from the dashboard host, so a dead
+  Prometheus or Alertmanager still pages Discord directly.
+
+## nginx-ingress
+
+- ACME uses `1.1.1.1` as its DNS resolver. The LAN's Technitium serves its own
+  copy of the zone and would never see the challenge record.
+- The `_` vhost is a catch-all that 404s unknown names, instead of nginx
+  falling through to the first route.

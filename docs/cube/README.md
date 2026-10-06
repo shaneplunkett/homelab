@@ -4,28 +4,13 @@
 
 Secondary Proxmox host. Runs critical always-on services (Plex, media automation) that need to stay stable and unaffected by experiments on PVE.
 
-- **CPU:** Intel (12 threads, UHD 630 iGPU for Plex transcoding)
-- **RAM:** 32 GB
-- **Storage:** 1 TB NVMe (local-lvm thin pool) + 1 TB NVMe (unmounted, second drive)
-- **IP:** 192.168.1.238
+Per-service docs:
 
-## Proxmox Storage Pools
+- [arr.md](arr.md)
+- [plex.md](plex.md)
 
-Unraid NFS shares managed by Proxmox (mounted at `/mnt/pve/<name>/`, options: `soft,nofail`):
+## Unraid storage
 
-| Storage ID       | Unraid Export          | Purpose               |
-|------------------|------------------------|-----------------------|
-| unraid-media     | `/mnt/user/Media`      | Media library         |
-| unraid-appdata   | `/mnt/user/appdata`    | App config data       |
-| unraid-programs  | `/mnt/user/Programs`   | Programs/software     |
+Unraid's NFS shares are Proxmox storage pools (`terraform/storage.tf`), so Proxmox owns the mount lifecycle, reconnection, and health. You can see them in the web UI under Storage.
 
-Proxmox handles mount lifecycle, reconnection, and health — visible in the web UI under Storage.
-
-## Resources
-
-| ID  | Type | Name        | IP            | Purpose                                      |
-|-----|------|-------------|---------------|----------------------------------------------|
-| 102 | LXC  | home-automation | 192.168.1.229 (DHCP) | Home automation                       |
-| 103 | LXC  | arr         | 192.168.1.90  | Media automation (*arr stack, downloads, Overseerr) |
-| 104 | LXC  | plex        | 192.168.1.237 | Plex Media Server (iGPU hardware transcoding) |
-| 110 | LXC  | technitium2 | 192.168.1.4   | Technitium DNS secondary (clustered with pve primary) |
+LXCs don't mount NFS themselves. They bind-mount the host path `/mnt/pve/<storage id>` instead.
