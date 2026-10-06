@@ -31,7 +31,10 @@ in
           columns = [
             {
               size = "full";
-              widgets = [ { type = "calendar"; } ];
+              widgets = [
+                { type = "calendar"; }
+                (import ./widgets/proxmox-ve-stats)
+              ];
             }
           ];
         }
