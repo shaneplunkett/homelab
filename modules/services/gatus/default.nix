@@ -12,7 +12,7 @@ in
   services.gatus = {
     enable = true;
     openFirewall = true;
-    environmentFile = secrets.gatus-discord.path;
+    environmentFile = secrets.discord-webhook.path;
 
     settings = {
       web.port = 8082;
