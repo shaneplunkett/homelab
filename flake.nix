@@ -1,10 +1,15 @@
 {
   description = "Homelab Flake";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs = {
 
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    colmena.url = "github:nix-community/colmena/v0.5.0";
+
+  };
   outputs =
-    { nixpkgs, ... }:
+    { nixpkgs, colmena, ... }:
     let
       systems = [
         "x86_64-linux"
@@ -32,6 +37,7 @@
               pkgs.dnsutils
               pkgs.doggo
               pkgs.jq
+              pkgs.colmena
             ];
           };
         }
@@ -40,6 +46,17 @@
       nixosConfigurations = {
         base = nixpkgs.lib.nixosSystem {
           modules = [ ./modules/base.nix ];
+        };
+
+        colmenaHive = colmena.lib.makeHive {
+          defaults = {
+            imports = [ ./modules/base.nix ];
+          };
+
+          dashboard = {
+            imports = [ ./modules/hosts/dashboard.nix ];
+            deployment.targetHost = "192.168.1.152";
+          };
         };
       };
     };
