@@ -28,5 +28,10 @@ in
       ++ lib.optional cfg.subnetRouter "--advertise-routes=192.168.1.0/24";
       useRoutingFeatures = if cfg.subnetRouter then "server" else "none";
     };
+
+    services.prometheus.exporters.node = {
+      enabledCollectors = [ "systemd" ];
+      extraFlags = [ "--collector.systemd.unit-include=tailscaled.service" ];
+    };
   };
 }

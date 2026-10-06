@@ -9,5 +9,6 @@
     ../services/blocky/monitoring.nix
     ../services/unbound/monitoring.nix
     ../services/blackbox
+    ../services/tailscale/alerts.nix
   ];
 }
