@@ -52,6 +52,10 @@ in
     shane
     plex
   ];
+  "backup-arr.age".publicKeys = [
+    shane
+    arr
+  ];
   "hetzner-api-token.age".publicKeys = [
     shane
     monitoring
