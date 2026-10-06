@@ -21,5 +21,5 @@
     ];
   };
 
-  system.stateVersion = ""; # see below
+  system.stateVersion = "26.11";
 }
