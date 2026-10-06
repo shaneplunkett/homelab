@@ -47,17 +47,26 @@ in
     recommendedOptimisation = true;
     clientMaxBodySize = "0";
 
-    virtualHosts = lib.mapAttrs' (
-      name: upstream:
-      lib.nameValuePair "${name}.${domain}" {
-        useACMEHost = domain;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = upstream;
-          proxyWebsockets = true;
+    virtualHosts =
+      lib.mapAttrs' (
+        name: upstream:
+        lib.nameValuePair "${name}.${domain}" {
+          useACMEHost = domain;
+          forceSSL = true;
+          locations."/" = {
+            proxyPass = upstream;
+            proxyWebsockets = true;
+          };
+        }
+      ) routes
+      // {
+        "_" = {
+          default = true;
+          useACMEHost = domain;
+          forceSSL = true;
+          locations."/".return = "404";
         };
-      }
-    ) routes;
+      };
   };
 
   networking.firewall.allowedTCPPorts = [
