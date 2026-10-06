@@ -1,0 +1,25 @@
+loki.source.journal "journal" {
+	forward_to    = [loki.write.monitoring.receiver]
+	relabel_rules = loki.relabel.journal.rules
+	labels        = {host = sys.env("ALLOY_HOST")}
+}
+
+loki.relabel "journal" {
+	forward_to = []
+
+	rule {
+		source_labels = ["__journal__systemd_unit"]
+		target_label  = "unit"
+	}
+
+	rule {
+		source_labels = ["__journal_priority_keyword"]
+		target_label  = "level"
+	}
+}
+
+loki.write "monitoring" {
+	endpoint {
+		url = sys.env("LOKI_URL")
+	}
+}
