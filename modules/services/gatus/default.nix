@@ -33,8 +33,6 @@ in
           interval = "1m";
           conditions = [
             "[STATUS] == 200"
-            "[BODY].data.cpu < 0.9"
-
           ];
           alerts = [
             {
