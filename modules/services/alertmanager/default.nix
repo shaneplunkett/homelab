@@ -22,7 +22,15 @@ in
       receivers = [
         {
           name = "discord";
-          discord_configs = [ { webhook_url = "\${DISCORD_WEBHOOK_URL}"; } ];
+          slack_configs = [
+            (
+              {
+                api_url = "\${DISCORD_WEBHOOK_URL}/slack";
+                send_resolved = true;
+              }
+              // import ./template.nix
+            )
+          ];
         }
       ];
     };

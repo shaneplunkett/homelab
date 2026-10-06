@@ -1,4 +1,6 @@
-_: {
+{
+  imports = [ ./alerts.nix ];
+
   services.loki = {
     enable = true;
     configuration = {
