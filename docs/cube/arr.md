@@ -1,16 +1,74 @@
-# Arr LXC
+# Arr
 
-## Summary
+NixOS LXC on Cube running the media automation stack. The container is
+`module "arr"` in `terraform/cube-arr.tf`, and the apps are `modules/arr`,
+one file per app.
 
-Alpine LXC running the media automation stack in Docker. Media and appdata come from Unraid.
+## How the apps find each other
 
-- **Container:** `terraform/cube-arr.tf`
-- **Stack:** `stacks/cube/arr-lxc/arr/compose.yaml` (what runs, images, ports)
-- **Management:** Hawser agent on the LXC (`terraform/modules/hawser`), driven from Dockhand
+The apps keep their connections to each other (download clients, Prowlarr's
+app sync, Seerr's servers) in their own databases, as the host's LAN address
+and each app's port. Nix can't declare any of that, so moving or rebuilding
+the host has to keep:
 
-## Notes
+- **The address.** It's a fixed DHCP reservation for the container's MAC.
+- **The ports.** Sonarr Anime is a second Sonarr on its own port, not a
+  remapped container port.
+- **The API keys.** Sonarr, Sonarr Anime, Radarr, Prowlarr and SABnzbd get
+  theirs from agenix. Seerr, Tautulli, Maintainerr and Shelfarr keep theirs in
+  their data folders, and Deluge's web password (what Sonarr and Radarr log in
+  with) is in `web.conf`.
 
-- **Static IP on purpose.** The ingress routes in `modules/services/nginx-ingress` point straight at this container's address, so it can't move. Change the IP and you need to update the ingress too.
-- **Storage is bind-mounted from Proxmox**, not mounted inside the LXC. The Unraid NFS shares are Proxmox storage pools on the host (see `docs/cube/README.md`); Terraform bind-mounts them in. `nesting=1` is there for Docker-in-LXC.
-- **PUID 99 / PGID 100** match Unraid's `nobody:users`, so files written to the shares keep the permissions Unraid expects. Anything new that writes to the shares should use the same IDs.
-- **MiniDLNA needs host networking.** DLNA discovery is multicast (SSDP), which doesn't make it through Docker's bridge network.
+## Media
+
+The `unraid-media` pool is bind-mounted at `/mnt/media`, the same path as
+Plex, and the apps store their paths under it. Unraid's NFS export squashes
+every user to `nobody:users`, so the services run as their normal NixOS users
+and files still land as 99:100.
+
+## Containers
+
+Maintainerr, Shelfarr and Calibre-Web-Automated have no NixOS module, so they
+run under Podman with `virtualisation.oci-containers`. Their images are
+pinned by tag (or by digest when there's no matching tag), so updating one
+means bumping the pin.
+
+- **Podman needs `XDG_RUNTIME_DIR=/run`.** Without it, rootful Podman puts
+  network namespaces in `/run/user/0`, and every root SSH login (like a
+  colmena deploy) mounts a fresh tmpfs over that folder. Podman then can't
+  find the namespace to tear down, leaves the old port forward behind, and the
+  port points at a dead container after the next restart.
+- **Shelfarr binds port 80 as a normal user.** Docker allows that inside
+  containers by default and Podman doesn't, so it gets
+  `net.ipv4.ip_unprivileged_port_start=0`.
+- **Calibre-Web-Automated imports whatever lands in the books-ingest folder**
+  into the real library. Never run two of them against the same share.
+
+## SABnzbd
+
+The whole config comes from Nix and is written read-only on each start, so
+changes made in the web UI don't stick. Credentials are in the `sabnzbd`
+secret.
+
+## Deluge
+
+`core.conf` and the daemon's `auth` come from Nix. The web password and
+labels are state in the data folder.
+
+- The NixOS module creates the download folders with tmpfiles, which would
+  `chmod` and `chown` them on the Unraid share. Those entries are forced
+  empty so Nix never touches share permissions.
+- Torrents are outgoing only. Deluge uses a random listening port and
+  nothing is forwarded to it.
+
+## Backups
+
+Each app's data folder is backed up, minus logs, posters (`MediaCover` comes
+back on a refresh) and the apps' own backup zips. The SQLite databases listed
+in `homelab.arr.databases` are excluded as live files and dumped into a
+`dumps/` folder next to them before each run.
+
+To restore a database, follow the restore steps in
+[docs/hetzner](../hetzner/README.md) for the app's folder. Then, with the app
+stopped, copy the dump from `dumps/` over the database, delete its `-wal` and
+`-shm` files, and start the app.

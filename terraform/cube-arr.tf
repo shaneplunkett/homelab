@@ -18,6 +18,8 @@ module "arr" {
 resource "proxmox_virtual_environment_container" "arr" {
   node_name             = local.cube.name
   description           = "Arr Stack Container"
+  start_on_boot         = false
+  started               = false
   unprivileged          = true
   environment_variables = {}
   lifecycle {
