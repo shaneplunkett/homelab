@@ -14,6 +14,14 @@
                 labels.severity = "warning";
                 annotations.summary = "{{ $labels.name }} on {{ $labels.node }} is {{ $value | humanizePercentage }} full";
               }
+
+              {
+                alert = "GuestCpuHigh";
+                expr = "pve_cpu_usage_ratio * on(id) group_left(name, node) pve_guest_info > 0.9";
+                for = "15m";
+                labels.severity = "warning";
+                annotations.summary = "{{ $labels.name }} on {{ $labels.node }} has been above 90% CPU for 15 minutes";
+              }
             ];
           }
         ];
