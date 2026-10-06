@@ -66,9 +66,16 @@
       colmenaHive = colmena.lib.makeHive {
         meta.nixpkgs = import nixpkgs { system = "x86_64-linux"; };
         defaults =
-          { config, lib, ... }:
           {
-            deployment.targetHost = lib.mkDefault config.homelab.lanAddress;
+            config,
+            lib,
+            name,
+            ...
+          }:
+          {
+            deployment.targetHost = lib.mkDefault (
+              if config.homelab.tailscale.enable then name else config.homelab.lanAddress
+            );
             imports = [
               ./modules/base.nix
               agenix.nixosModules.default
@@ -81,7 +88,6 @@
         dashboard = {
           imports = [ ./modules/hosts/dashboard.nix ];
           homelab.lanAddress = "192.168.1.152";
-          deployment.targetHost = "dashboard";
         };
 
         monitoring = {
