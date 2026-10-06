@@ -22,6 +22,34 @@
       description = "Where jobs drop .prom files for node exporter to publish.";
     };
 
+    monitoring = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether the host runs node exporter and Prometheus scrapes it.";
+      };
+
+      thresholds = {
+        memoryAvailable = lib.mkOption {
+          type = lib.types.float;
+          default = 0.10;
+          description = "Alert when the free share of memory drops below this.";
+        };
+
+        cpu = lib.mkOption {
+          type = lib.types.float;
+          default = 0.9;
+          description = "Alert when sustained CPU use goes above this share.";
+        };
+
+        disk = lib.mkOption {
+          type = lib.types.float;
+          default = 0.85;
+          description = "Alert when the root disk fills beyond this share.";
+        };
+      };
+    };
+
     routes = lib.mkOption {
       type = lib.types.attrsOf lib.types.port;
       default = { };
@@ -48,7 +76,7 @@
 
     services.prometheus = {
       exporters.node = {
-        enable = true;
+        inherit (config.homelab.monitoring) enable;
         openFirewall = true;
         extraFlags = [ "--collector.textfile.directory=${config.homelab.metricsDir}" ];
       };
