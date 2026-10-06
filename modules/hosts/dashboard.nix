@@ -1,3 +1,6 @@
 {
-  imports = [ ../services/glance ];
+  imports = [
+    ../services/glance
+    ../services/gatus
+  ];
 }
