@@ -114,11 +114,12 @@ resource "proxmox_virtual_environment_container" "this" {
     command = var.nesting ? "ssh -o StrictHostKeyChecking=no shane@${var.node_ip} \"sudo pct exec ${self.vm_id} -- sh -c 'echo ${local.cgroup_delegate_script} | base64 -d > /etc/init.d/cgroup-delegate && chmod +x /etc/init.d/cgroup-delegate && rc-update add cgroup-delegate default'\"" : "echo 'nesting disabled, skipping cgroup delegation'"
   }
 
-  # Configure TUN device and install Tailscale when requested
+  # Install Tailscale when requested. TUN comes from the node-wide drop-in in
+  # proxmox/, so never add dev0 here: a container with both fails to start.
   provisioner "local-exec" {
     command = var.tailscale ? join("", [
       "ssh -o StrictHostKeyChecking=no shane@${var.node_ip} \"",
-      "sudo pct set ${self.vm_id} --dev0 /dev/net/tun --features keyctl=1,nesting=1 && ",
+      "sudo pct set ${self.vm_id} --features keyctl=1,nesting=1 && ",
       "sudo pct reboot ${self.vm_id} && sleep 10 && ",
       "sudo pct exec ${self.vm_id} -- sh -c '",
       "apk add --no-cache tailscale && ",
@@ -126,13 +127,6 @@ resource "proxmox_virtual_environment_container" "this" {
       "service tailscale start",
       "'\""
     ]) : "echo 'tailscale disabled, skipping'"
-  }
-
-  # The tailscale provisioner above adds /dev/net/tun via pct outside
-  # terraform; without this, every later plan tries to remove the device
-  # (which would break tailscale on the container)
-  lifecycle {
-    ignore_changes = [device_passthrough]
   }
 }
 
