@@ -60,6 +60,30 @@ in
     shane
     monitoring
   ];
+  "sonarr.age".publicKeys = [
+    shane
+    arr
+  ];
+  "sonarr-anime.age".publicKeys = [
+    shane
+    arr
+  ];
+  "radarr.age".publicKeys = [
+    shane
+    arr
+  ];
+  "prowlarr.age".publicKeys = [
+    shane
+    arr
+  ];
+  "sabnzbd.age".publicKeys = [
+    shane
+    arr
+  ];
+  "deluge-auth.age".publicKeys = [
+    shane
+    arr
+  ];
   "tailscale-oauth.age".publicKeys = [
     shane
     dashboard

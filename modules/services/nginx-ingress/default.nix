@@ -14,15 +14,6 @@ let
     unifi = "https://192.168.1.1:443";
     coffee = "http://192.168.20.29:80";
     docker = "http://192.168.1.158:3000";
-
-    # arr
-    overseer = "http://192.168.1.90:5055";
-    prowlarr = "http://192.168.1.90:9696";
-    nzb = "http://192.168.1.90:8080";
-    deluge = "http://192.168.1.90:8112";
-    radarr = "http://192.168.1.90:7878";
-    sonarr = "http://192.168.1.90:8989";
-    sonarranime = "http://192.168.1.90:8990";
   };
 
   hiveRoutes = lib.concatMapAttrs (
