@@ -71,6 +71,7 @@
             agenix.nixosModules.default
             ./modules/agenix
             ./modules/services/alloy
+            ./modules/services/tailscale
           ];
         };
         #TODO: Figure out not using IPs for declaring targetHost
