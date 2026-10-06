@@ -10,8 +10,6 @@ Per-service docs:
 
 - [unraid.md](unraid.md)
 - [mcphub.md](mcphub.md)
-- [satisfactory.md](satisfactory.md)
-- [technitium.md](technitium.md)
 - [macos-tahoe.md](macos-tahoe.md)
 
 ## Gotchas
