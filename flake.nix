@@ -52,7 +52,7 @@
           defaults = {
             imports = [ ./modules/base.nix ];
           };
-
+          #TODO: Figure out not using IPs for declaring targetHost
           dashboard = {
             imports = [ ./modules/hosts/dashboard.nix ];
             deployment.targetHost = "192.168.1.152";
