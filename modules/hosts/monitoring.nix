@@ -5,5 +5,6 @@
     ../services/alertmanager
     ../services/gatus/alerts.nix
     ../services/grafana
+    ../services/loki
   ];
 }
