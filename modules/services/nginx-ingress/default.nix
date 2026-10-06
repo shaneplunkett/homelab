@@ -13,7 +13,6 @@ let
     proxmox = "https://192.168.1.169:8006";
     unifi = "https://192.168.1.1:443";
     coffee = "http://192.168.20.29:80";
-    docker = "http://192.168.1.158:3000";
   };
 
   hiveRoutes = lib.concatMapAttrs (
