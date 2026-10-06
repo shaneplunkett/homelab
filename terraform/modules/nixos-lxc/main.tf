@@ -52,4 +52,39 @@ resource "proxmox_virtual_environment_container" "this" {
     nesting = true
   }
 
+  lifecycle {
+    ignore_changes = [device_passthrough, mount_point]
+  }
+}
+
+# Proxmox only lets root@pam set devices and bind mounts, and the API token
+# is refused, so these go over SSH with pct instead. The container reboots
+# to pick them up.
+
+locals {
+  root_only = concat(
+    [for i, d in var.devices : "-dev${i} ${d.path}${d.gid != null ? ",gid=${d.gid}" : ""}"],
+    [for i, path in keys(var.bind_mounts) : "-mp${i} ${var.bind_mounts[path]},mp=${path}"],
+  )
+}
+
+resource "terraform_data" "root_only" {
+  count = length(local.root_only) > 0 ? 1 : 0
+
+  triggers_replace = {
+    node_ip  = var.node_ip
+    vm_id    = proxmox_virtual_environment_container.this.vm_id
+    settings = local.root_only
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.node_ip != null
+      error_message = "devices and bind_mounts need node_ip to SSH to the node."
+    }
+  }
+
+  provisioner "local-exec" {
+    command = "ssh -o StrictHostKeyChecking=no shane@${var.node_ip} 'sudo pct set ${self.triggers_replace.vm_id} ${join(" ", local.root_only)} && sudo pct reboot ${self.triggers_replace.vm_id}'"
+  }
 }

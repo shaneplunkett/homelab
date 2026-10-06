@@ -112,6 +112,11 @@
           imports = [ ./modules/hosts/dns.nix ];
           homelab.lanAddress = "192.168.1.236";
         };
+
+        plex = {
+          imports = [ ./modules/hosts/plex.nix ];
+          homelab.lanAddress = "192.168.1.237";
+        };
       };
     };
 

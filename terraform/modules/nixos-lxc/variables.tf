@@ -60,6 +60,27 @@ variable "template_file_id" {
   default = "local:vztmpl/nixos-26.11-base_amd64.tar.xz"
 }
 
+variable "node_ip" {
+  type        = string
+  default     = null
+  description = "IP of the Proxmox node, needed to SSH in for devices and bind_mounts"
+}
+
+variable "devices" {
+  type = list(object({
+    path = string
+    gid  = optional(number)
+  }))
+  default     = []
+  description = "Host devices to pass through, with the gid that owns them inside the container"
+}
+
+variable "bind_mounts" {
+  type        = map(string)
+  default     = {}
+  description = "Host paths to bind-mount, keyed by their path inside the container"
+}
+
 variable "mac_address" {
   type        = string
   default     = null

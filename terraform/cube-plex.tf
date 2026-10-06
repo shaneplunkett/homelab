@@ -1,7 +1,29 @@
+module "plex" {
+  source      = "./modules/nixos-lxc"
+  hostname    = "plex"
+  node_name   = local.cube.name
+  node_ip     = local.cube.ip
+  ip          = "dhcp"
+  mac_address = "BC:24:11:AA:D1:7C"
+  cores       = 4
+  memory      = 8192
+  swap        = 1024
+  disk_size   = 100
+
+  devices = [
+    { path = "/dev/dri/renderD128", gid = 303 },
+  ]
+
+  bind_mounts = {
+    "/mnt/media" = "/mnt/pve/unraid-media"
+  }
+}
+
 resource "proxmox_virtual_environment_container" "plex" {
   description   = "Plex Container"
   node_name     = local.cube.name
-  start_on_boot = true
+  start_on_boot = false
+  started       = false
   unprivileged  = false
   lifecycle {
     ignore_changes = [operating_system[0].template_file_id]

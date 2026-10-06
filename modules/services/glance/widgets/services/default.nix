@@ -5,6 +5,7 @@
 }:
 let
   media = [
+    "plex"
     "overseer"
     "prowlarr"
     "nzb"

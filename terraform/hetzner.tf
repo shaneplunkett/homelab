@@ -39,7 +39,7 @@ resource "random_password" "storage_box" {
 }
 
 locals {
-  backup_hosts = toset(["dashboard"])
+  backup_hosts = toset(["dashboard", "plex"])
 }
 
 resource "random_password" "storage_box_host" {

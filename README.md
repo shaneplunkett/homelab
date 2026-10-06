@@ -53,7 +53,9 @@ Flakes only see tracked files, so `git add` new files before building.
 5. Add the host's key to `modules/agenix/agenix-rules.nix`
    (`ssh-keyscan -t ed25519 <ip>`), add it to the secrets it needs, and
    `agenix -r` to rekey.
-6. `colmena apply --on <host>`.
+6. `colmena apply --on <host>`. Colmena reaches hosts by their tailnet
+   name, which doesn't exist until this first deploy joins it, so for this
+   one deploy temporarily set `deployment.targetHost` to the LAN address.
 
 ## Secrets
 
