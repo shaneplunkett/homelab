@@ -31,6 +31,9 @@ Modules can read the whole hive through colmena's `nodes` and `name`
 arguments, so things like scrape targets, log shipping and dashboard tiles are
 generated from the hive instead of kept as hand-written lists.
 
+A service backs up its data by listing it in `homelab.backup.paths`. See
+[docs/hetzner](docs/hetzner/README.md) for how that works and how to restore.
+
 ```sh
 colmena build --on <host>   # check it evaluates and builds
 colmena apply --on <host>   # deploy over SSH

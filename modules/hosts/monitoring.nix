@@ -10,5 +10,6 @@
     ../services/unbound/monitoring.nix
     ../services/blackbox
     ../services/tailscale/alerts.nix
+    ../services/backup/monitoring.nix
   ];
 }

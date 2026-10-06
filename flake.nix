@@ -51,6 +51,8 @@
               pkgs.colmena
               agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
               pkgs.grafana-alloy
+              pkgs.restic
+              pkgs.rclone
             ];
           };
         }
@@ -80,6 +82,7 @@
               ./modules/base.nix
               agenix.nixosModules.default
               ./modules/agenix
+              ./modules/services/backup
               ./modules/services/alloy
               ./modules/services/tailscale
             ];

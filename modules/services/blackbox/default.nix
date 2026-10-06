@@ -12,6 +12,13 @@
             valid_rcodes = [ "NOERROR" ];
           };
         };
+        modules.ssh_banner = {
+          prober = "tcp";
+          tcp = {
+            preferred_ip_protocol = "ip4";
+            query_response = [ { expect = "^SSH-2.0-"; } ];
+          };
+        };
       }
     );
   };

@@ -42,6 +42,14 @@ in
     shane
     dashboard
   ];
+  "backup-dashboard.age".publicKeys = [
+    shane
+    dashboard
+  ];
+  "hetzner-api-token.age".publicKeys = [
+    shane
+    monitoring
+  ];
   "tailscale-oauth.age".publicKeys = [
     shane
     dashboard

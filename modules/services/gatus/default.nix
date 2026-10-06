@@ -1,15 +1,32 @@
-{ config, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   secrets = config.age.secrets;
+  state = "/var/lib/private/gatus";
 in
 {
-  homelab.secrets = [
-    "discord-webhook"
-    "proxmox-token"
-  ];
-  systemd.services.gatus.serviceConfig.EnvironmentFile = [ secrets.proxmox-token.path ];
+  homelab = {
+    secrets = [
+      "discord-webhook"
+      "proxmox-token"
+    ];
 
-  homelab.routes.status = config.services.gatus.settings.web.port;
+    routes.status = config.services.gatus.settings.web.port;
+
+    backup = {
+      paths = [ state ];
+      exclude = [ "${state}/data.db*" ];
+      prepare = ''
+        ${lib.getExe' pkgs.sqlite "sqlite3"} ${state}/data.db ".backup ${state}/backup.db"
+      '';
+    };
+  };
+
+  systemd.services.gatus.serviceConfig.EnvironmentFile = [ secrets.proxmox-token.path ];
 
   services.gatus = {
     enable = true;

@@ -37,3 +37,42 @@ resource "random_password" "storage_box" {
   length  = 32
   special = true
 }
+
+locals {
+  backup_hosts = toset(["dashboard"])
+}
+
+resource "random_password" "storage_box_host" {
+  for_each         = local.backup_hosts
+  length           = 32
+  special          = true
+  min_lower        = 1
+  min_upper        = 1
+  min_numeric      = 1
+  min_special      = 1
+  override_special = "!$%/()=?+#-.,;:~*@{}_&"
+}
+
+resource "hcloud_storage_box_subaccount" "host" {
+  for_each       = local.backup_hosts
+  storage_box_id = hcloud_storage_box.backups.id
+  name           = each.key
+  home_directory = "hosts/${each.key}/"
+  password       = random_password.storage_box_host[each.key].result
+  description    = "restic backups for ${each.key}"
+
+  access_settings = {
+    reachable_externally = true
+    ssh_enabled          = true
+  }
+}
+
+output "storage_box_subaccounts" {
+  value = {
+    for host, account in hcloud_storage_box_subaccount.host : host => {
+      username = account.username
+      password = account.password
+    }
+  }
+  sensitive = true
+}
