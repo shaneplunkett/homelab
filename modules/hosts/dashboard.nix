@@ -15,7 +15,7 @@ in
       {
         "Infrastructure" = [
           {
-            "Proxmox" = {
+            "PVE" = {
               href = "https://proxmox.shaneplunkett.com";
               description = "Proxmox";
               icon = "proxmox.png";
