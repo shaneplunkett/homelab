@@ -47,7 +47,53 @@ These are the whys the Nix can't say for itself.
 
 ## nginx-ingress
 
-- ACME uses `1.1.1.1` as its DNS resolver. The LAN's Technitium serves its own
-  copy of the zone and would never see the challenge record.
+- ACME uses `1.1.1.1` as its DNS resolver. The LAN's Blocky answers for the
+  whole domain itself and would never see the challenge record.
 - The `_` vhost is a catch-all that 404s unknown names, instead of nginx
   falling through to the first route.
+
+## Blocky and Unbound
+
+Blocky does ad blocking and local records, and forwards everything else to
+Unbound on the same host, which resolves from the roots. Both are fully
+declared in Nix with no state, so redundancy is the same host module on one
+host per Proxmox node. There's nothing to cluster or back up.
+
+- Unbound listens on `127.0.0.1:5335`. Blocky wants port 53 on every address,
+  so the two can't share it, and systemd-resolved is off for the same reason.
+- Blocky starts after Unbound. Otherwise it downloads its blocklists before
+  Unbound is listening, every attempt fails, and the host answers without
+  blocking anything until the next refresh.
+- Blocky's default download timeout is 5 seconds, which cuts oisd off
+  part-way and loads half the list without an error that stops anything.
+  Check the per-source `import succeeded` counts in the journal.
+- `customDNS.mapping` answers for a domain and every name under it, so
+  `shaneplunkett.com` locally shadows anything that only exists in
+  Cloudflare. Records like that (a CNAME to Pages, say) need their own entry,
+  and CNAMEs have to go in `customDNS.zone` because `mapping` only takes IPs.
+  TXT and mail records don't matter, since mail servers never ask this
+  resolver.
+
+## Tailscale
+
+Every Nix host joins as `tag:homelab` with the OAuth client secret, so keys
+don't expire. Containers get TUN from the drop-in in `proxmox/`.
+
+- An OAuth secret used as an auth key makes ephemeral devices by default,
+  which vanish when they go offline. `authKeyParameters` turns that off.
+- `extraUpFlags` only apply on first join. Anything that has to stay true
+  goes in `extraSetFlags`, which runs on every boot.
+- Hosts never accept routes. They're on the LAN already, and a LAN machine
+  that accepts the subnet route answers LAN clients through the tunnel and
+  they never hear back. Macs and iPhones accept routes automatically, so if
+  their LAN transfers are slow, check this first.
+- Hosts don't accept tailnet DNS either. They keep the LAN resolvers from
+  DHCP, so a Tailscale problem can't take DNS down with it, and the DNS hosts
+  can't loop back to themselves.
+- MagicDNS can't serve an owned domain, so the DNS hosts' tailnet IPs are the
+  tailnet's global nameservers with Override on. A split-DNS entry for a
+  domain beats the global nameservers, so delete stale ones rather than
+  leaving them behind.
+- Prometheus targets, the Loki URL and Blocky's records use
+  `homelab.lanAddress`, never the tailnet name, so monitoring and DNS keep
+  working when Tailscale doesn't.

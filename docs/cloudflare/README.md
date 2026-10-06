@@ -10,7 +10,7 @@ Everything comes from the repo's `flake.nix` via direnv (`use flake` in `.envrc`
 - **`cf`**: the official Cloudflare CLI (beta), a scriptable fallback for the same API. It isn't in nixpkgs yet, so the flake runs a pinned npm release through `npx`.
 - **`wrangler`**: Workers and Pages projects only. It has no DNS, zone, Registrar or Access commands.
 - **`cloudflared`**: tunnel runtime and management.
-- **`dig`, `doggo`**: checking public DNS from outside the Technitium split view.
+- **`dig`, `doggo`**: checking public DNS from outside the LAN's own answers.
 
 Agent skills from `cloudflare/skills` (`cloudflare`, `cloudflare-one`, `wrangler`, `workers-best-practices`) are pinned in `skills-lock.json`.
 
@@ -45,7 +45,7 @@ Account and Zone permissions need separate policies. The Zone ones only take eff
 
 ## Gotchas
 
-- The local Technitium serves its own `shaneplunkett.com` zone, so LAN lookups don't match the public answer. Ask public DNS instead, e.g. `dig @1.1.1.1` or `doggo @https://cloudflare-dns.com/dns-query`.
+- On the LAN, Blocky answers for all of `shaneplunkett.com` itself, so LAN lookups don't match the public answer. Ask public DNS instead, e.g. `dig @1.1.1.1` or `doggo @https://cloudflare-dns.com/dns-query`.
 - The `cf` CLI is beta. Non-interactive deletes without `--force` print `Aborted.` and exit 0, so check the result rather than the exit code.
 - The legacy Registrar `domains` list endpoint is end-of-life. Use `GET /accounts/{id}/registrar/registrations/{domain}` for `auto_renew` and `expires_at`.
 - If the MCP server ever fails auth (for example, rbw was locked), Claude Code caches it as needing auth and stops connecting, even after the token works again. Remove the `cloudflare` key from `~/.claude/mcp-needs-auth-cache.json` and start a new session.
