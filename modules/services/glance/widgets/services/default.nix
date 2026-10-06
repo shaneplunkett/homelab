@@ -17,6 +17,7 @@ let
 
   overrides = {
     unifi.title = "UniFi";
+    plex.alt-status-codes = [ 401 ];
     coffee = {
       title = "Coffee";
       icon = "mdi:coffee";
