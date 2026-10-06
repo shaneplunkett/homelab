@@ -7,7 +7,7 @@ in
   homelab.secrets = [ "proxmox-token" ];
 
   services.homepage-dashboard = {
-    enable = false;
+    enable = true;
     openFirewall = true;
     allowedHosts = "dashboard.shaneplunkett.com,192.168.1.152:8082";
     environmentFiles = [ secrets.proxmox-token.path ];
