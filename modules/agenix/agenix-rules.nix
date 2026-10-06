@@ -6,6 +6,7 @@ let
   dns1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFUXb6HM8jMHJvC7/Uy1f0MMjSMmm78W0xH58X7vBENY";
   dns2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPbYHIaGpPpaZxcJT6zHry6kCbXjX50+jQZMuHKgkvFQ";
   plex = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOEtYm68pdXcUDG9IUOLJ+9Nv/F8qRF9ne2jnVrBH/v6";
+  arr = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJooa6mXdhrngIeozlvGk5eUjfE0gFqODKuc1XMJ/grG";
 
 in
 {
@@ -63,5 +64,6 @@ in
     dns1
     dns2
     plex
+    arr
   ];
 }
