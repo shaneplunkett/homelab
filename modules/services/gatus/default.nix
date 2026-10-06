@@ -3,7 +3,10 @@ let
   secrets = config.age.secrets;
 in
 {
-  homelab.secrets = [ "gatus-discord" ];
+  homelab.secrets = [
+    "gatus-discord"
+    "proxmox-token"
+  ];
   systemd.services.gatus.serviceConfig.EnvironmentFile = [ secrets.proxmox-token.path ];
 
   services.gatus = {
