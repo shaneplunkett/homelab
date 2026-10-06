@@ -8,4 +8,9 @@ in
     shane
     dashboard
   ];
+  "gatus-discord.age".publicKeys = [
+    shane
+    dashboard
+
+  ];
 }
