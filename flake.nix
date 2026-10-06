@@ -91,12 +91,12 @@
 
         dns1 = {
           imports = [ ./modules/hosts/dns.nix ];
-          deployment.targetHost = "...";
+          deployment.targetHost = "192.168.1.91";
         };
 
         dns2 = {
           imports = [ ./modules/hosts/dns.nix ];
-          deployment.targetHost = "...";
+          deployment.targetHost = "192.168.1.236";
         };
       };
     };
