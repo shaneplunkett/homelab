@@ -48,10 +48,10 @@ in
       builtins.toJSON {
         groups = [
           {
-            name = "DnsNotAnswering";
+            name = "dns";
             rules = [
               {
-                alert = "DNS Probe";
+                alert = "DnsNotAnswering";
                 expr = ''probe_success{job="dns"} == 0'';
                 for = "3m";
                 labels.severity = "critical";
