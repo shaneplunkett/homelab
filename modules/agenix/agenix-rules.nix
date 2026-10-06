@@ -20,4 +20,14 @@ in
     monitoring
 
   ];
+  "grafana-admin-password.age".publicKeys = [
+    shane
+    monitoring
+
+  ];
+  "grafana-secret-key.age".publicKeys = [
+    shane
+    monitoring
+
+  ];
 }
