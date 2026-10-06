@@ -17,6 +17,8 @@ let
     check = 9 * 86400;
   };
 
+  humanize = seconds: if seconds >= 2 * 86400 then "${toString (seconds / 86400)}d" else "${toString (seconds / 3600)}h";
+
   freshness = lib.concatLists (
     lib.mapAttrsToList (task: seconds: [
       {
@@ -26,7 +28,11 @@ let
           severity = "warning";
           inherit task;
         };
-        annotations.summary = "{{ $labels.host }}'s last successful restic ${task} was {{ $value | humanizeDuration }} ago";
+        annotations = {
+          summary = "{{ $labels.host }}'s last successful restic ${task} was {{ $value | humanizeDuration }} ago";
+          condition = "No successful ${task} in ${humanize seconds}";
+          check = "ssh root@{{ $labels.host }} journalctl -u 'restic-backups-homelab*' -n 50";
+        };
       }
       {
         alert = "BackupMissing";
@@ -36,7 +42,11 @@ let
           severity = "warning";
           inherit task;
         };
-        annotations.summary = "{{ $labels.host }} has no successful restic ${task} on record";
+        annotations = {
+          summary = "{{ $labels.host }} has no successful restic ${task} on record";
+          condition = "No ${task} on record for ${humanize seconds}";
+          check = "ssh root@{{ $labels.host }} journalctl -u 'restic-backups-homelab*' -n 50";
+        };
       }
     ]) maxAge
   );
@@ -103,20 +113,32 @@ in
                 expr = ''probe_success{job="storagebox"} == 0'';
                 for = "15m";
                 labels.severity = "warning";
-                annotations.summary = "The Storage Box isn't answering SFTP, so no host can back up";
+                annotations = {
+                  summary = "The Storage Box isn't answering SFTP, so no host can back up";
+                  condition = "SSH banner probe failing for 15m";
+                  check = "nc -vz {{ reReplaceAll \":.*\" \"\" $labels.instance }} 23";
+                };
               }
               {
                 alert = "StorageBoxFilling";
                 expr = "homelab_storagebox_used_bytes / homelab_storagebox_size_bytes > 0.8";
                 for = "1h";
                 labels.severity = "warning";
-                annotations.summary = "The Storage Box is {{ $value | humanizePercentage }} full";
+                annotations = {
+                  summary = "The Storage Box is {{ $value | humanizePercentage }} full";
+                  condition = "Over 80% used for 1h";
+                  check = "ssh root@monitoring journalctl -u restic-backups-homelab-prune -n 50";
+                };
               }
               {
                 alert = "StorageBoxUsageStale";
                 expr = ''time() - node_textfile_mtime_seconds{file=~".*storagebox.prom"} > 3 * 3600'';
                 labels.severity = "warning";
-                annotations.summary = "Storage Box usage hasn't updated from Hetzner's API in over 3 hours";
+                annotations = {
+                  summary = "Storage Box usage hasn't updated from Hetzner's API in over 3 hours";
+                  condition = "Usage file older than 3h";
+                  check = "ssh root@monitoring journalctl -u storagebox-usage -n 20";
+                };
               }
             ];
           }

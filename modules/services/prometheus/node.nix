@@ -23,17 +23,25 @@ in
                   expr = ''up{job="node"} == 0'';
                   for = "5m";
                   labels.severity = "critical";
-                  annotations.summary = "{{ $labels.host }} isn't answering";
+                  annotations = {
+                    summary = "{{ $labels.host }} isn't answering";
+                    condition = "Node exporter unreachable for 5m";
+                    check = "ssh root@{{ $labels.host }} systemctl status prometheus-node-exporter";
+                  };
                 }
               ]
               ++ byThreshold "memoryAvailable" (
-                { value, matcher }:
+                { value, percent, matcher }:
                 {
                   alert = "HostMemoryLow";
                   expr = "node_memory_MemAvailable_bytes{${matcher}} / node_memory_MemTotal_bytes < ${toString value}";
                   for = "10m";
                   labels.severity = "warning";
-                  annotations.summary = "{{ $labels.host }} has only {{ $value | humanizePercentage }} memory free";
+                  annotations = {
+                    summary = "{{ $labels.host }} has only {{ $value | humanizePercentage }} memory free";
+                    condition = "Free memory under ${percent} for 10m";
+                    check = "ssh root@{{ $labels.host }} ps aux --sort=-rss | head";
+                  };
                 }
               );
             }

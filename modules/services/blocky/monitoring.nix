@@ -55,7 +55,11 @@ in
                 expr = ''probe_success{job="dns"} == 0'';
                 for = "3m";
                 labels.severity = "critical";
-                annotations.summary = "{{ $labels.host }} isnt answering DNS";
+                annotations = {
+                  summary = "{{ $labels.host }} isn't answering DNS";
+                  condition = "DNS probe failing for 3m";
+                  check = "dig @{{ $labels.instance }} example.com";
+                };
               }
             ];
           }

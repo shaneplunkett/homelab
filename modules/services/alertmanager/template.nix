@@ -5,7 +5,9 @@
   title_link = "{{ (index .Alerts 0).GeneratorURL }}";
   text = ''
     {{ range .Alerts }}{{ if eq .Status "resolved" }}🟢{{ else if eq .Labels.severity "critical" }}🔴{{ else }}🟠{{ end }} **{{ .Annotations.summary }}** · [view]({{ .GeneratorURL }})
-    {{ end }}'';
+    {{ with .Annotations.condition }}{{ . }} · {{ end }}{{ if eq .Status "resolved" }}lasted {{ .EndsAt.Sub .StartsAt | humanizeDuration }}{{ else }}firing for {{ .StartsAt | since | humanizeDuration }}{{ end }}
+    {{ if eq .Status "firing" }}{{ with .Annotations.check }}`{{ . }}`
+    {{ end }}{{ end }}{{ end }}'';
   fields = [
     {
       title = "Severity";
