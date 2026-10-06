@@ -22,14 +22,29 @@ in
         path = "/var/lib/gatus/data.db";
       };
 
+      metrics = true;
       alerting.discord.webhook-url = "\${DISCORD_WEBHOOK_URL}";
 
       endpoints = [
         {
-          name = "PVE";
+          name = "Prometheus";
           group = "Infrastructure";
-          url = "https://proxmox.shaneplunkett.com/api2/json/nodes/pve/status";
-          headers.Authorization = "PVEAPIToken=homepage@pve!dashboard=\${HOMEPAGE_VAR_PROXMOX_TOKEN}";
+          url = "http://192.168.1.78:9090/-/healthy";
+          interval = "1m";
+          conditions = [
+            "[STATUS] == 200"
+          ];
+          alerts = [
+            {
+              type = "discord";
+              send-on-resolved = true;
+            }
+          ];
+        }
+        {
+          name = "Alertmanager";
+          group = "Infrastructure";
+          url = "http://192.168.1.78:9093/-/healthy";
           interval = "1m";
           conditions = [
             "[STATUS] == 200"

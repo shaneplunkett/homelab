@@ -7,6 +7,7 @@ in
 
   services.prometheus.alertmanager = {
     enable = true;
+    openFirewall = true;
     environmentFile = secrets.discord-webhook.path;
     checkConfig = false;
     configuration = {
