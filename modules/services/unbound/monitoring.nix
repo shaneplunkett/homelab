@@ -1,22 +1,9 @@
 { lib, nodes, ... }:
 let
-  dnsHosts = lib.filterAttrs (_: node: node.config.services.blocky.enable) nodes;
+  dnsHosts = lib.filterAttrs (_: node: node.config.services.unbound.enable) nodes;
 in
 {
   services = {
-    unbound.localControlSocketPath = "/run/unbound/unbound.ctl";
-
-    prometheus.exporters.unbound = {
-      enable = true;
-      openFirewall = true;
-      unbound = {
-        host = "unix:///run/unbound/unbound.ctl";
-        ca = null;
-        certificate = null;
-        key = null;
-      };
-    };
-
     prometheus.scrapeConfigs = [
       {
         job_name = "unbound";

@@ -7,5 +7,6 @@
     ../services/grafana
     ../services/loki
     ../services/blocky/monitoring.nix
+    ../services/unbound/monitoring.nix
   ];
 }
