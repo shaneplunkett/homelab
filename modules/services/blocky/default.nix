@@ -27,6 +27,7 @@
       queryLog.type = "console";
     };
   };
+  services.resolved.enable = false;
   networking.firewall = {
     allowedTCPPorts = [
       53
