@@ -17,6 +17,7 @@ in
       server = {
         http_addr = "0.0.0.0";
         http_port = 3000;
+        root_url = "https://grafana.shaneplunkett.com";
       };
       security = {
         admin_password = "$__file{${secrets.grafana-admin-password.path}}";
