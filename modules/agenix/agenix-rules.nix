@@ -9,9 +9,10 @@ in
     shane
     dashboard
   ];
-  "gatus-discord.age".publicKeys = [
+  "discord-webhook.age".publicKeys = [
     shane
     dashboard
+    monitoring
 
   ];
   "pve-exporter.age".publicKeys = [
