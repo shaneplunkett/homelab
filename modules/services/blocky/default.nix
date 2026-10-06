@@ -14,7 +14,14 @@
         ];
         clientGroupsBlock.default = [ "ads" ];
         blockType = "nxDomain";
-        loading.strategy = "fast";
+        loading = {
+          strategy = "fast";
+          downloads = {
+            timeout = "2m";
+            attempts = 5;
+            cooldown = "10s";
+          };
+        };
       };
       customDNS = {
         mapping."shaneplunkett.com" = nodes.ingress.config.homelab.lanAddress;
@@ -26,6 +33,10 @@
       prometheus.enable = true;
       queryLog.type = "console";
     };
+  };
+  systemd.services.blocky = {
+    after = [ "unbound.service" ];
+    wants = [ "unbound.service" ];
   };
   services.resolved.enable = false;
   networking.firewall = {

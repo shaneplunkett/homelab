@@ -29,6 +29,11 @@ in
       useRoutingFeatures = if cfg.subnetRouter then "server" else "none";
     };
 
+    systemd.services.tailscaled-autoconnect.serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = "10s";
+    };
+
     services.prometheus.exporters.node = {
       enabledCollectors = [ "systemd" ];
       extraFlags = [ "--collector.systemd.unit-include=tailscaled.service" ];
