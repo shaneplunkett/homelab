@@ -88,6 +88,16 @@
           imports = [ ./modules/hosts/ingress.nix ];
           deployment.targetHost = "192.168.1.149";
         };
+
+        dns1 = {
+          imports = [ ./modules/hosts/dns.nix ];
+          deployment.targetHost = "...";
+        };
+
+        dns2 = {
+          imports = [ ./modules/hosts/dns.nix ];
+          deployment.targetHost = "...";
+        };
       };
     };
 
