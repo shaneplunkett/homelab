@@ -3,6 +3,10 @@ let
   secrets = config.age.secrets;
 in
 {
+  imports = [
+    ./alerts.nix
+  ];
+
   homelab.secrets = [ "pve-exporter" ];
 
   services.prometheus.exporters.pve = {
