@@ -1,0 +1,23 @@
+{
+  viewer {
+    assignedIssues(
+      first: 20
+      orderBy: updatedAt
+      filter: { state: { type: { in: ["started", "unstarted"] } } }
+    ) {
+      nodes {
+        identifier
+        title
+        url
+        state {
+          name
+          type
+          color
+        }
+        project {
+          name
+        }
+      }
+    }
+  }
+}

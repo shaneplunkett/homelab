@@ -7,16 +7,25 @@ together and extended. For what's actually configured, read the Nix.
 
 ```
 glance/
-  default.nix            # NixOS module: services.glance and its secrets
+  default.nix            # NixOS module: services.glance, its secrets, the page list
+  theme.nix              # colours and theme presets
+  pages/
+    <page>.nix           # one page: its columns and which widgets go where
   widgets/
     <name>/
-      default.nix        # the widget's settings, as a plain attrset
+      default.nix        # the widget's settings
       template.html      # the widget's Go template (custom-api widgets)
 ```
 
-`default.nix` is a NixOS module, and a host opts in by importing the folder. A
-widget's `default.nix` is **not** a module: it's a plain attrset with no
-`{ config, ... }:` header, pulled into a page with `import`.
+`default.nix` is a NixOS module, and a host opts in by importing the folder.
+Pages and widgets are **not** modules. They're plain attrsets pulled in with
+`import`. When one needs something from the module (`nodes`, `secrets`,
+`lib`), it becomes a function taking just those, and the caller passes them:
+`(import ../widgets/alerts { inherit nodes; })`.
+
+Widgets built from the hive (like the service tiles, generated from the
+ingress host's `virtualHosts`) update themselves when the hive changes, so
+there's nothing to keep in sync by hand.
 
 ## Gotchas
 
@@ -34,7 +43,9 @@ substitutes `${VAR}` placeholders from it when it starts, and doesn't care
 what the variables are called.
 
 The module also accepts `{ _secret = "/path"; }` in place of any single
-setting, which reads a raw value from a file with no `KEY=` line.
+setting, which reads a raw value from a file with no `KEY=` line. It's
+substituted as root before Glance starts, so it works with root-owned agenix
+files and avoids juggling more than one `environmentFile`.
 
 ## Escaping `${...}`
 

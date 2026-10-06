@@ -1,10 +1,18 @@
-{ config, ... }:
+{
+  config,
+  lib,
+  nodes,
+  ...
+}:
 
 let
   secrets = config.age.secrets;
 in
 {
-  homelab.secrets = [ "proxmox-token" ];
+  homelab.secrets = [
+    "proxmox-token"
+    "linear-api-key"
+  ];
 
   services.glance = {
     enable = true;
@@ -14,33 +22,16 @@ in
       server = {
         host = "0.0.0.0";
         port = 8080;
-
       };
 
-      theme = {
-        background-color = "240 21 15";
-        contrast-multiplier = 1.2;
-        primary-color = "232 97 85";
-        positive-color = "115 54 76";
-        negative-color = "347 70 65";
-      };
+      theme = import ./theme.nix;
+      document.head = builtins.readFile ./auto-refresh.html;
 
       pages = [
-        {
-          name = "Home";
-          columns = [
-            {
-              size = "full";
-              widgets = [
-                { type = "calendar"; }
-                (import ./widgets/proxmox-ve-stats)
-              ];
-            }
-          ];
-        }
+        (import ./pages/home.nix { inherit nodes secrets; })
+        (import ./pages/homelab.nix { inherit lib nodes; })
+        (import ./pages/media.nix { inherit lib nodes; })
       ];
     };
-
   };
-
 }

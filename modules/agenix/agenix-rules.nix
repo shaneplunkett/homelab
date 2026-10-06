@@ -36,4 +36,8 @@ in
     ingress
 
   ];
+  "linear-api-key.age".publicKeys = [
+    shane
+    dashboard
+  ];
 }
