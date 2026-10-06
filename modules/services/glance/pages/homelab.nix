@@ -18,6 +18,7 @@
       size = "small";
       widgets = [
         (import ../widgets/proxmox-ve-stats)
+        (import ../widgets/dns { inherit nodes; })
         (import ../widgets/alerts { inherit nodes; })
       ];
     }
