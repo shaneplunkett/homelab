@@ -38,7 +38,7 @@
       {
         job_name = "node";
         static_configs = lib.mapAttrsToList (name: node: {
-          targets = [ "${node.config.deployment.targetHost}:9100" ];
+          targets = [ "${node.config.homelab.lanAddress}:9100" ];
           labels.host = name;
         }) nodes;
       }

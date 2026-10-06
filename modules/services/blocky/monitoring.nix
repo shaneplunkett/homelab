@@ -12,7 +12,7 @@ in
     {
       job_name = "blocky";
       static_configs = lib.mapAttrsToList (name: node: {
-        targets = [ "${node.config.deployment.targetHost}:4000" ];
+        targets = [ "${node.config.homelab.lanAddress}:4000" ];
         labels.host = name;
       }) dnsHosts;
     }
@@ -24,7 +24,7 @@ in
         module = [ "dns" ];
       };
       static_configs = lib.mapAttrsToList (name: node: {
-        targets = [ "${node.config.deployment.targetHost}" ];
+        targets = [ "${node.config.homelab.lanAddress}" ];
         labels.host = name;
       }) dnsHosts;
       relabel_configs = [

@@ -8,7 +8,7 @@ in
       {
         job_name = "unbound";
         static_configs = lib.mapAttrsToList (name: node: {
-          targets = [ "${node.config.deployment.targetHost}:9167" ];
+          targets = [ "${node.config.homelab.lanAddress}:9167" ];
           labels.host = name;
         }) dnsHosts;
       }

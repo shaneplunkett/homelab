@@ -10,6 +10,6 @@
   systemd.services.alloy.environment = {
     LD_LIBRARY_PATH = "${pkgs.systemd}/lib";
     ALLOY_HOST = name;
-    LOKI_URL = "http://${nodes.monitoring.config.deployment.targetHost}:3100/loki/api/v1/push";
+    LOKI_URL = "http://${nodes.monitoring.config.homelab.lanAddress}:3100/loki/api/v1/push";
   };
 }

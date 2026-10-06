@@ -1,7 +1,7 @@
 { nodes }:
 let
-  prometheus = "http://${nodes.monitoring.config.deployment.targetHost}:9090/api/v1/query";
-  realClients = ''client!~"127.0.0.1|${nodes.monitoring.config.deployment.targetHost}"'';
+  prometheus = "http://${nodes.monitoring.config.homelab.lanAddress}:9090/api/v1/query";
+  realClients = ''client!~"127.0.0.1|${nodes.monitoring.config.homelab.lanAddress}"'';
 
   query = promql: {
     url = prometheus;

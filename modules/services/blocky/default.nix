@@ -17,7 +17,7 @@
         loading.strategy = "fast";
       };
       customDNS = {
-        mapping."shaneplunkett.com" = nodes.ingress.config.deployment.targetHost;
+        mapping."shaneplunkett.com" = nodes.ingress.config.homelab.lanAddress;
         zone = ''
           $ORIGIN shaneplunkett.com.
           redbook 3600 CNAME red-book-5nn.pages.dev.

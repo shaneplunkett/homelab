@@ -65,39 +65,43 @@
 
       colmenaHive = colmena.lib.makeHive {
         meta.nixpkgs = import nixpkgs { system = "x86_64-linux"; };
-        defaults = {
-          imports = [
-            ./modules/base.nix
-            agenix.nixosModules.default
-            ./modules/agenix
-            ./modules/services/alloy
-            ./modules/services/tailscale
-          ];
-        };
-        #TODO: Figure out not using IPs for declaring targetHost
+        defaults =
+          { config, lib, ... }:
+          {
+            deployment.targetHost = lib.mkDefault config.homelab.lanAddress;
+            imports = [
+              ./modules/base.nix
+              agenix.nixosModules.default
+              ./modules/agenix
+              ./modules/services/alloy
+              ./modules/services/tailscale
+            ];
+          };
+
         dashboard = {
           imports = [ ./modules/hosts/dashboard.nix ];
-          deployment.targetHost = "192.168.1.152";
+          homelab.lanAddress = "192.168.1.152";
+          deployment.targetHost = "dashboard";
         };
 
         monitoring = {
           imports = [ ./modules/hosts/monitoring.nix ];
-          deployment.targetHost = "192.168.1.78";
+          homelab.lanAddress = "192.168.1.78";
         };
 
         ingress = {
           imports = [ ./modules/hosts/ingress.nix ];
-          deployment.targetHost = "192.168.1.149";
+          homelab.lanAddress = "192.168.1.149";
         };
 
         dns1 = {
           imports = [ ./modules/hosts/dns.nix ];
-          deployment.targetHost = "192.168.1.91";
+          homelab.lanAddress = "192.168.1.91";
         };
 
         dns2 = {
           imports = [ ./modules/hosts/dns.nix ];
-          deployment.targetHost = "192.168.1.236";
+          homelab.lanAddress = "192.168.1.236";
         };
       };
     };
