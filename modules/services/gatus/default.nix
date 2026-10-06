@@ -4,7 +4,7 @@ let
 in
 {
   homelab.secrets = [
-    "gatus-discord"
+    "discord-webhook"
     "proxmox-token"
   ];
   systemd.services.gatus.serviceConfig.EnvironmentFile = [ secrets.proxmox-token.path ];
@@ -22,7 +22,7 @@ in
         path = "/var/lib/gatus/data.db";
       };
 
-      alerting.discord.webhook-url = "\${GATUS_DISCORD_URL}";
+      alerting.discord.webhook-url = "\${DISCORD_WEBHOOK_URL}";
 
       endpoints = [
         {
