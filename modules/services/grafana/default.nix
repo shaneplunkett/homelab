@@ -11,6 +11,8 @@ in
   age.secrets.grafana-admin-password.owner = "grafana";
   age.secrets.grafana-secret-key.owner = "grafana";
 
+  homelab.routes.grafana = config.services.grafana.settings.server.http_port;
+
   services.grafana = {
     enable = true;
     settings = {

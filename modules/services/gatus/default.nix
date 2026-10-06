@@ -9,6 +9,8 @@ in
   ];
   systemd.services.gatus.serviceConfig.EnvironmentFile = [ secrets.proxmox-token.path ];
 
+  homelab.routes.status = config.services.gatus.settings.web.port;
+
   services.gatus = {
     enable = true;
     openFirewall = true;

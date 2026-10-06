@@ -13,6 +13,12 @@
     description = "The host's LAN address, for anything that must keep working without Tailscale.";
   };
 
+  options.homelab.routes = lib.mkOption {
+    type = lib.types.attrsOf lib.types.port;
+    default = { };
+    description = "Subdomains the ingress host proxies to this host, mapped to the local port.";
+  };
+
   config = {
     nixpkgs.hostPlatform = "x86_64-linux"; # the LXCs' platform
 

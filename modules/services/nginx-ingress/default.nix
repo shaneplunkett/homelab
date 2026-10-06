@@ -1,9 +1,14 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  nodes,
+  ...
+}:
 let
   secrets = config.age.secrets;
   domain = "shaneplunkett.com";
 
-  routes = {
+  externalRoutes = {
     unraid = "http://192.168.1.132:80";
     proxmox = "https://192.168.1.169:8006";
     unifi = "https://192.168.1.1:443";
@@ -18,16 +23,30 @@ let
     radarr = "http://192.168.1.90:7878";
     sonarr = "http://192.168.1.90:8989";
     sonarranime = "http://192.168.1.90:8990";
-
-    # Hive
-    dashboard = "http://192.168.1.152:8080";
-    status = "http://192.168.1.152:8082";
-    grafana = "http://192.168.1.78:3000";
-    prometheus = "http://192.168.1.78:9090";
   };
+
+  hiveRoutes = lib.concatMapAttrs (
+    _: node:
+    lib.mapAttrs (
+      _: port: "http://${node.config.homelab.lanAddress}:${toString port}"
+    ) node.config.homelab.routes
+  ) nodes;
+
+  routeNames =
+    lib.attrNames externalRoutes
+    ++ lib.concatMap (node: lib.attrNames node.config.homelab.routes) (lib.attrValues nodes);
+
+  routes = externalRoutes // hiveRoutes;
 in
 {
   homelab.secrets = [ "cloudflare-dns" ];
+
+  assertions = [
+    {
+      assertion = lib.allUnique routeNames;
+      message = "Two routes claim the same subdomain: ${toString routeNames}";
+    }
+  ];
 
   security.acme = {
     acceptTerms = true;

@@ -1,5 +1,8 @@
-{ ... }: {
+{ config, ... }:
+{
   imports = [ ./node.nix ];
+
+  homelab.routes.prometheus = config.services.prometheus.port;
 
   services.prometheus = {
     enable = true;

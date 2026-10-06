@@ -14,6 +14,8 @@ in
     "linear-api-key"
   ];
 
+  homelab.routes.dashboard = config.services.glance.settings.server.port;
+
   services.glance = {
     enable = true;
     openFirewall = true;

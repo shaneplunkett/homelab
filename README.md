@@ -79,9 +79,10 @@ stack itself, so a dead Alertmanager still gets noticed.
 
 nginx on the ingress host terminates TLS with a wildcard certificate (ACME
 DNS-01 via Cloudflare) and proxies `<name>.shaneplunkett.com` to each
-service. Routes are an attrset in `modules/services/nginx-ingress`; anything
-unknown gets a 404. On the LAN, Blocky resolves the whole domain to the
-ingress host.
+service. A service in the hive declares its own route with
+`homelab.routes.<name> = <port>;`, and anything outside the hive is listed in
+`modules/services/nginx-ingress`. Unknown names get a 404. On the LAN, Blocky
+resolves the whole domain to the ingress host.
 
 ## Updates
 
