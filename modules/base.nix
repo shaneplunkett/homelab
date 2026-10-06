@@ -1,4 +1,7 @@
-{ modulesPath, ... }:
+{
+  modulesPath,
+  ...
+}:
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
@@ -19,6 +22,13 @@
       "nix-command"
       "flakes"
     ];
+  };
+
+  services.prometheus = {
+    exporters.node = {
+      enable = true;
+      openFirewall = true;
+    };
   };
 
   system.stateVersion = "26.11";
