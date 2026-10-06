@@ -76,6 +76,11 @@
           imports = [ ./modules/hosts/dashboard.nix ];
           deployment.targetHost = "192.168.1.152";
         };
+
+        monitoring = {
+          imports = [ ./modules/hosts/monitoring.nix ];
+          deployment.targetHost = "192.168.1.78";
+        };
       };
     };
 
