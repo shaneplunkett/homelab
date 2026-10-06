@@ -9,10 +9,18 @@
       url = "github:nix-community/colmena/v0.5.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
-    { nixpkgs, colmena, ... }:
+    {
+      nixpkgs,
+      colmena,
+      agenix,
+      ...
+    }:
     let
       systems = [
         "x86_64-linux"
@@ -41,6 +49,7 @@
               pkgs.doggo
               pkgs.jq
               pkgs.colmena
+              agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
             ];
           };
         }
@@ -56,7 +65,10 @@
       colmenaHive = colmena.lib.makeHive {
         meta.nixpkgs = import nixpkgs { system = "x86_64-linux"; };
         defaults = {
-          imports = [ ./modules/base.nix ];
+          imports = [
+            ./modules/base.nix
+            agenix.nixosModules.default
+          ];
         };
         #TODO: Figure out not using IPs for declaring targetHost
         dashboard = {
