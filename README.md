@@ -91,9 +91,7 @@ resolves the whole domain to the ingress host.
 
 ## Updates
 
-Nix hosts: `nix flake update`, build, then `colmena apply`. Legacy Alpine
-LXCs upgrade themselves nightly via apk-cron (`terraform/modules/lxc-baseline`)
-until they're migrated.
+`nix flake update`, build, then `colmena apply`.
 
 ## Tools
 

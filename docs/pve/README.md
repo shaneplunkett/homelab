@@ -10,8 +10,6 @@ Per-service docs:
 
 - [unraid.md](unraid.md)
 - [brain.md](brain.md)
-- [mcphub.md](mcphub.md)
-- [macos-tahoe.md](macos-tahoe.md)
 
 ## Gotchas
 
