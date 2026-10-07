@@ -42,7 +42,7 @@ let
   '';
 
   register = pkgs.writeShellScript "forgejo-runner-register" ''
-    exec ${exe} forgejo-cli actions register --name builder \
+    exec ${exe} forgejo-cli actions register --name builder --keep-labels \
       --secret-file "$CREDENTIALS_DIRECTORY/secret"
   '';
 

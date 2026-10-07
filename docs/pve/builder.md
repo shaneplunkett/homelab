@@ -99,8 +99,8 @@ ssh root@builder ssh-keygen -y -f /run/agenix/builder-ssh-key
   only the first line becomes the password. A multi-line value like an SSH
   key can't live in Bitwarden that way, so `builder-ssh-key` exists only in
   agenix. If it's lost, make a new one and replace the deploy keys.
-- **The runner can go quiet after the forge restarts.** A deploy that
-  restarts Forgejo can leave the runner active but no longer picking up jobs,
-  and the forge then says no runner is online with the `nix` label. It
-  doesn't happen every time. Restarting it is safe when no job is running:
-  `ssh root@builder systemctl restart forgejo-runner-builder`.
+- **Registering without `--keep-labels` wipes the runner's labels.**
+  `forgejo-runner-register` re-runs whenever Forgejo restarts, and the
+  runner only declares its labels when it starts itself. Without the flag,
+  every forge restart left the runner online with no labels, and jobs waited
+  for a runner with `nix` that never came.
