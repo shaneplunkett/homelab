@@ -1,7 +1,8 @@
 resource "proxmox_virtual_environment_container" "mcphub" {
   description   = "MCP Host"
   node_name     = local.pve.name
-  start_on_boot = true
+  start_on_boot = false
+  started       = false
   unprivileged  = false
   lifecycle {
     ignore_changes = [operating_system[0].template_file_id]

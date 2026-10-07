@@ -2,7 +2,7 @@
 
 ## Summary
 
-Alpine LXC on PVE running the MCP infrastructure stack (the brain that powers Vex across Claude Code and Claude Desktop) and the Open Wearables platform. Declared in `terraform/pve-mcphub.tf`. Tailscale is installed by the `tailscale-lan` module and apk upgrades come from the `lxc-baseline` module.
+Alpine LXC on PVE running the MCP infrastructure stack and the Open Wearables platform. The Vex brain used to run here too and now has its own host; see [brain.md](brain.md). Declared in `terraform/pve-mcphub.tf`. Tailscale is installed by the `tailscale-lan` module and apk upgrades come from the `lxc-baseline` module.
 
 ## LXC config
 
