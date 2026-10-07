@@ -138,6 +138,11 @@
           imports = [ ./modules/hosts/auth.nix ];
           homelab.lanAddress = "192.168.1.31";
         };
+
+        forge = {
+          imports = [ ./modules/hosts/forge.nix ];
+          homelab.lanAddress = "192.168.1.115";
+        };
       };
     };
 

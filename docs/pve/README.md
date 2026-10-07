@@ -11,6 +11,7 @@ Per-service docs:
 - [unraid.md](unraid.md)
 - [brain.md](brain.md)
 - [auth.md](auth.md)
+- [forge.md](forge.md)
 
 ## Gotchas
 

@@ -9,6 +9,7 @@ let
   arr = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJooa6mXdhrngIeozlvGk5eUjfE0gFqODKuc1XMJ/grG";
   brain = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL8uoyuFpHlqcYqZV8yPWcVaHP5BJA8MxiHHseTKTD1+";
   auth = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHAowiuABEm9SQcqT8W0QNthVasjWdAIOZu0fVHVODgu";
+  forge = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKThjQG7Etu9AY90bUyg/ggLa80OexaSh0NzGDQB2E6k";
 
 in
 {
@@ -97,6 +98,7 @@ in
     arr
     brain
     auth
+    forge
   ];
   "backup-brain.age".publicKeys = [
     shane
@@ -129,6 +131,14 @@ in
   "oauth2-proxy-cookie-secret.age".publicKeys = [
     shane
     ingress
+  ];
+  "backup-forge.age".publicKeys = [
+    shane
+    forge
+  ];
+  "forgejo-oidc-client-secret.age".publicKeys = [
+    shane
+    forge
   ];
   "unraid-api-key.age".publicKeys = [
     shane

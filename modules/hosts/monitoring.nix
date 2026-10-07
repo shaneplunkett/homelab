@@ -12,5 +12,6 @@
     ../services/tailscale/alerts.nix
     ../services/backup/monitoring.nix
     ../services/vex-brain/alerts.nix
+    ../services/forgejo/alerts.nix
   ];
 }
