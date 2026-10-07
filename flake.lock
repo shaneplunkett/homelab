@@ -164,11 +164,11 @@
         "rev": "8389e6aa98f39735953274361b2a6a86bfcbfb85",
         "revCount": 141,
         "type": "git",
-        "url": "https://git.shaneplunkett.com/metrokitten/vex-brain"
+        "url": "ssh://forgejo@forge/metrokitten/vex-brain"
       },
       "original": {
         "type": "git",
-        "url": "https://git.shaneplunkett.com/metrokitten/vex-brain"
+        "url": "ssh://forgejo@forge/metrokitten/vex-brain"
       }
     }
   },

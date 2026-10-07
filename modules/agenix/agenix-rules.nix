@@ -10,6 +10,7 @@ let
   brain = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL8uoyuFpHlqcYqZV8yPWcVaHP5BJA8MxiHHseTKTD1+";
   auth = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHAowiuABEm9SQcqT8W0QNthVasjWdAIOZu0fVHVODgu";
   forge = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKThjQG7Etu9AY90bUyg/ggLa80OexaSh0NzGDQB2E6k";
+  builder = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICKHEEAHyQNtytcLug34VWpUKGsLtSsBPk25Lr/RXOS6";
 
 in
 {
@@ -99,6 +100,7 @@ in
     brain
     auth
     forge
+    builder
   ];
   "backup-brain.age".publicKeys = [
     shane
@@ -143,5 +145,14 @@ in
   "unraid-api-key.age".publicKeys = [
     shane
     dashboard
+  ];
+  "forgejo-runner-secret.age".publicKeys = [
+    shane
+    forge
+    builder
+  ];
+  "builder-ssh-key.age".publicKeys = [
+    shane
+    builder
   ];
 }

@@ -12,6 +12,7 @@ Per-service docs:
 - [brain.md](brain.md)
 - [auth.md](auth.md)
 - [forge.md](forge.md)
+- [builder.md](builder.md)
 
 ## Gotchas
 

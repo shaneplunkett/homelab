@@ -14,7 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vex-brain = {
-      url = "git+https://git.shaneplunkett.com/metrokitten/vex-brain";
+      url = "git+ssh://forgejo@forge/metrokitten/vex-brain";
       flake = false;
     };
   };
@@ -142,6 +142,11 @@
         forge = {
           imports = [ ./modules/hosts/forge.nix ];
           homelab.lanAddress = "192.168.1.115";
+        };
+
+        builder = {
+          imports = [ ./modules/hosts/builder.nix ];
+          homelab.lanAddress = "192.168.1.224";
         };
       };
     };

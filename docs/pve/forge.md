@@ -12,12 +12,19 @@ go straight to the host over the tailnet, as
 
 Sign-in goes through Pocket ID, using the `forgejo` client. The first sign-in
 creates the account, named from the `preferred_username` claim, and members
-of `forgejo_admins` become admins. There's no registration form.
+of `forgejo_admins` become admins. There's no registration form, and nothing
+is visible without signing in, including clones over HTTPS.
 
 `forgejo-oidc.service` creates the `pocket-id` auth source, or updates it,
 whenever the service changes, so the Nix module is the place to change it.
 Edits under Site Administration, Authentication Sources get overwritten on
 the next deploy that touches it.
+
+## Actions
+
+Workflows live in `.forgejo/workflows/` and run on the builder, which
+`forgejo-runner-register` registers from a shared secret. See
+[builder.md](builder.md).
 
 ## Getting back in
 

@@ -40,10 +40,32 @@ let
     fi
     exec ${exe} admin auth add-oauth "$@"
   '';
+
+  register = pkgs.writeShellScript "forgejo-runner-register" ''
+    exec ${exe} forgejo-cli actions register --name builder \
+      --secret-file "$CREDENTIALS_DIRECTORY/secret"
+  '';
+
+  oneshot = credential: script: {
+    after = [ "forgejo.service" ];
+    requires = [ "forgejo.service" ];
+    wantedBy = [ "multi-user.target" ];
+    environment = env;
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      User = cfg.user;
+      LoadCredential = "secret:${credential}";
+      ExecStart = script;
+    };
+  };
 in
 {
   homelab = {
-    secrets = [ "forgejo-oidc-client-secret" ];
+    secrets = [
+      "forgejo-oidc-client-secret"
+      "forgejo-runner-secret"
+    ];
 
     routes.git = cfg.settings.server.HTTP_PORT;
 
@@ -78,6 +100,7 @@ in
       security.REVERSE_PROXY_TRUSTED_PROXIES = nodes.ingress.config.homelab.lanAddress;
       session.COOKIE_SECURE = true;
       service = {
+        REQUIRE_SIGNIN_VIEW = true;
         ALLOW_ONLY_EXTERNAL_REGISTRATION = true;
         SHOW_REGISTRATION_BUTTON = false;
         DEFAULT_KEEP_EMAIL_PRIVATE = true;
@@ -91,18 +114,9 @@ in
     };
   };
 
-  systemd.services.forgejo-oidc = {
-    after = [ "forgejo.service" ];
-    requires = [ "forgejo.service" ];
-    wantedBy = [ "multi-user.target" ];
-    environment = env;
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      User = cfg.user;
-      LoadCredential = "secret:${secrets.forgejo-oidc-client-secret.path}";
-      ExecStart = oidc;
-    };
+  systemd.services = {
+    forgejo-oidc = oneshot secrets.forgejo-oidc-client-secret.path oidc;
+    forgejo-runner-register = oneshot secrets.forgejo-runner-secret.path register;
   };
 
   systemd.tmpfiles.rules = [ "d ${dumps} 0700 postgres postgres -" ];
