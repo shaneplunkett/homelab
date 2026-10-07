@@ -120,7 +120,8 @@
       "inputs": {
         "agenix": "agenix",
         "colmena": "colmena",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "vex-brain": "vex-brain"
       }
     },
     "stable": {
@@ -152,6 +153,22 @@
         "owner": "nix-systems",
         "repo": "default",
         "type": "github"
+      }
+    },
+    "vex-brain": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791289864,
+        "narHash": "sha256-P1C4ydONIQ/NgibGogQUesOBjT7tvhjmKw5KtYbFHbc=",
+        "ref": "refs/heads/main",
+        "rev": "8389e6aa98f39735953274361b2a6a86bfcbfb85",
+        "revCount": 141,
+        "type": "git",
+        "url": "ssh://git@github.com/shaneplunkett/vex-brain"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/shaneplunkett/vex-brain"
       }
     }
   },

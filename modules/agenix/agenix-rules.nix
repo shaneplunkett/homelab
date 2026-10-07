@@ -7,6 +7,7 @@ let
   dns2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPbYHIaGpPpaZxcJT6zHry6kCbXjX50+jQZMuHKgkvFQ";
   plex = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOEtYm68pdXcUDG9IUOLJ+9Nv/F8qRF9ne2jnVrBH/v6";
   arr = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJooa6mXdhrngIeozlvGk5eUjfE0gFqODKuc1XMJ/grG";
+  brain = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL8uoyuFpHlqcYqZV8yPWcVaHP5BJA8MxiHHseTKTD1+";
 
 in
 {
@@ -93,5 +94,18 @@ in
     dns2
     plex
     arr
+    brain
+  ];
+  "backup-brain.age".publicKeys = [
+    shane
+    brain
+  ];
+  "vex-brain.age".publicKeys = [
+    shane
+    brain
+  ];
+  "cloudflared-brain.age".publicKeys = [
+    shane
+    brain
   ];
 }

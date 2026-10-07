@@ -1,0 +1,5 @@
+{
+  imports = [
+    ../services/vex-brain
+  ];
+}

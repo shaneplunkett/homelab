@@ -13,12 +13,17 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    vex-brain = {
+      url = "git+ssh://git@github.com/shaneplunkett/vex-brain";
+      flake = false;
+    };
   };
   outputs =
     {
       nixpkgs,
       colmena,
       agenix,
+      vex-brain,
       ...
     }:
     let
@@ -67,6 +72,7 @@
 
       colmenaHive = colmena.lib.makeHive {
         meta.nixpkgs = import nixpkgs { system = "x86_64-linux"; };
+        meta.specialArgs = { inherit vex-brain; };
         defaults =
           {
             config,
@@ -121,6 +127,11 @@
         arr = {
           imports = [ ./modules/hosts/arr.nix ];
           homelab.lanAddress = "192.168.1.90";
+        };
+
+        brain = {
+          imports = [ ./modules/hosts/brain.nix ];
+          homelab.lanAddress = "192.168.1.243";
         };
       };
     };
