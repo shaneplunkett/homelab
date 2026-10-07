@@ -133,7 +133,8 @@ to the sign-in page and look up even when the app was down.
   local address, so the passkey is the only sign-in. The arr apps do this with
   `auth.required = "DisabledForLocalAddresses"`, and SABnzbd with
   `inet_exposure = 5`. Deluge's web password can't be turned off, so it still
-  asks.
+  asks, but its session lasts 30 days instead of an idle hour. deluge-web
+  owns `web.conf`, so Nix sets `session_timeout` there before each start.
 
 ## Getting back in
 

@@ -52,6 +52,12 @@ in
     };
   };
 
+  systemd.services.delugeweb.preStart = ''
+    if [ -f ${configDir}/web.conf ]; then
+      sed -i -E 's/"session_timeout": [0-9]+/"session_timeout": ${toString (30 * 24 * 60 * 60)}/' ${configDir}/web.conf
+    fi
+  '';
+
   systemd.tmpfiles.settings."10-deluged" = lib.genAttrs [
     cfg.config.download_location
     cfg.config.move_completed_path
