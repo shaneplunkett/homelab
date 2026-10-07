@@ -160,4 +160,8 @@ in
     shane
     builder
   ];
+  "renovate-github-token.age".publicKeys = [
+    shane
+    builder
+  ];
 }

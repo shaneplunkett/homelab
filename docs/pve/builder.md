@@ -39,6 +39,25 @@ is `forge-bot-token`, in Bitwarden and agenix, and the runner loads it as a
 credential. A pull request can't ask its own author for a review, which is why
 the updates come from a bot and not from your account.
 
+## Renovate
+
+Renovate runs on the builder every Sunday morning, as `forge-bot`, for the
+pins a flake update doesn't touch: container images in Nix modules, flake
+inputs pinned to a GitHub tag, the `npx` packages in the dev shell, and
+Terraform providers. Each update is its own pull request asking
+`metrokitten` to review, which pings Discord. The repo's rules are in
+`renovate.json`, and its Nix manager is off, because the update workflow owns
+`flake.lock`.
+
+It finds repos by itself: any repo where `forge-bot` is a collaborator gets
+an onboarding pull request first, unless it already has a `renovate.json`.
+`renovate-github-token` is a read-only GitHub token, because GitHub refuses
+to list tags and releases without one. To run it now:
+
+```sh
+ssh root@builder systemctl start renovate
+```
+
 ## Registration
 
 The forge and the builder share the `forgejo-runner-secret` secret, 40 hex

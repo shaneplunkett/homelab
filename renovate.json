@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "reviewers": ["metrokitten"],
+  "dependencyDashboard": false,
+  "prHourlyLimit": 0,
+  "nix": {
+    "enabled": false
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Container images in Nix modules",
+      "managerFilePatterns": ["/\\.nix$/"],
+      "matchStrings": [
+        "image = \"(?<depName>[^:@\"]+)(?::(?<currentValue>[^@\"]+))?(?:@(?<currentDigest>sha256:[a-f0-9]+))?\";"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Flake inputs pinned to a GitHub tag",
+      "managerFilePatterns": ["/^flake\\.nix$/"],
+      "matchStrings": ["url = \"github:(?<depName>[^/\"]+/[^/\"]+)/(?<currentValue>v[^\"]+)\";"],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "description": "npm packages run with npx",
+      "managerFilePatterns": ["/^flake\\.nix$/"],
+      "matchStrings": ["npx --yes (?<depName>[a-z0-9@/-]+)@(?<currentValue>[^\\s\"]+)"],
+      "datasourceTemplate": "npm"
+    }
+  ]
+}

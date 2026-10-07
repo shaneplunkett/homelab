@@ -1,0 +1,25 @@
+{ config, nodes, ... }:
+{
+  homelab = {
+    secrets = [
+      "forge-bot-token"
+      "renovate-github-token"
+    ];
+    monitoring.units = [ "renovate.service" ];
+  };
+
+  services.renovate = {
+    enable = true;
+    schedule = "Sun 06:30 Australia/Melbourne";
+    credentials = {
+      RENOVATE_TOKEN = config.age.secrets.forge-bot-token.path;
+      RENOVATE_GITHUB_COM_TOKEN = config.age.secrets.renovate-github-token.path;
+    };
+    settings = {
+      platform = "forgejo";
+      endpoint = "${nodes.forge.config.services.forgejo.settings.server.ROOT_URL}api/v1/";
+      gitAuthor = "forge-bot <forge-bot@noreply.shaneplunkett.com>";
+      autodiscover = true;
+    };
+  };
+}
