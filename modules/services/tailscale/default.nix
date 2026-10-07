@@ -34,9 +34,6 @@ in
       RestartSec = "10s";
     };
 
-    services.prometheus.exporters.node = {
-      enabledCollectors = [ "systemd" ];
-      extraFlags = [ "--collector.systemd.unit-include=tailscaled.service" ];
-    };
+    homelab.monitoring.units = [ "tailscaled.service" ];
   };
 }

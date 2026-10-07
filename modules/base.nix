@@ -4,6 +4,9 @@
   modulesPath,
   ...
 }:
+let
+  inherit (config.homelab.monitoring) units;
+in
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
@@ -27,6 +30,12 @@
         type = lib.types.bool;
         default = true;
         description = "Whether the host runs node exporter and Prometheus scrapes it.";
+      };
+
+      units = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "systemd units whose state node exporter publishes, for alerts on them.";
       };
 
       thresholds = {
@@ -78,7 +87,11 @@
       exporters.node = {
         inherit (config.homelab.monitoring) enable;
         openFirewall = true;
-        extraFlags = [ "--collector.textfile.directory=${config.homelab.metricsDir}" ];
+        enabledCollectors = lib.mkIf (units != [ ]) [ "systemd" ];
+        extraFlags = [
+          "--collector.textfile.directory=${config.homelab.metricsDir}"
+        ]
+        ++ lib.optional (units != [ ]) "--collector.systemd.unit-include=${lib.concatStringsSep "|" units}";
       };
     };
 
