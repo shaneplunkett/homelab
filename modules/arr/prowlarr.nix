@@ -26,5 +26,6 @@ in
     enable = true;
     openFirewall = true;
     environmentFiles = [ config.age.secrets.prowlarr.path ];
+    settings.auth.required = "DisabledForLocalAddresses";
   };
 }

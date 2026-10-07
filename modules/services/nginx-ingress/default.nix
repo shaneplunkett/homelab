@@ -19,7 +19,10 @@ let
       "/api/"
       "~ ^/[0-9]+/(api|download)"
     ];
-    nzb = [ "/api" ];
+    nzb = [
+      "/api"
+      "/sabnzbd/api"
+    ];
     deluge = [ ];
   };
 

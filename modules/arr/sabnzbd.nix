@@ -32,6 +32,7 @@ in
         host = "0.0.0.0";
         url_base = "/sabnzbd";
         host_whitelist = "nzb.shaneplunkett.com, arr";
+        inet_exposure = 5;
         download_dir = "${downloads}/usenet/incomplete";
         complete_dir = "${downloads}/usenet/complete";
         bandwidth_max = "500M";

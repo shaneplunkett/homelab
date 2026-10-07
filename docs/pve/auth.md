@@ -110,7 +110,7 @@ that lasts 30 days, so it covers every gated app at once.
 
 The open paths are how the apps talk to each other through ingress.
 Maintainerr calls Sonarr, Radarr and Overseerr on `/api/`, Shelfarr calls
-SABnzbd on `/api`, and SABnzbd and Shelfarr fetch NZBs from Prowlarr's
+SABnzbd (which answers on both `/api` and `/sabnzbd/api`), and SABnzbd and Shelfarr fetch NZBs from Prowlarr's
 `/<n>/download` links. Every open path still needs that app's API key. Before
 gating a new app, search the arr host's `/var/lib` for its hostname to find
 what calls it.
@@ -128,8 +128,12 @@ to the sign-in page and look up even when the app was down.
   `insecure-oidc-allow-unverified-email`, which is safe because the group
   decides who gets in, not the email.
 - **The apps' own ports are still open on the LAN**, so the gate only covers
-  the `shaneplunkett.com` names. Sonarr, Sonarr Anime and Radarr skip their
-  own login for local addresses, and ingress counts as local.
+  the `shaneplunkett.com` names.
+- **Behind the gate, the apps skip their own logins.** Ingress counts as a
+  local address, so the passkey is the only sign-in. The arr apps do this with
+  `auth.required = "DisabledForLocalAddresses"`, and SABnzbd with
+  `inet_exposure = 5`. Deluge's web password can't be turned off, so it still
+  asks.
 
 ## Getting back in
 
