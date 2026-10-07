@@ -35,6 +35,30 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: List the input changes
+        if: steps.update.outputs.changed == 'true'
+        run: |
+          git show HEAD~1:flake.lock > "$CLOSURES/old.lock"
+          jq -r --slurpfile old "$CLOSURES/old.lock" '
+            .nodes as $nodes
+            | .nodes.root.inputs | to_entries[]
+            | .key as $name
+            | $nodes[.value].locked as $new
+            | ($old[0].nodes[$old[0].nodes.root.inputs[$name]].locked // {}) as $was
+            | select($was.rev != null and $was.rev != $new.rev)
+            | [$name, $new.type, ($new.url // "\($new.owner)/\($new.repo)"), $was.rev, $new.rev]
+            | @tsv' flake.lock > "$CLOSURES/moved.tsv"
+
+          while IFS=$'\t' read -r name type source was now; do
+            if [ "$type" = github ]; then
+              echo "**$name**: [${was:0:7}...${now:0:7}](https://github.com/$source/compare/$was...$now)" >> "$CLOSURES/inputs.md"
+            else
+              git clone -q --bare --filter=blob:none "$source" "$CLOSURES/$name.git"
+              printf '**%s**\n%s\n' "$name" "$(git -C "$CLOSURES/$name.git" log --format='- %h %s' "$was..$now")" >> "$CLOSURES/inputs.md"
+            fi
+            echo >> "$CLOSURES/inputs.md"
+          done < "$CLOSURES/moved.tsv"
+
       - name: Build every host
         id: build
         if: steps.update.outputs.changed == 'true'
@@ -81,9 +105,10 @@ jobs:
             status="❌ The build failed. The update workflow's log has the error."
           fi
           changes="$(cat "$CLOSURES/changes.md" 2> /dev/null || echo "No package list, because the build failed.")"
-          inputs="$(git log -1 --format=%b)"
-          body="$(printf '%s\n\n### Package changes\n\n%s\n\n<details>\n<summary>Flake inputs</summary>\n\n%s\n\n</details>' \
-            "$status" "$changes" "$inputs")"
+          inputs="$(cat "$CLOSURES/inputs.md")"
+          lock="$(git log -1 --format=%b)"
+          body="$(printf '%s\n\n### Package changes\n\n%s\n\n### Input changes\n\n%s\n\n<details>\n<summary>Lock file</summary>\n\n%s\n\n</details>' \
+            "$status" "$changes" "$inputs" "$lock")"
 
           number="$(curl -sf -H "$auth" "$api/pulls?state=open" \
             | jq --arg branch "$BRANCH" '.[] | select(.head.ref == $branch) | .number')"

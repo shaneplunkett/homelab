@@ -29,7 +29,10 @@ It runs `nix flake update`, builds every host, pushes the result to
 `update/flake-lock` as `forge-bot`, and opens a pull request that says
 whether the build passed. It also builds every host from `main` first, so the
 pull request can list each host's package changes from
-`nix store diff-closures`, leaving out changes that are only in size. Only then does it ask `metrokitten` to review,
+`nix store diff-closures`, leaving out changes that are only in size. That
+list can't show a source-only input like `vex-brain`, which has no version,
+so the pull request also lists each moved input: a compare link for GitHub
+inputs, and the new commits for inputs on the forge. Only then does it ask `metrokitten` to review,
 which pings Discord, so the ping always comes with the build's result. If
 last week's pull request is still open, it updates that one instead. Merging
 it deploys like any other change.
