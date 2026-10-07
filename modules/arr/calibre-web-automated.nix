@@ -21,7 +21,7 @@ in
   };
 
   virtualisation.oci-containers.containers.calibre-web-automated = {
-    image = "docker.io/crocodilestick/calibre-web-automated:v4.0.6";
+    image = "docker.io/crocodilestick/calibre-web-automated:v4.0.8";
     ports = [ "${toString port}:${toString port}" ];
     volumes = [
       "${dataDir}:/config"
