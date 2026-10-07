@@ -49,9 +49,10 @@ Flakes only see tracked files, so `git add` new files before building.
 2. Add a `terraform/<node>-<host>.tf` using `modules/nixos-lxc` and apply it.
 3. Give it a fixed DHCP reservation in UniFi.
 4. Add `modules/hosts/<host>.nix` and a node in the hive pointing at it.
-5. Add the host's key to `modules/agenix/agenix-rules.nix`
-   (`ssh-keyscan -t ed25519 <ip>`), add it to the secrets it needs, and
-   `agenix -r` to rekey.
+5. Add the host's key to `modules/agenix/host-keys.nix`
+   (`ssh-keyscan -t ed25519 <ip>`), name it in `agenix-rules.nix`, add it to
+   the secrets it needs, and `agenix -r` to rekey. The builder trusts hosts
+   from the same file, so this is also what lets it deploy there.
 6. `colmena apply --on <host>`. Colmena reaches hosts by their tailnet
    name, which doesn't exist until this first deploy joins it, so for this
    one deploy temporarily set `deployment.targetHost` to the LAN address.
@@ -88,9 +89,16 @@ service. A service in the hive declares its own route with
 `modules/services/nginx-ingress`. Unknown names get a 404. On the LAN, Blocky
 resolves the whole domain to the ingress host.
 
-## Updates
+## Changes and deploys
 
-`nix flake update`, build, then `colmena apply`.
+The forge is the source of truth, and GitHub is a push mirror of it. Every
+pull request builds every host on the builder, and every push to `main`
+deploys every host tagged `deploy-on-merge`, one deploy at a time. The
+builder isn't tagged, because switching it restarts the runner mid-deploy,
+so it's deployed by hand with `colmena apply --on builder`.
+
+Updates are a pull request like any other: `nix flake update`, push a
+branch, and merge once it builds.
 
 ## Tools
 

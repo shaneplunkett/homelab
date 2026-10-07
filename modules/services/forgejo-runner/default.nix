@@ -1,12 +1,13 @@
 {
   config,
+  lib,
   pkgs,
   nodes,
   ...
 }:
 let
   unit = "forgejo-runner-builder";
-  forge = nodes.forge.config.homelab.lanAddress;
+  lanAddress = name: nodes.${name}.config.homelab.lanAddress;
 in
 {
   homelab = {
@@ -45,18 +46,18 @@ in
   ];
 
   programs.ssh = {
-    knownHosts.forge = {
+    knownHosts = lib.mapAttrs (name: publicKey: {
       hostNames = [
-        "forge"
-        forge
+        name
+        (lanAddress name)
       ];
-      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKThjQG7Etu9AY90bUyg/ggLa80OexaSh0NzGDQB2E6k";
-    };
-    extraConfig = ''
-      Host forge
-        HostName ${forge}
+      inherit publicKey;
+    }) (import ../../agenix/host-keys.nix);
+    extraConfig = lib.concatMapStrings (name: ''
+      Host ${name}
+        HostName ${lanAddress name}
         IdentityFile /run/credentials/${unit}.service/ssh-key
-    '';
+    '') (lib.attrNames nodes);
   };
 
   nix.gc = {

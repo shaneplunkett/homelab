@@ -13,6 +13,15 @@ The host has Nix, git, colmena, and node for JavaScript actions like
 `actions/checkout`. Anything else a job needs goes in `hostPackages`, or
 comes from `nix shell` inside the job. Old store paths are collected weekly.
 
+## Deploying
+
+The deploy workflow runs `colmena apply --on @deploy-on-merge` on each push
+to `main`. Its concurrency group queues deploys instead of cancelling them,
+which is what Forgejo does by default for pushes. The builder's SSH key is an
+authorised root key on every host, and its SSH config maps each host's name
+to its LAN address from the hive, because the hosts don't use Tailscale's
+DNS. It trusts each host by the key in `modules/agenix/host-keys.nix`.
+
 ## Registration
 
 The forge and the builder share the `forgejo-runner-secret` secret, 40 hex

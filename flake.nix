@@ -84,6 +84,7 @@
             deployment.targetHost = lib.mkDefault (
               if config.homelab.tailscale.enable then name else config.homelab.lanAddress
             );
+            deployment.tags = lib.mkDefault [ "deploy-on-merge" ];
             imports = [
               ./modules/base.nix
               agenix.nixosModules.default
@@ -147,6 +148,7 @@
         builder = {
           imports = [ ./modules/hosts/builder.nix ];
           homelab.lanAddress = "192.168.1.224";
+          deployment.tags = [ ];
         };
       };
     };

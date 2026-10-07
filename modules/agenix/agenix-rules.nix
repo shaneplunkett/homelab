@@ -1,17 +1,18 @@
 let
   shane = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINfq31bP+xQwlO/joZeGU6LaLYZXV2ql7TLSv5ToVUtJ";
-  dashboard = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOslO4NV6X1Rk1AkNPkIg7AndhYeMAI3lz/jKJOQ3IPo";
-  monitoring = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA22/YPhM1xo8VJPcessZzNQ1PzFtpKZ7lGltOmffZjx";
-  ingress = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAe172XoKAZeWtcPmuuFibRFG1Jdlpv/atTRfHtVfezB";
-  dns1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFUXb6HM8jMHJvC7/Uy1f0MMjSMmm78W0xH58X7vBENY";
-  dns2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPbYHIaGpPpaZxcJT6zHry6kCbXjX50+jQZMuHKgkvFQ";
-  plex = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOEtYm68pdXcUDG9IUOLJ+9Nv/F8qRF9ne2jnVrBH/v6";
-  arr = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJooa6mXdhrngIeozlvGk5eUjfE0gFqODKuc1XMJ/grG";
-  brain = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL8uoyuFpHlqcYqZV8yPWcVaHP5BJA8MxiHHseTKTD1+";
-  auth = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHAowiuABEm9SQcqT8W0QNthVasjWdAIOZu0fVHVODgu";
-  forge = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKThjQG7Etu9AY90bUyg/ggLa80OexaSh0NzGDQB2E6k";
-  builder = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICKHEEAHyQNtytcLug34VWpUKGsLtSsBPk25Lr/RXOS6";
-
+  inherit (import ./host-keys.nix)
+    dashboard
+    monitoring
+    ingress
+    dns1
+    dns2
+    plex
+    arr
+    brain
+    auth
+    forge
+    builder
+    ;
 in
 {
   "proxmox-token.age".publicKeys = [
