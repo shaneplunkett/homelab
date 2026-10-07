@@ -48,6 +48,54 @@ Map roles from group names rather than emails. Grafana makes members of
 Groups live in Pocket ID under User Groups. The group's name is what goes in
 the claim, not its display name.
 
+### Proxmox
+
+The realm is cluster-wide, and Terraform can't manage it. The Terraform
+token's role has no `Realm.Allocate` or `Permissions.Modify`, and adding
+`Permissions.Modify` would let it grant itself anything. So the realm was
+made once by hand. To make it again, from this repo:
+
+```sh
+printf '%s\n' "$(rbw get proxmox-oidc-client-secret)" | ssh shane@<pve> 'sudo bash -c '\''
+read -r key
+pveum realm add pocket-id --type openid --comment "Pocket ID" \
+  --issuer-url https://auth.shaneplunkett.com --client-id proxmox --client-key "$key" \
+  --scopes "email profile groups" --username-claim username \
+  --autocreate 1 --groups-claim groups --groups-overwrite 1 --default 1
+pveum group add proxmox_admins-pocket-id
+pveum acl modify / --groups proxmox_admins-pocket-id --roles Administrator
+'\'''
+```
+
+The secret goes in on stdin so it stays out of sudo's log.
+
+- **Proxmox renames groups.** It adds the realm to each group from the claim,
+  so `proxmox_admins` in Pocket ID becomes `proxmox_admins-pocket-id`. It
+  only syncs groups that already exist in Proxmox, and the ACL is on that
+  group.
+- **Don't add `openid` to the scopes.** Proxmox adds it itself.
+- **The callback is the bare origin,** `https://proxmox.shaneplunkett.com`.
+  Signing in at a node's own address needs that origin added to the client.
+- **The nodes need to resolve `auth.shaneplunkett.com`.** Proxmox fetches
+  tokens itself, and the router doesn't know the homelab's names. Each node's
+  DNS is in `terraform/proxmox-dns.tf`: Blocky on dns1 and dns2 first, the
+  router last as a fallback.
+- `shane@pam` is the way in when Pocket ID is down.
+
+### Unraid
+
+Unraid (7.2 or later) keeps OIDC in its own UI, under Settings, Management
+Access, API, OIDC. It saves to
+`/boot/config/plugins/dynamix.my.servers/configs/oidc.json` on the flash
+drive.
+
+- The callback is `https://unraid.shaneplunkett.com/graphql/api/auth/oidc/callback`.
+- The issuer URL has no trailing slash.
+- Add `groups` to the scopes, and use Advanced authorization with one rule,
+  `groups` contains `unraid_admins`. Every OIDC login signs in as root, so
+  this rule is the only thing deciding who gets in.
+- The root password still works when Pocket ID is down.
+
 ### Apps without OIDC
 
 The arr apps, SABnzbd and Deluge have no OIDC login. The plan for those is
