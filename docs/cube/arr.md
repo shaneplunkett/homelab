@@ -46,9 +46,15 @@ means bumping the pin.
 
 ## SABnzbd
 
-The whole config comes from Nix and is written read-only on each start, so
-changes made in the web UI don't stick. Credentials are in the `sabnzbd`
-secret.
+Nix writes its settings into `sabnzbd.ini` on each start, and they win over
+anything set in the web UI. Credentials are in the `sabnzbd` secret.
+
+- The ini is writable (`allowConfigWrite`). Read-only, SABnzbd still tries
+  to save it every 30 seconds or so, and fills the Warnings tab with "Cannot
+  write to INI file".
+- Settings changed only in the web UI live in `sabnzbd.ini`, which isn't
+  backed up because it holds the credentials. Anything worth keeping belongs
+  in Nix.
 
 ## Deluge
 

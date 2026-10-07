@@ -26,6 +26,7 @@ in
     enable = true;
     openFirewall = true;
     secretFiles = [ config.age.secrets.sabnzbd.path ];
+    allowConfigWrite = true;
 
     settings = {
       misc = {
