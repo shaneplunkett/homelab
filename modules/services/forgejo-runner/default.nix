@@ -14,6 +14,7 @@ in
     secrets = [
       "forgejo-runner-secret"
       "builder-ssh-key"
+      "forge-bot-token"
     ];
     monitoring.units = [ "${unit}.service" ];
   };
@@ -34,6 +35,7 @@ in
       pkgs.curl
       pkgs.gawk
       pkgs.gnused
+      pkgs.jq
       pkgs.nodejs
       config.programs.ssh.package
       config.nix.package
@@ -43,6 +45,7 @@ in
 
   systemd.services.${unit}.serviceConfig.LoadCredential = [
     "ssh-key:${config.age.secrets.builder-ssh-key.path}"
+    "forge-bot-token:${config.age.secrets.forge-bot-token.path}"
   ];
 
   programs.ssh = {

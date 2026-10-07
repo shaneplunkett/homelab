@@ -1,0 +1,53 @@
+on:
+  schedule:
+    - cron: "0 19 * * 6"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: nix
+    env:
+      BRANCH: update/flake-lock
+      REVIEWER: metrokitten
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Update the lock file
+        run: |
+          git config user.name forge-bot
+          git config user.email forge-bot@noreply.shaneplunkett.com
+          nix flake update --commit-lock-file
+
+      - name: Open a pull request
+        run: |
+          if [ "$(git rev-parse HEAD)" = "$GITHUB_SHA" ]; then
+            echo "Everything is already up to date."
+            exit 0
+          fi
+
+          token="$(< /run/credentials/forgejo-runner-builder.service/forge-bot-token)"
+          echo "::add-mask::$token"
+          auth="Authorization: token $token"
+          api="$GITHUB_SERVER_URL/api/v1/repos/$GITHUB_REPOSITORY"
+
+          basic="$(printf 'forge-bot:%s' "$token" | base64 -w0)"
+          git -c http.extraHeader="Authorization: Basic $basic" \
+            push --force "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" "HEAD:refs/heads/$BRANCH"
+
+          open="$(curl -sf -H "$auth" "$api/pulls?state=open" \
+            | jq --arg branch "$BRANCH" '[.[] | select(.head.ref == $branch)] | length')"
+          if [ "$open" -gt 0 ]; then
+            echo "Updated the pull request that was already open."
+            exit 0
+          fi
+
+          request="$(jq -n --arg branch "$BRANCH" --arg body "$(git log -1 --format=%b)" \
+            '{head: $branch, base: "main", title: "Update flake inputs", body: $body}')"
+          number="$(curl -sf -H "$auth" -H "Content-Type: application/json" \
+            -d "$request" "$api/pulls" | jq .number)"
+
+          curl -sf -H "$auth" -H "Content-Type: application/json" \
+            -d "{\"reviewers\": [\"$REVIEWER\"]}" "$api/pulls/$number/requested_reviewers" > /dev/null
+          echo "Opened pull request #$number."

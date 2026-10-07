@@ -22,6 +22,19 @@ authorised root key on every host, and its SSH config maps each host's name
 to its LAN address from the hive, because the hosts don't use Tailscale's
 DNS. It trusts each host by the key in `modules/agenix/host-keys.nix`.
 
+## Updates
+
+The update workflow runs weekly, or from the Actions tab with Run workflow.
+It runs `nix flake update`, pushes the result to `update/flake-lock` as
+`forge-bot`, and opens a pull request asking `metrokitten` to review, which
+pings Discord. If last week's pull request is still open, it updates that one
+instead. Merging it deploys like any other change.
+
+`forge-bot` is a plain forge account with Write access to the repo. Its token
+is `forge-bot-token`, in Bitwarden and agenix, and the runner loads it as a
+credential. A pull request can't ask its own author for a review, which is why
+the updates come from a bot and not from your account.
+
 ## Registration
 
 The forge and the builder share the `forgejo-runner-secret` secret, 40 hex

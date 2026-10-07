@@ -156,4 +156,8 @@ in
     shane
     builder
   ];
+  "forge-bot-token.age".publicKeys = [
+    shane
+    builder
+  ];
 }
