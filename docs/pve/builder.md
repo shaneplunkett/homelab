@@ -27,7 +27,9 @@ DNS. It trusts each host by the key in `modules/agenix/host-keys.nix`.
 The update workflow runs weekly, or from the Actions tab with Run workflow.
 It runs `nix flake update`, builds every host, pushes the result to
 `update/flake-lock` as `forge-bot`, and opens a pull request that says
-whether the build passed. Only then does it ask `metrokitten` to review,
+whether the build passed. It also builds every host from `main` first, so the
+pull request can list each host's package changes from
+`nix store diff-closures`, leaving out changes that are only in size. Only then does it ask `metrokitten` to review,
 which pings Discord, so the ping always comes with the build's result. If
 last week's pull request is still open, it updates that one instead. Merging
 it deploys like any other change.
