@@ -6,6 +6,7 @@
 }:
 let
   unit = "forgejo-runner-builder";
+  forge = nodes.forge.config.homelab.lanAddress;
 in
 {
   homelab = {
@@ -44,9 +45,16 @@ in
   ];
 
   programs.ssh = {
-    knownHosts.forge.publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKThjQG7Etu9AY90bUyg/ggLa80OexaSh0NzGDQB2E6k";
+    knownHosts.forge = {
+      hostNames = [
+        "forge"
+        forge
+      ];
+      publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKThjQG7Etu9AY90bUyg/ggLa80OexaSh0NzGDQB2E6k";
+    };
     extraConfig = ''
       Host forge
+        HostName ${forge}
         IdentityFile /run/credentials/${unit}.service/ssh-key
     '';
   };
