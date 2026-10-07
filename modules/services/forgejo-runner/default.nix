@@ -33,6 +33,7 @@ in
       pkgs.gawk
       pkgs.gnused
       pkgs.nodejs
+      config.programs.ssh.package
       config.nix.package
       pkgs.colmena
     ];
