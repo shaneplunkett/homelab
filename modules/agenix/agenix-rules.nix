@@ -122,4 +122,12 @@ in
     shane
     monitoring
   ];
+  "oauth2-proxy-client-secret.age".publicKeys = [
+    shane
+    ingress
+  ];
+  "oauth2-proxy-cookie-secret.age".publicKeys = [
+    shane
+    ingress
+  ];
 }

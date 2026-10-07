@@ -41,6 +41,9 @@ let
     };
   };
 
+  ingress = nodes.ingress.config.services;
+  gated = ingress.oauth2-proxy.nginx.virtualHosts;
+
   nameOf = host: lib.head (lib.splitString "." host);
   groupOf = name: if lib.elem name media then "media" else "homelab";
 
@@ -54,11 +57,14 @@ let
       url = "https://${host}";
       icon = "di:${name}";
     }
+    // lib.optionalAttrs (gated ? ${host}) {
+      check-url = ingress.nginx.virtualHosts.${host}.locations."/".proxyPass;
+    }
     // overrides.${name} or { };
 
-  hosts = lib.filter (host: host != "_" && groupOf (nameOf host) == group) (
-    lib.attrNames nodes.ingress.config.services.nginx.virtualHosts
-  );
+  proxied = lib.filterAttrs (_: vhost: vhost.locations."/".proxyPass or null != null) ingress.nginx.virtualHosts;
+
+  hosts = lib.filter (host: groupOf (nameOf host) == group) (lib.attrNames proxied);
 in
 {
   type = "monitor";

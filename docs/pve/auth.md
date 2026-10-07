@@ -22,7 +22,11 @@ callback URL and scopes each one wants.
    - Leave Public Client, Re-Authentication and Pushed Authorization
      Requests off.
    - Set Client ID to the app's name, like `grafana`, so the Nix config
-     can name it instead of needing a random UUID.
+     can name it instead of needing a random UUID. The field is at the very
+     bottom of the form and easy to miss. If it's left blank, Pocket ID
+     generates a UUID and the ID can't be changed afterwards. That's what
+     happened to oauth2-proxy's client, and it's fine to use the UUID
+     instead.
 2. Saving doesn't show a secret. Open the client again, add one under Client
    secrets, and save it in Bitwarden as `<app>-oidc-client-secret`. Pocket ID
    only shows it once.
@@ -98,11 +102,34 @@ drive.
 
 ### Apps without OIDC
 
-The arr apps, SABnzbd and Deluge have no OIDC login. The plan for those is
-oauth2-proxy on the ingress host. nixpkgs wires it into nginx with
-`services.oauth2-proxy.nginx.virtualHosts`, so each protected route becomes
-one line. Phone apps that use the arr APIs will need their API paths left
-outside it.
+Apps with no OIDC login of their own sit behind oauth2-proxy on the ingress
+host, in `modules/services/nginx-ingress`. A route goes behind it by adding
+its name to `gated`, with the paths that should stay open. Only members of
+`media_admins` get through. One sign-in sets a cookie for the whole domain
+that lasts 30 days, so it covers every gated app at once.
+
+The open paths are how the apps talk to each other through ingress.
+Maintainerr calls Sonarr, Radarr and Overseerr on `/api/`, Shelfarr calls
+SABnzbd on `/api`, and SABnzbd and Shelfarr fetch NZBs from Prowlarr's
+`/<n>/download` links. Every open path still needs that app's API key. Before
+gating a new app, search the arr host's `/var/lib` for its hostname to find
+what calls it.
+
+oauth2-proxy's own callback lives on `oauth.shaneplunkett.com`, which has
+nothing else on it.
+
+Glance's tiles for gated apps check the app's LAN address directly, using the
+`/` proxy target from ingress. Through ingress, every gated app would redirect
+to the sign-in page and look up even when the app was down.
+
+- **Pocket ID doesn't verify emails** without a mail server, so every
+  `email_verified` claim is false. oauth2-proxy refuses those by default,
+  which shows up as a 500 after signing in. It runs with
+  `insecure-oidc-allow-unverified-email`, which is safe because the group
+  decides who gets in, not the email.
+- **The apps' own ports are still open on the LAN**, so the gate only covers
+  the `shaneplunkett.com` names. Sonarr, Sonarr Anime and Radarr skip their
+  own login for local addresses, and ingress counts as local.
 
 ## Getting back in
 

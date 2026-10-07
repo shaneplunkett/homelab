@@ -7,6 +7,21 @@
 let
   secrets = config.age.secrets;
   domain = "shaneplunkett.com";
+  oauthName = "oauth";
+  oauthHost = "${oauthName}.${domain}";
+
+  gated = {
+    overseer = [ "/api/" ];
+    sonarr = [ "/api/" ];
+    sonarranime = [ "/api/" ];
+    radarr = [ "/api/" ];
+    prowlarr = [
+      "/api/"
+      "~ ^/[0-9]+/(api|download)"
+    ];
+    nzb = [ "/api" ];
+    deluge = [ ];
+  };
 
   externalRoutes = {
     unraid = "http://192.168.1.132:80";
@@ -23,12 +38,15 @@ let
   ) nodes;
 
   routeNames =
-    lib.attrNames externalRoutes
+    [ oauthName ]
+    ++ lib.attrNames externalRoutes
     ++ lib.concatMap (node: lib.attrNames node.config.homelab.routes) (lib.attrValues nodes);
 
   routes = externalRoutes // hiveRoutes;
 in
 {
+  imports = [ ./oauth2-proxy.nix ];
+
   homelab.secrets = [ "cloudflare-dns" ];
 
   assertions = [
@@ -63,13 +81,19 @@ in
         lib.nameValuePair "${name}.${domain}" {
           useACMEHost = domain;
           forceSSL = true;
-          locations."/" = {
+          locations = lib.genAttrs ([ "/" ] ++ gated.${name} or [ ]) (path: {
             proxyPass = upstream;
             proxyWebsockets = true;
-          };
+            extraConfig = lib.mkIf (path != "/") "auth_request off;";
+          });
         }
       ) routes
       // {
+        ${oauthHost} = {
+          useACMEHost = domain;
+          forceSSL = true;
+          locations."/".return = "404";
+        };
         "_" = {
           default = true;
           useACMEHost = domain;
@@ -77,6 +101,13 @@ in
           locations."/".return = "404";
         };
       };
+  };
+
+  services.oauth2-proxy.nginx = {
+    domain = oauthHost;
+    virtualHosts = lib.mapAttrs' (
+      name: _: lib.nameValuePair "${name}.${domain}" { allowed_groups = [ "media_admins" ]; }
+    ) gated;
   };
 
   networking.firewall.allowedTCPPorts = [
