@@ -25,10 +25,12 @@ DNS. It trusts each host by the key in `modules/agenix/host-keys.nix`.
 ## Updates
 
 The update workflow runs weekly, or from the Actions tab with Run workflow.
-It runs `nix flake update`, pushes the result to `update/flake-lock` as
-`forge-bot`, and opens a pull request asking `metrokitten` to review, which
-pings Discord. If last week's pull request is still open, it updates that one
-instead. Merging it deploys like any other change.
+It runs `nix flake update`, builds every host, pushes the result to
+`update/flake-lock` as `forge-bot`, and opens a pull request that says
+whether the build passed. Only then does it ask `metrokitten` to review,
+which pings Discord, so the ping always comes with the build's result. If
+last week's pull request is still open, it updates that one instead. Merging
+it deploys like any other change.
 
 `forge-bot` is a plain forge account with Write access to the repo. Its token
 is `forge-bot-token`, in Bitwarden and agenix, and the runner loads it as a

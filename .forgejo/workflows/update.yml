@@ -15,18 +15,29 @@ jobs:
           persist-credentials: false
 
       - name: Update the lock file
+        id: update
         run: |
           git config user.name forge-bot
           git config user.email forge-bot@noreply.shaneplunkett.com
           nix flake update --commit-lock-file
-
-      - name: Open a pull request
-        run: |
           if [ "$(git rev-parse HEAD)" = "$GITHUB_SHA" ]; then
             echo "Everything is already up to date."
-            exit 0
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Build every host
+        id: build
+        if: steps.update.outputs.changed == 'true'
+        continue-on-error: true
+        run: colmena build
+
+      - name: Open or update the pull request
+        if: steps.update.outputs.changed == 'true'
+        env:
+          BUILD: ${{ steps.build.outcome }}
+        run: |
           token="$(< /run/credentials/forgejo-runner-builder.service/forge-bot-token)"
           echo "::add-mask::$token"
           auth="Authorization: token $token"
@@ -36,18 +47,26 @@ jobs:
           git -c http.extraHeader="Authorization: Basic $basic" \
             push --force "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" "HEAD:refs/heads/$BRANCH"
 
-          open="$(curl -sf -H "$auth" "$api/pulls?state=open" \
-            | jq --arg branch "$BRANCH" '[.[] | select(.head.ref == $branch)] | length')"
-          if [ "$open" -gt 0 ]; then
-            echo "Updated the pull request that was already open."
-            exit 0
+          if [ "$BUILD" = success ]; then
+            status="✅ Every host builds."
+          else
+            status="❌ The build failed. The update workflow's log has the error."
           fi
+          body="$(printf '%s\n\n%s' "$status" "$(git log -1 --format=%b)")"
 
-          request="$(jq -n --arg branch "$BRANCH" --arg body "$(git log -1 --format=%b)" \
-            '{head: $branch, base: "main", title: "Update flake inputs", body: $body}')"
-          number="$(curl -sf -H "$auth" -H "Content-Type: application/json" \
-            -d "$request" "$api/pulls" | jq .number)"
+          number="$(curl -sf -H "$auth" "$api/pulls?state=open" \
+            | jq --arg branch "$BRANCH" '.[] | select(.head.ref == $branch) | .number')"
+          if [ -z "$number" ]; then
+            request="$(jq -n --arg branch "$BRANCH" --arg body "$body" \
+              '{head: $branch, base: "main", title: "Update flake inputs", body: $body}')"
+            number="$(curl -sf -H "$auth" -H "Content-Type: application/json" \
+              -d "$request" "$api/pulls" | jq .number)"
+            echo "Opened pull request #$number."
+          else
+            curl -sf -X PATCH -H "$auth" -H "Content-Type: application/json" \
+              -d "$(jq -n --arg body "$body" '{body: $body}')" "$api/pulls/$number" > /dev/null
+            echo "Updated pull request #$number."
+          fi
 
           curl -sf -H "$auth" -H "Content-Type: application/json" \
             -d "{\"reviewers\": [\"$REVIEWER\"]}" "$api/pulls/$number/requested_reviewers" > /dev/null
-          echo "Opened pull request #$number."
