@@ -130,4 +130,8 @@ in
     shane
     ingress
   ];
+  "unraid-api-key.age".publicKeys = [
+    shane
+    dashboard
+  ];
 }

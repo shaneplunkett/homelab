@@ -12,6 +12,7 @@ in
   homelab.secrets = [
     "proxmox-token"
     "linear-api-key"
+    "unraid-api-key"
   ];
 
   homelab.routes.dashboard = config.services.glance.settings.server.port;
@@ -31,7 +32,7 @@ in
 
       pages = [
         (import ./pages/home.nix { inherit nodes secrets; })
-        (import ./pages/homelab.nix { inherit lib nodes; })
+        (import ./pages/homelab.nix { inherit lib nodes secrets; })
         (import ./pages/media.nix { inherit lib nodes; })
       ];
     };

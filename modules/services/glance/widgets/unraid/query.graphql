@@ -1,0 +1,46 @@
+query GetDashboardData {
+  info {
+    os {
+      uptime
+    }
+  }
+  metrics {
+    cpu {
+      percentTotal
+    }
+    memory {
+      total
+      used
+      free
+      percentTotal
+    }
+  }
+  array {
+    state
+    parityCheckStatus {
+      status
+    }
+    parities {
+      name
+      temp
+    }
+    disks {
+      name
+      temp
+      size
+      status
+    }
+  }
+  parityHistory {
+    date
+    status
+    duration
+    errors
+  }
+  shares {
+    name
+    used
+    free
+    size
+  }
+}
