@@ -110,6 +110,10 @@ in
         ENABLE_AUTO_REGISTRATION = true;
         USERNAME = "preferred_username";
       };
+      "repository.pull-request" = {
+        DEFAULT_MERGE_STYLE = "rebase";
+        DEFAULT_UPDATE_STYLE = "rebase";
+      };
       actions.ENABLED = true;
     };
   };
