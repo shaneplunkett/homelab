@@ -14,7 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vex-brain = {
-      url = "git+ssh://git@github.com/shaneplunkett/vex-brain";
+      url = "git+https://git.shaneplunkett.com/metrokitten/vex-brain";
       flake = false;
     };
   };
