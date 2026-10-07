@@ -133,6 +133,11 @@
           imports = [ ./modules/hosts/brain.nix ];
           homelab.lanAddress = "192.168.1.243";
         };
+
+        auth = {
+          imports = [ ./modules/hosts/auth.nix ];
+          homelab.lanAddress = "192.168.1.31";
+        };
       };
     };
 

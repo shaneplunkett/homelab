@@ -10,6 +10,7 @@ Per-service docs:
 
 - [unraid.md](unraid.md)
 - [brain.md](brain.md)
+- [auth.md](auth.md)
 
 ## Gotchas
 

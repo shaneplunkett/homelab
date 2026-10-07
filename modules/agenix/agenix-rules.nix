@@ -8,6 +8,7 @@ let
   plex = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOEtYm68pdXcUDG9IUOLJ+9Nv/F8qRF9ne2jnVrBH/v6";
   arr = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJooa6mXdhrngIeozlvGk5eUjfE0gFqODKuc1XMJ/grG";
   brain = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL8uoyuFpHlqcYqZV8yPWcVaHP5BJA8MxiHHseTKTD1+";
+  auth = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHAowiuABEm9SQcqT8W0QNthVasjWdAIOZu0fVHVODgu";
 
 in
 {
@@ -95,6 +96,7 @@ in
     plex
     arr
     brain
+    auth
   ];
   "backup-brain.age".publicKeys = [
     shane
@@ -107,5 +109,17 @@ in
   "cloudflared-brain.age".publicKeys = [
     shane
     brain
+  ];
+  "backup-auth.age".publicKeys = [
+    shane
+    auth
+  ];
+  "pocket-id-encryption-key.age".publicKeys = [
+    shane
+    auth
+  ];
+  "grafana-oidc-client-secret.age".publicKeys = [
+    shane
+    monitoring
   ];
 }
