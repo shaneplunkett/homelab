@@ -16,7 +16,6 @@ modules/
   services/<name>/ one folder per service
 terraform/         Proxmox LXCs/VMs, Hetzner, Cloudflare
 proxmox/           config installed on the Proxmox nodes themselves
-stacks/            legacy Docker Compose configs for Alpine LXCs
 docs/              notes that the code can't explain
 tools/             small helpers (minirack planner, Cloudflare MCP headers)
 ```

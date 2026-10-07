@@ -6,10 +6,6 @@
 .claude
 secrets/
 *.secret
-mcp_settings.json
-
-# Docker runtime
-docker-compose.override.yml
 
 # Data volumes
 data/

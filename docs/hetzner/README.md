@@ -74,13 +74,7 @@ or a host that backs up has never succeeded. The monitoring host also probes
 the box over SFTP and polls Hetzner's API for usage, since a full box fails
 every host at once.
 
-## Legacy LXC backups
-
-Each Alpine LXC that backs up runs its own repo-managed script from cron
-(`stacks/**/backup.sh`, installed under `/opt/<service>/`). They share one
-restic repo and password on the main account; each LXC has its own SSH key
-on the box. The scripts are the source of truth for what's backed up, when,
-and for how long.
+## Retired services
 
 Final archives of retired services are kept on the box under
 `<service>-final-archives/`.
@@ -106,12 +100,5 @@ Final archives of retired services are kept on the box under
 - **Nothing under `/mnt` gets backed up.** That's where Proxmox mounts the
   Unraid shares, so the module refuses those paths and restic stays on one
   filesystem.
-- **Legacy LXC SSH keys are added out-of-band.** Terraform ignores `ssh_keys` changes
-  after creation, so each LXC's key is appended to the box's
-  `authorized_keys` by hand.
 - **SFTP paths must be relative**: `./backups`, not `/backups`.
 - **SSH is on port 23**, not 22.
-- **Legacy cron lives on the LXC**, not in config, so a rebuilt container
-  needs it restored.
-- **A legacy backup only runs while its LXC is healthy.** The restic repo survives
-  losing a container, but new dumps stop until it's back.

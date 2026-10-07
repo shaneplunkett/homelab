@@ -12,8 +12,6 @@ Read `README.md` for how the repo fits together.
 - **Docs:** keep state out of them (IPs, versions, sizes, what's deployed
   where). If the code explains it, it doesn't need a doc. Docs hold the how,
   the why, and the gotchas.
-- **Legacy Alpine LXCs:** don't add new support for them. They get migrated
-  to Nix instead.
 
 ## Agent skills
 
