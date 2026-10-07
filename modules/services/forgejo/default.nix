@@ -98,7 +98,10 @@ in
         SSH_DOMAIN = "forge";
       };
       security.REVERSE_PROXY_TRUSTED_PROXIES = nodes.ingress.config.homelab.lanAddress;
-      session.COOKIE_SECURE = true;
+      session = {
+        PROVIDER = "db";
+        COOKIE_SECURE = true;
+      };
       service = {
         REQUIRE_SIGNIN_VIEW = true;
         ALLOW_ONLY_EXTERNAL_REGISTRATION = true;
