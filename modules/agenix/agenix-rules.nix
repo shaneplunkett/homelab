@@ -12,6 +12,7 @@ let
     auth
     forge
     builder
+    dlna
     ;
 in
 {
@@ -106,6 +107,7 @@ in
     auth
     forge
     builder
+    dlna
   ];
   "backup-brain.age".publicKeys = [
     shane

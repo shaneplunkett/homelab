@@ -130,6 +130,11 @@
           homelab.lanAddress = "192.168.1.90";
         };
 
+        dlna = {
+          imports = [ ./modules/hosts/dlna.nix ];
+          homelab.lanAddress = "192.168.1.66";
+        };
+
         brain = {
           imports = [ ./modules/hosts/brain.nix ];
           homelab.lanAddress = "192.168.1.243";
