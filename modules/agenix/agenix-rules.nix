@@ -162,6 +162,10 @@ in
     shane
     builder
   ];
+  "nix-cache-signing-key.age".publicKeys = [
+    shane
+    builder
+  ];
   "forge-bot-token.age".publicKeys = [
     shane
     builder

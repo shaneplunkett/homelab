@@ -96,6 +96,26 @@ printf '%s' "$(rbw get forgejo-runner-secret | head -c 16)" | od -An -tx1 | tr -
 The last command prints the new UUID for the module. Deploy the forge, then
 the builder.
 
+## Binary cache
+
+Harmonia serves the builder's own Nix store at `cache.shaneplunkett.com`, so
+anything a job builds can be downloaded by other machines instead of built
+again. Nothing is pushed to it: building something is what puts it in the
+cache. Paths are signed on the way out with `nix-cache-signing-key`, which is
+in Bitwarden and agenix. A machine trusts the cache by its public half:
+
+```sh
+rbw get nix-cache-signing-key | nix key convert-secret-to-public
+```
+
+The store is collected weekly, so a build only stays in the cache while
+something roots it. A job that wants its result kept builds with
+`--out-link` into the runner's state directory, and replaces the link each
+run so only the latest build is held.
+
+The name only resolves through Blocky, so the cache is reachable on the LAN
+and the tailnet and nowhere else.
+
 ## Fetching other repos
 
 The forge needs a sign-in to see anything, and a job's own token only reaches
