@@ -33,7 +33,8 @@ jobs:
           TF_TOKEN_app_terraform_io="$(< "$creds/terraform-cloud-token")"
           TF_VAR_pve_api_token="$(< "$creds/terraform-pve-token")"
           TF_VAR_hcloud_token="$(< "$creds/terraform-hcloud-token")"
-          export TF_TOKEN_app_terraform_io TF_VAR_pve_api_token TF_VAR_hcloud_token
+          TF_VAR_cloudflare_api_token="$(< "$creds/terraform-cloudflare-token")"
+          export TF_TOKEN_app_terraform_io TF_VAR_pve_api_token TF_VAR_hcloud_token TF_VAR_cloudflare_api_token
 
           terraform init -input=false -no-color
           terraform plan -input=false -no-color -out=tfplan | tee plan.txt
