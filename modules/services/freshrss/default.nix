@@ -11,6 +11,7 @@ let
   ingress = lib.escapeRegex nodes.ingress.config.homelab.lanAddress;
   users = "${cfg.dataDir}/users";
   sqlite = lib.getExe' pkgs.sqlite "sqlite3";
+  catppuccin = pkgs.callPackage ./theme { };
 
   af-readability = pkgs.freshrss-extensions.buildFreshRssExtension {
     FreshRssExtUniqueId = "Af_Readability";
@@ -50,6 +51,11 @@ in
 
   services.freshrss = {
     enable = true;
+    package = pkgs.freshrss.overrideAttrs (old: {
+      postInstall = (old.postInstall or "") + ''
+        cp -r ${catppuccin} $out/p/themes/Catppuccin
+      '';
+    });
     baseUrl = "https://rss.shaneplunkett.com";
     defaultUser = shane;
     authType = "http_auth";

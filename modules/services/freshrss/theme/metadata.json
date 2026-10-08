@@ -1,0 +1,8 @@
+{
+	"name": "Catppuccin",
+	"author": "Shane & Vex",
+	"description": "Catppuccin Latte and Mocha with Lucide icons, matching the homelab dashboard",
+	"version": 1.0,
+	"files": ["_frss.css", "origine.css", "catppuccin.css"],
+	"theme-color": {"dark": "#1e1e2e", "light": "#eff1f5"}
+}

@@ -45,3 +45,22 @@ original website" setting does the same job by hand.
 Each user's `db.sqlite` is copied with SQLite's `.backup` before restic runs,
 and the live file is excluded, so a backup never catches it mid-write. To
 restore, put `backup.sqlite` back as `db.sqlite` with the service stopped.
+
+## Theme
+
+`modules/services/freshrss/theme` adds a Catppuccin theme to the FreshRSS
+package, picked per user under Settings, Display. It's Latte in light mode and
+Mocha in dark, to match Glance, and it sits on top of the stock Origine theme
+so FreshRSS updates mostly carry through.
+
+- **Origine's dark mode is cut out at build time.** Its dark rules are more
+  specific than ours and would override them, so the build copies
+  `origine.css` up to its `prefers-color-scheme: dark` block. If the theme
+  suddenly looks half Origine after an update, check that block still exists
+  and is still last in the file.
+- **Icons come from Lucide.** `icons.txt` maps each FreshRSS icon name to a
+  Lucide icon, and the build bakes in a grey stroke because FreshRSS shows
+  icons as `<img>`, which can't inherit a colour. An icon FreshRSS adds later
+  falls back to its own until it's added to the map.
+- **FreshRSS caches pages,** so after a theme change the old icons can hang
+  around until a hard refresh.
