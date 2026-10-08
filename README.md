@@ -47,7 +47,11 @@ Flakes only see tracked files, so `git add` new files before building.
    upload it to each node's `local:vztmpl` under the name
    `terraform/modules/nixos-lxc` expects.
 2. Add a `terraform/<node>-<host>.tf` using `modules/nixos-lxc` and apply it.
-3. Give it a fixed DHCP reservation in UniFi.
+3. Give it a fixed DHCP reservation in UniFi. The `Unifi API Key` in rbw
+   can do this over the gateway's API (`X-API-KEY` header): find the
+   client by MAC in `/proxy/network/api/s/default/rest/user` for its `_id`
+   and in `stat/sta` for its `network_id`, then `PUT rest/user/<_id>` with
+   `use_fixedip: true`, `fixed_ip` and `network_id`.
 4. Add `modules/hosts/<host>.nix` and a node in the hive pointing at it.
 5. Add the host's key to `modules/agenix/host-keys.nix`
    (`ssh-keyscan -t ed25519 <ip>`), name it in `agenix-rules.nix`, add it to
