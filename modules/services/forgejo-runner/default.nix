@@ -10,6 +10,8 @@ let
   lanAddress = name: nodes.${name}.config.homelab.lanAddress;
 in
 {
+  imports = [ ./darwin-builder.nix ];
+
   homelab = {
     secrets = [
       "forgejo-runner-secret"

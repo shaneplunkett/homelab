@@ -128,6 +128,19 @@ hears about a full disk before Nix gets a chance to clear it.
 The name only resolves through Blocky, so the cache is reachable on the LAN
 and the tailnet and nowhere else.
 
+## Darwin builds
+
+The builder can't build for macOS, so it hands `aarch64-darwin` builds to
+mini-server over SSH, and the results come back into its store and the
+cache. That's how nix-config's Macs get built here. The Nix daemon makes the
+connection as root with `builder-ssh-key`, logging in as `shane`. On
+mini-server, nix-config pins that key to `nix-daemon --stdio`, so it can
+build but can't open a shell.
+
+mini-server's address is fixed in `darwin-builder.nix`, so it needs a DHCP
+reservation like the LXCs. If darwin builds start failing to connect, check
+that first.
+
 ## Fetching other repos
 
 The forge needs a sign-in to see anything, and a job's own token only reaches
