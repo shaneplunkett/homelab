@@ -1,7 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "reviewers": ["metrokitten"],
+  "extends": [
+    "config:recommended"
+  ],
+  "reviewers": [
+    "metrokitten"
+  ],
   "dependencyDashboard": false,
   "prHourlyLimit": 0,
   "nix": {
@@ -11,7 +15,9 @@
     {
       "customType": "regex",
       "description": "Container images in Nix modules",
-      "managerFilePatterns": ["/\\.nix$/"],
+      "managerFilePatterns": [
+        "/\\.nix$/"
+      ],
       "matchStrings": [
         "image = \"(?<depName>[^:@\"]+)(?::(?<currentValue>[^@\"]+))?(?:@(?<currentDigest>sha256:[a-f0-9]+))?\";"
       ],
@@ -20,16 +26,54 @@
     {
       "customType": "regex",
       "description": "Flake inputs pinned to a GitHub tag",
-      "managerFilePatterns": ["/^flake\\.nix$/"],
-      "matchStrings": ["url = \"github:(?<depName>[^/\"]+/[^/\"]+)/(?<currentValue>v[^\"]+)\";"],
+      "managerFilePatterns": [
+        "/^flake\\.nix$/"
+      ],
+      "matchStrings": [
+        "url = \"github:(?<depName>[^/\"]+/[^/\"]+)/(?<currentValue>v[^\"]+)\";"
+      ],
       "datasourceTemplate": "github-tags"
     },
     {
       "customType": "regex",
       "description": "npm packages run with npx",
-      "managerFilePatterns": ["/^flake\\.nix$/"],
-      "matchStrings": ["npx --yes (?<depName>[a-z0-9@/-]+)@(?<currentValue>[^\\s\"]+)"],
+      "managerFilePatterns": [
+        "/^flake\\.nix$/"
+      ],
+      "matchStrings": [
+        "npx --yes (?<depName>[a-z0-9@/-]+)@(?<currentValue>[^\\s\"]+)"
+      ],
       "datasourceTemplate": "npm"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "One PR for the Terraform providers",
+      "matchManagers": [
+        "terraform"
+      ],
+      "groupName": "Terraform providers"
+    },
+    {
+      "description": "One PR for the arr stack's container images",
+      "matchFileNames": [
+        "modules/arr/**"
+      ],
+      "groupName": "arr containers"
+    },
+    {
+      "description": "One PR for the tools pinned in flake.nix",
+      "matchFileNames": [
+        "flake.nix"
+      ],
+      "groupName": "flake tools"
+    },
+    {
+      "description": "One PR for workflow actions",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "workflow actions"
     }
   ]
 }
