@@ -135,6 +135,11 @@
           homelab.lanAddress = "192.168.1.66";
         };
 
+        gym = {
+          imports = [ ./modules/hosts/gym.nix ];
+          homelab.lanAddress = "192.168.1.209";
+        };
+
         brain = {
           imports = [ ./modules/hosts/brain.nix ];
           homelab.lanAddress = "192.168.1.243";
