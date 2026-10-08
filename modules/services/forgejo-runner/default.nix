@@ -21,6 +21,7 @@ in
       "terraform-pve-token"
       "terraform-hcloud-token"
       "terraform-cloudflare-token"
+      "terraform-access-emails"
     ];
     monitoring.units = [ "${unit}.service" ];
   };
@@ -57,6 +58,7 @@ in
     "terraform-pve-token:${config.age.secrets.terraform-pve-token.path}"
     "terraform-hcloud-token:${config.age.secrets.terraform-hcloud-token.path}"
     "terraform-cloudflare-token:${config.age.secrets.terraform-cloudflare-token.path}"
+    "terraform-access-emails:${config.age.secrets.terraform-access-emails.path}"
   ];
 
   programs.ssh = {

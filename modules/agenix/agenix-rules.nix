@@ -196,4 +196,8 @@ in
     shane
     builder
   ];
+  "terraform-access-emails.age".publicKeys = [
+    shane
+    builder
+  ];
 }
