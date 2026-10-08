@@ -30,6 +30,13 @@ query GetDashboardData {
       size
       status
     }
+    caches {
+      name
+      temp
+      status
+      fsUsed
+      fsFree
+    }
   }
   parityHistory {
     date

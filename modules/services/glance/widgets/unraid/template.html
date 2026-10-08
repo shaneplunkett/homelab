@@ -22,9 +22,15 @@
         {{ $currentParity := .JSON.String "data.array.parityCheckStatus.status" }}
         {{ $lastCheckDate := .JSON.String "data.parityHistory.0.date" }}
         
+        {{ if eq (len (.JSON.Array "data.array.parities")) 0 }}
+        <div class="color-paragraph" style="width:100%; font-size:11px; font-weight:normal;">
+          Parity: <span style="font-weight:bold;">None</span>
+        </div>
+        {{ else }}
         <div data-popover-type="text" data-popover-text="Checked: {{ if $lastCheckDate }}{{ printf "%.10s" $lastCheckDate }}{{ else }}Unknown{{ end }}" style="cursor: pointer; width:100%; font-size:11px; font-weight:normal;" class="color-paragraph">
           Parity: <span style="font-weight:bold; color:{{ if eq $currentParity "VALID" "OK" "COMPLETED" }}var(--color-positive){{ else }}var(--color-warning){{ end }};">{{ if $currentParity }}{{ $currentParity }}{{ else }}OK{{ end }}</span>
         </div>
+        {{ end }}
 
       </div>
 
@@ -69,7 +75,7 @@
     <div class="size-h6 color-paragraph" style="text-transform:uppercase; font-weight:bold; letter-spacing:1px; border-bottom:1px solid rgba(128,128,128,0.2); padding-bottom:4px; margin-bottom:10px;">
       Storage Array Devices
     </div>
-    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px;">
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap:8px;">
       {{ range .JSON.Array "data.array.disks" }}
         {{ $diskName := .String "name" }}
         {{ $diskStatus := .String "status" }}
@@ -91,6 +97,67 @@
           </div>
         {{ end }}
       {{ end }}
+    </div>
+  </div>
+
+  <div>
+    <div class="size-h6 color-paragraph" style="text-transform:uppercase; font-weight:bold; letter-spacing:1px; border-bottom:1px solid rgba(128,128,128,0.2); padding-bottom:4px; margin-bottom:12px;">
+      Pools
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:12px;">
+    {{ range .JSON.Array "data.array.caches" }}
+      {{ $poolName := .String "name" }}
+      {{ $poolStatus := .String "status" }}
+      {{ $poolTemp := .Float "temp" }}
+      {{ $usedRaw := .Float "fsUsed" }}
+      {{ $freeRaw := .Float "fsFree" }}
+      {{ $totalRaw := add $usedRaw $freeRaw }}
+      {{ $isOnline := eq $poolStatus "DISK_OK" }}
+
+      {{ $pctUsed := 0.0 }}
+      {{ if lt 0.0 $totalRaw }}
+        {{ $pctUsed = mul (div $usedRaw $totalRaw) 100.0 }}
+      {{ end }}
+
+      {{ $usedText := "" }}
+      {{ if ge $usedRaw 1000000000.0 }}
+        {{ $usedText = printf "%.1f TB" (div $usedRaw 1000000000.0) }}
+      {{ else }}
+        {{ $usedText = printf "%.1f GB" (div $usedRaw 1000000.0) }}
+      {{ end }}
+
+      {{ $freeText := "" }}
+      {{ if ge $freeRaw 1000000000.0 }}
+        {{ $freeText = printf "%.1f TB" (div $freeRaw 1000000000.0) }}
+      {{ else }}
+        {{ $freeText = printf "%.1f GB" (div $freeRaw 1000000.0) }}
+      {{ end }}
+
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline;">
+          <span style="display:flex; align-items:center; gap:6px;">
+            <span style="width:8px; height:8px; border-radius:50%; background-color:var(--color-{{ if $isOnline }}positive{{ else }}negative{{ end }}); box-shadow:0 0 6px var(--color-{{ if $isOnline }}positive{{ else }}negative{{ end }});"></span>
+            <span class="size-sm color-highlight" style="font-weight:bold;">{{ $poolName }}</span>
+            {{ if $isOnline }}
+              <span class="size-sm color-paragraph" style="font-size:11px;">{{ printf "%.0f" $poolTemp }}°C</span>
+            {{ else }}
+              <span class="size-sm color-error" style="font-size:10px; font-weight:bold;">{{ $poolStatus }}</span>
+            {{ end }}
+          </span>
+          <span class="size-sm color-paragraph" style="font-size:11px; font-weight:bold;">{{ printf "%.0f%%" $pctUsed }}</span>
+        </div>
+
+        <div style="width:100%; height:6px; background:rgba(128, 128, 128, 0.15); border-radius:3px; overflow:hidden;">
+          <div style="width: {{ $pctUsed }}%; height:100%; background:{{ if ge $pctUsed 85.0 }}var(--color-warning, #ff9800){{ else }}var(--color-primary, #4caf50){{ end }};"></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:10px;" class="color-paragraph">
+          <span>Used: {{ $usedText }}</span>
+          <span>Free: {{ $freeText }}</span>
+        </div>
+      </div>
+    {{ end }}
     </div>
   </div>
 
