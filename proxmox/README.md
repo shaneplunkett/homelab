@@ -53,3 +53,32 @@ unset url
   are a secret.
 - **Matchers and targets share names**, so the matcher can't also be called
   `discord`.
+
+## Upgrading the nodes
+
+Proxmox's daily check posts to Discord when packages are waiting. Upgrade one
+node at a time, Cube first, and only start the second once the first is back
+and the cluster is quorate again, because with two nodes the cluster loses
+quorum while either one is down.
+
+```sh
+ssh shane@<node> 'sudo apt-get -s full-upgrade | grep -E "^Remv|upgraded"'
+ssh shane@<node> 'sudo systemd-run --unit=pve-upgrade --collect --setenv=DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=--force-confold full-upgrade'
+ssh shane@<node> 'sudo journalctl -fu pve-upgrade'
+ssh shane@<node> 'sudo systemctl reboot'
+```
+
+The dry run is there to catch anything being removed, which a normal upgrade
+never does. Running the upgrade as its own unit means a dropped SSH session
+can't interrupt dpkg. The old kernel stays installed, so if a new one
+misbehaves, `proxmox-boot-tool kernel pin <version>` and a reboot goes back.
+
+Before rebooting PVE:
+
+- **Stop Unraid from its own UI first.** It has no guest agent, so Proxmox
+  can only press its power button and force it off if the array takes too
+  long to stop, which means a parity check.
+- **Check Unraid's array started.** Auto start is on in Disk Settings, but
+  if it's ever off, nothing can mount its shares until someone starts it.
+- **Then remount its shares on Cube**, because they go stale whenever
+  Unraid restarts. `docs/cube/README.md` has the commands.

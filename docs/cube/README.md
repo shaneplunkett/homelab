@@ -17,14 +17,18 @@ LXCs don't mount NFS themselves. They bind-mount the host path `/mnt/pve/<storag
 
 ## Gotchas
 
-- **The Media share can come up empty after Cube reboots.** The kernel
-  rejects it at boot with `NFS: server 192.168.1.132 error: fileid changed`
-  in `dmesg`, Proxmox shows `unraid-media` as inactive, and Plex and arr see
-  an empty `/mnt/media`. The other shares mount fine. It happened on the
-  first boot into kernel 7.0. A remount fixes it, then the containers need a
-  restart to pick up the new mount:
+- **Unraid's shares go stale on Cube whenever Unraid restarts**, and the
+  Media share can also come up empty after Cube itself reboots. Unraid's
+  user shares hand out new file IDs each boot, so the kernel rejects the old
+  mounts with `NFS: server 192.168.1.132 error: fileid changed` in `dmesg`,
+  Proxmox shows the storage as inactive, and Plex and arr see an empty
+  `/mnt/media`. Remount, then restart the containers so their bind mounts
+  pick up the new mounts:
 
   ```sh
-  ssh shane@<cube> 'sudo umount -l /mnt/pve/unraid-media && sudo pvesm status'
+  ssh shane@<cube> 'for s in appdata media programs; do sudo umount -l /mnt/pve/unraid-$s; done; sudo pvesm status'
   ssh shane@<cube> 'sudo pct reboot 102 && sudo pct reboot 104'
   ```
+
+  If a manual mount says `Operation not permitted`, Unraid isn't exporting
+  yet, usually because its array hasn't been started.
