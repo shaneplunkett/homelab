@@ -9,6 +9,12 @@ Read `README.md` for how the repo fits together.
   a secret or token. Only show names, lengths or recipient counts.
 - **Monitoring:** the Grafana MCP is read-only. Use it to investigate
   (Prometheus and Loki), then report. Never remediate on its findings alone.
+- **Changes:** land every change through a pull request on the forge
+  (`origin`; GitHub is a mirror of it). Commit on a branch and file it with
+  the `file-pr` skill, which opens it as Vex and asks Shane to review. Done is
+  a green build check, plus a Terraform plan comment showing what you expect
+  when `terraform/` changed. Shane merges: merging deploys every host and
+  applies Terraform.
 - **Docs:** keep state out of them (IPs, versions, sizes, what's deployed
   where). If the code explains it, it doesn't need a doc. Docs hold the how,
   the why, and the gotchas.
