@@ -19,7 +19,7 @@ Each operation lists the MCP-first way, then the CLI fallback.
 
 ## Pull requests as a triage surface
 
-**PRs as a request surface: no.** _(Linear is not the PR surface for this repo; GitHub PRs are handled with `gh` independently of triage.)_
+**PRs as a request surface: no.** _(Linear is not the PR surface for this repo; pull requests live on the forge and are handled with `fj` independently of triage.)_
 
 ## When a skill says "publish to the issue tracker"
 

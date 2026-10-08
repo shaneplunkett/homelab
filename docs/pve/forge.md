@@ -55,12 +55,15 @@ cp -a /root/restore/var/lib/forgejo /var/lib/
 runuser -u postgres -- dropdb forgejo
 runuser -u postgres -- createdb -O forgejo forgejo
 runuser -u postgres -- pg_restore --no-owner --role=forgejo -d forgejo \
-  /root/restore/var/backup/forgejo/forgejo.dump
+  < /root/restore/var/backup/forgejo/forgejo.dump
 systemctl start forgejo
 ```
 
 ## Gotchas
 
+- **The dump goes in through stdin.** `postgres` can't read files under
+  `/root`, so `pg_restore` reads the dump from a redirect, which root's shell
+  opens before switching user.
 - **SSH doesn't go through ingress.** `git.shaneplunkett.com` resolves to
   the ingress host, which only proxies HTTP, so `SSH_DOMAIN` is the tailnet
   name `forge` instead.
