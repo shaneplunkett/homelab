@@ -147,6 +147,10 @@ in
     shane
     forge
   ];
+  "backup-gym.age".publicKeys = [
+    shane
+    gym
+  ];
   "forgejo-oidc-client-secret.age".publicKeys = [
     shane
     forge

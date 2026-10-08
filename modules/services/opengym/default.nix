@@ -9,6 +9,7 @@ in
 {
   homelab = {
     routes.gym = port;
+    backup.paths = [ "${dataDir}/data" ];
     monitoring.units = [
       "podman-opengym-api.service"
       "podman-opengym-web.service"
@@ -27,7 +28,7 @@ in
         RP_NAME = "openGym";
         ORIGIN = "https://${host}";
         ALLOW_GUEST = "0";
-        FIRST_USER_ADMIN = "1";
+        INVITE_ONLY = "1";
       };
       extraOptions = [ "--network=host" ];
     };
