@@ -140,6 +140,11 @@
           homelab.lanAddress = "192.168.1.209";
         };
 
+        rss = {
+          imports = [ ./modules/hosts/rss.nix ];
+          homelab.lanAddress = "192.168.1.153";
+        };
+
         brain = {
           imports = [ ./modules/hosts/brain.nix ];
           homelab.lanAddress = "192.168.1.243";

@@ -14,6 +14,7 @@ let
     builder
     dlna
     gym
+    rss
     ;
 in
 {
@@ -110,6 +111,7 @@ in
     builder
     dlna
     gym
+    rss
   ];
   "backup-brain.age".publicKeys = [
     shane
@@ -150,6 +152,10 @@ in
   "backup-gym.age".publicKeys = [
     shane
     gym
+  ];
+  "backup-rss.age".publicKeys = [
+    shane
+    rss
   ];
   "forgejo-oidc-client-secret.age".publicKeys = [
     shane
