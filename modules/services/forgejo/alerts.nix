@@ -1,5 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, nodes, ... }:
 let
+  forge = nodes.forge.config.services.forgejo.settings.server.ROOT_URL;
+  run = ''{{ $value | printf "%.0f" }}'';
+
   unitDown = alert: unit: what: {
     inherit alert;
     expr = ''node_systemd_unit_state{name="${unit}", state="active"} == 0'';
@@ -22,6 +25,15 @@ in
             rules = [
               (unitDown "ForgejoDown" "forgejo.service" "Forgejo")
               (unitDown "ForgejoPostgresDown" "postgresql.service" "Forgejo's PostgreSQL")
+              {
+                alert = "ForgejoWorkflowFailing";
+                expr = "homelab_forgejo_workflow_failed_run > 0";
+                labels.severity = "warning";
+                annotations = {
+                  summary = "{{ $labels.repo }}'s {{ $labels.workflow }} is failing on {{ $labels.branch }}";
+                  condition = "[Run #${run}](${forge}{{ $labels.repo }}/actions/runs/${run}) was the last to finish";
+                };
+              }
             ];
           }
         ];
