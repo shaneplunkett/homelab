@@ -25,6 +25,10 @@ in
     monitoring
 
   ];
+  "unraid-smart-ssh-key.age".publicKeys = [
+    shane
+    monitoring
+  ];
   "pve-exporter.age".publicKeys = [
     shane
     monitoring

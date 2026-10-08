@@ -35,9 +35,9 @@ rebuilt node needs it re-run: `terraform apply -replace='terraform_data.node_exp
 - **Containers see the host's sensors.** Every LXC's node exporter reports the
   hypervisor's temperatures too, so the hardware rules only look at the
   Proxmox hosts.
-- **Unraid's array isn't covered.** Its HBA and NVMe are passed through to the
-  VM, so PVE can't see those disks. Unraid's own Discord notifications cover
-  them.
+- **Unraid's disks aren't here.** Its HBA and NVMe are passed through to the
+  VM, so PVE can't see them. [docs/pve/unraid.md](../docs/pve/unraid.md)
+  covers how they're watched.
 
 ## Notifications to Discord
 

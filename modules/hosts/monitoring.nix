@@ -3,6 +3,7 @@
     ../services/prometheus
     ../services/pve-exporter
     ../services/proxmox-hosts
+    ../services/unraid-smart
     ../services/alertmanager
     ../services/gatus/alerts.nix
     ../services/grafana
