@@ -15,6 +15,11 @@ Read `README.md` for how the repo fits together.
   a green build check, plus a Terraform plan comment showing what you expect
   when `terraform/` changed. Shane merges: merging deploys every host and
   applies Terraform.
+- **Sign-in:** every web app a change adds signs in through Pocket ID,
+  with its own OIDC login or, if it has none, behind the oauth2-proxy gate.
+  `docs/pve/auth.md` covers both. The client and its secret are made in
+  Pocket ID's UI, so walk Shane through that part. The app is done when her
+  passkey gets her in.
 - **Docs:** keep state out of them (IPs, versions, sizes, what's deployed
   where). If the code explains it, it doesn't need a doc. Docs hold the how,
   the why, and the gotchas.
