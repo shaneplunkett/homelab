@@ -115,7 +115,9 @@ rbw get nix-cache-signing-key | nix key convert-secret-to-public
 The store is collected weekly, so a build only stays in the cache while
 something roots it. A job that wants its result kept builds with
 `--out-link` into the runner's state directory, and replaces the link each
-run so only the latest build is held.
+run so only the latest build is held. Full desktop and Mac closures are tens
+of gigabytes each, so Nix also collects garbage by itself whenever free space
+drops below `min-free`, and roots keep the latest builds safe from it.
 
 The name only resolves through Blocky, so the cache is reachable on the LAN
 and the tailnet and nowhere else.
