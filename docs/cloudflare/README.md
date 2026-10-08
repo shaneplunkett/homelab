@@ -50,7 +50,13 @@ Zone permissions only take effect when the token's Zone Resources point at the a
 
 ## Gotchas
 
-- Terraform owns the account tokens (`terraform/cloudflare.tf`) and the personal zones' DNS records and DNSSEC (`terraform/cloudflare-dns.tf`). Change those in code. A change made through the MCP or the dashboard gets reverted on the next apply.
+- Terraform owns these, in `terraform/cloudflare*.tf`. Change them in code, because a change made through the MCP or the dashboard gets reverted on the next apply.
+  - the account tokens
+  - the personal zones' DNS records and DNSSEC
+  - the brain's tunnel and its routes
+  - the Access apps
+  - Red Book's Pages custom domain
+- Some things stay out of Terraform on purpose. The Access policies hold email addresses and the Vex CLI's service token, and the repo is public. The Red Book Pages project belongs to its own repo's `wrangler` deploys. Martin's zones and his Workers custom domains belong to his site.
 - The dashboard's account-token page has no zone picker. It puts every permission into one account-wide policy, so zone permissions save and display but grant nothing, and saving an account token there drops any zone policy added through the API. Change account tokens through Terraform.
 - On the LAN, Blocky answers for all of `shaneplunkett.com` itself, so LAN lookups don't match the public answer. Ask public DNS instead, e.g. `dig @1.1.1.1` or `doggo @https://cloudflare-dns.com/dns-query`.
 - The `cf` CLI is beta. Non-interactive deletes without `--force` print `Aborted.` and exit 0, so check the result rather than the exit code.
