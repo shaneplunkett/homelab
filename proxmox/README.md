@@ -1,6 +1,6 @@
 # Proxmox nodes
 
-Config that lives on the Proxmox hosts themselves, outside Terraform and Nix.
+Config that lives on the Proxmox hosts themselves, where Nix can't reach.
 
 ## TUN for containers
 
@@ -24,6 +24,20 @@ Why it's done this way:
   PVE's autodev hook creates the device for `dev0` and dies when the bind
   mount already made it. Don't add `dev0` for TUN anywhere.
 - No package owns the file, so Proxmox upgrades leave it alone.
+
+## Node exporter
+
+`node-exporter.sh` installs Debian's node exporter and its NVMe collector,
+which is where the hardware alerts get disk health and temperatures. Terraform
+runs it on both nodes over SSH, again whenever the script changes, so a
+rebuilt node needs it re-run: `terraform apply -replace='terraform_data.node_exporter["<node>"]'`.
+
+- **Containers see the host's sensors.** Every LXC's node exporter reports the
+  hypervisor's temperatures too, so the hardware rules only look at the
+  Proxmox hosts.
+- **Unraid's array isn't covered.** Its HBA and NVMe are passed through to the
+  VM, so PVE can't see those disks. Unraid's own Discord notifications cover
+  them.
 
 ## Notifications to Discord
 

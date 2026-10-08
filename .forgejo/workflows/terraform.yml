@@ -2,10 +2,12 @@ on:
   pull_request:
     paths:
       - "terraform/**"
+      - "proxmox/**"
   push:
     branches: [main]
     paths:
       - "terraform/**"
+      - "proxmox/**"
   workflow_dispatch:
 
 concurrency:

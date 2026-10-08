@@ -8,6 +8,7 @@
 let
   byThreshold = import ./thresholds.nix { inherit lib nodes options; } "host";
   monitored = lib.filterAttrs (_: node: node.config.homelab.monitoring.enable) nodes;
+  proxmox = import ../proxmox-hosts/addresses.nix;
 in
 {
   services.prometheus = {
@@ -53,10 +54,15 @@ in
     scrapeConfigs = [
       {
         job_name = "node";
-        static_configs = lib.mapAttrsToList (name: node: {
-          targets = [ "${node.config.homelab.lanAddress}:9100" ];
-          labels.host = name;
-        }) monitored;
+        static_configs =
+          lib.mapAttrsToList (name: node: {
+            targets = [ "${node.config.homelab.lanAddress}:9100" ];
+            labels.host = name;
+          }) monitored
+          ++ lib.mapAttrsToList (name: address: {
+            targets = [ "${address}:9100" ];
+            labels.host = name;
+          }) proxmox;
       }
     ];
   };

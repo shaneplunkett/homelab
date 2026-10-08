@@ -75,7 +75,8 @@ consuming service expects.
 ## Monitoring
 
 Prometheus, Alertmanager, Loki and Grafana run on the monitoring host. Every
-Nix host is scraped and ships its journal to Loki automatically. Alert rules
+Nix host is scraped and ships its journal to Loki automatically, and the
+Proxmox nodes are scraped too (see [proxmox](proxmox/README.md)). Alert rules
 live next to the service they watch, and everything routes through
 Alertmanager to Discord. Gatus on the dashboard host watches the monitoring
 stack itself, so a dead Alertmanager still gets noticed.

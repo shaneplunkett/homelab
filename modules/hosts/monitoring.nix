@@ -2,6 +2,7 @@
   imports = [
     ../services/prometheus
     ../services/pve-exporter
+    ../services/proxmox-hosts
     ../services/alertmanager
     ../services/gatus/alerts.nix
     ../services/grafana
