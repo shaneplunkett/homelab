@@ -24,6 +24,7 @@ let
       "/sabnzbd/api"
     ];
     deluge = [ ];
+    rss = [ "/api/" ];
   };
 
   externalRoutes = {

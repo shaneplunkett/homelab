@@ -15,5 +15,6 @@
     ../services/backup/monitoring.nix
     ../services/vex-brain/alerts.nix
     ../services/forgejo/alerts.nix
+    ../services/freshrss/alerts.nix
   ];
 }

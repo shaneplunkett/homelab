@@ -13,6 +13,7 @@ Per-service docs:
 - [auth.md](auth.md)
 - [forge.md](forge.md)
 - [builder.md](builder.md)
+- [rss.md](rss.md)
 
 ## Gotchas
 

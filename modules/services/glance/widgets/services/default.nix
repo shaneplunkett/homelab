@@ -39,6 +39,11 @@ let
       title = "Gatus";
       icon = "di:gatus";
     };
+    rss = {
+      title = "FreshRSS";
+      icon = "di:freshrss";
+      check-url = "http://${nodes.rss.config.homelab.lanAddress}/api/";
+    };
   };
 
   ingress = nodes.ingress.config.services;
