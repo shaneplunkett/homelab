@@ -38,3 +38,11 @@ moved {
   from = proxmox_virtual_environment_storage_nfs.unraid_programs
   to   = proxmox_storage_nfs.unraid_programs
 }
+
+resource "proxmox_storage_lvmthin" "cube_nvme" {
+  id           = "nvme-thin"
+  volume_group = "nvme"
+  thin_pool    = "nvme"
+  content      = ["images", "rootdir"]
+  nodes        = [local.cube.name]
+}

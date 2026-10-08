@@ -39,6 +39,24 @@ rebuilt node needs it re-run: `terraform apply -replace='terraform_data.node_exp
   VM, so PVE can't see them. [docs/pve/unraid.md](../docs/pve/unraid.md)
   covers how they're watched.
 
+## Cube's second NVMe
+
+Cube's second NVMe is the `nvme-thin` storage, a thin pool `nvme` in volume
+group `nvme`. Terraform declares the storage, but Proxmox has to set up the
+disk first, and the provider can't do that. To make it again:
+
+```sh
+dev=$(readlink -f /dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_<serial>)
+sudo pvesh set /nodes/cube/disks/wipedisk --disk "$dev"
+sudo pvesh create /nodes/cube/disks/lvmthin --device "$dev" --name nvme --add_storage 0
+```
+
+- **Proxmox hides disks that have anything on them.** The GUI's LVM-Thin
+  dialog only lists empty disks, so a leftover filesystem makes the disk
+  look missing. Wipe it first.
+- **Go by serial, not `nvme0`/`nvme1`.** Those names can swap between boots,
+  and the other NVMe is the boot disk.
+
 ## Notifications to Discord
 
 Proxmox sends its notifications, like the daily "packages available" and
