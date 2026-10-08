@@ -17,6 +17,10 @@ The builder also substitutes from the caches nix-config's machines trust.
 The runner isn't a trusted user, so a flake can't add caches for itself, and
 without them a desktop build compiles Hyprland and noctalia from source.
 
+The host runs nix-ld, so binaries a job downloads for a generic Linux, like
+the `ruff` that `uv sync` installs, run without patching. Without it they fail
+with `Could not start dynamically linked executable`.
+
 ## Deploying
 
 The deploy workflow runs `colmena apply --on @deploy-on-merge` on each push
