@@ -30,6 +30,12 @@ authorised root key on every host, and its SSH config maps each host's name
 to its LAN address from the hive, because the hosts don't use Tailscale's
 DNS. It trusts each host by the key in `modules/agenix/host-keys.nix`.
 
+The builder isn't in `deploy-on-merge`, so after merging a change to it, run
+`colmena apply --on builder` by hand. Wait until that merge's deploy and
+terraform runs have finished first. Switching the builder restarts the
+runner, which kills whatever job it's running, and that run fails with
+`RUN signal: terminated`.
+
 ## Updates
 
 The update workflow runs weekly, or from the Actions tab with Run workflow.
