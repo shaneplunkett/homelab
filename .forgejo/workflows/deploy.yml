@@ -11,4 +11,6 @@ jobs:
     runs-on: nix
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - run: colmena apply --on @deploy-on-merge
