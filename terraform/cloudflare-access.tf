@@ -1,8 +1,29 @@
-locals {
-  access_policies = {
-    redbook_editor = "274a02ac-fb51-4464-8a68-5cb0b54a7a49"
-    vex_cli        = "c012fc13-962e-4733-a496-7f37299f52fe"
-  }
+import {
+  to = cloudflare_zero_trust_access_policy.redbook_editor
+  id = "${var.cloudflare_account_id}/274a02ac-fb51-4464-8a68-5cb0b54a7a49"
+}
+
+resource "cloudflare_zero_trust_access_policy" "redbook_editor" {
+  account_id = var.cloudflare_account_id
+  name       = "Editor"
+  decision   = "allow"
+  include    = [for email in var.access_editor_emails : { email = { email = email } }]
+
+  connection_rules = { rdp = {} }
+}
+
+import {
+  to = cloudflare_zero_trust_access_policy.vex_cli
+  id = "${var.cloudflare_account_id}/c012fc13-962e-4733-a496-7f37299f52fe"
+}
+
+resource "cloudflare_zero_trust_access_policy" "vex_cli" {
+  account_id       = var.cloudflare_account_id
+  name             = "vex-cli-service-token"
+  decision         = "non_identity"
+  session_duration = "24h"
+  include          = [{ service_token = { token_id = "c0d72bcf-278b-41d6-a981-8d92bdaed773" } }]
+  connection_rules = { rdp = {} }
 }
 
 import {
@@ -20,7 +41,7 @@ resource "cloudflare_zero_trust_access_application" "redbook_admin" {
   auto_redirect_to_identity = true
   app_launcher_visible      = true
   session_duration          = "24h"
-  policies                  = [{ id = local.access_policies.redbook_editor, precedence = 1 }]
+  policies                  = [{ id = cloudflare_zero_trust_access_policy.redbook_editor.id, precedence = 1 }]
 
   allow_authenticate_via_warp = false
   enable_binding_cookie       = false
@@ -41,7 +62,7 @@ resource "cloudflare_zero_trust_access_application" "vex" {
   destinations         = [{ type = "public", uri = "vex.shaneplunkett.dev" }]
   app_launcher_visible = true
   session_duration     = "24h"
-  policies             = [{ id = local.access_policies.vex_cli, precedence = 1 }]
+  policies             = [{ id = cloudflare_zero_trust_access_policy.vex_cli.id, precedence = 1 }]
 
   auto_redirect_to_identity  = false
   enable_binding_cookie      = false
