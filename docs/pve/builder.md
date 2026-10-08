@@ -13,6 +13,10 @@ The host has Nix, git, colmena, and node for JavaScript actions like
 `actions/checkout`. Anything else a job needs goes in `hostPackages`, or
 comes from `nix shell` inside the job. Old store paths are collected weekly.
 
+The builder also substitutes from the caches nix-config's machines trust.
+The runner isn't a trusted user, so a flake can't add caches for itself, and
+without them a desktop build compiles Hyprland and noctalia from source.
+
 ## Deploying
 
 The deploy workflow runs `colmena apply --on @deploy-on-merge` on each push
