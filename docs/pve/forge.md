@@ -26,6 +26,12 @@ Workflows live in `.forgejo/workflows/` and run on the builder, which
 `forgejo-runner-register` registers from a shared secret. See
 [builder.md](builder.md).
 
+Every five minutes, `forgejo-workflow-metrics` reads the database for the
+last finished run of each workflow on each repo's default branch. A failed
+one fires `ForgejoWorkflowFailing` in Discord, linked to the run, and the
+alert resolves when a later run passes. Pull requests don't count, nor do
+cancelled runs or repos with Actions switched off.
+
 ## Getting back in
 
 `forgejo-admin` on the host runs `forgejo admin` as the service user, with
