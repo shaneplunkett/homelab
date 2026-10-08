@@ -84,8 +84,8 @@ in
   };
 
   nix.settings = {
-    min-free = 10 * 1024 * 1024 * 1024;
-    max-free = 30 * 1024 * 1024 * 1024;
+    min-free = 20 * 1024 * 1024 * 1024;
+    max-free = 40 * 1024 * 1024 * 1024;
     extra-substituters = [
       "https://nix-community.cachix.org"
       "https://hyprland.cachix.org"

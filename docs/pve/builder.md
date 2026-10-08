@@ -122,6 +122,8 @@ something roots it. A job that wants its result kept builds with
 run so only the latest build is held. Full desktop and Mac closures are tens
 of gigabytes each, so Nix also collects garbage by itself whenever free space
 drops below `min-free`, and roots keep the latest builds safe from it.
+`min-free` has to leave more room than the disk alert does, or Discord
+hears about a full disk before Nix gets a chance to clear it.
 
 The name only resolves through Blocky, so the cache is reachable on the LAN
 and the tailnet and nowhere else.
