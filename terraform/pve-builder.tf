@@ -6,5 +6,5 @@ module "builder" {
   cores     = 8
   memory    = 16384
   swap      = 2048
-  disk_size = 100
+  disk_size = 250
 }
