@@ -13,6 +13,7 @@ let
     forge
     builder
     dlna
+    gym
     ;
 in
 {
@@ -108,6 +109,7 @@ in
     forge
     builder
     dlna
+    gym
   ];
   "backup-brain.age".publicKeys = [
     shane

@@ -62,6 +62,13 @@
       "groupName": "arr containers"
     },
     {
+      "description": "One PR for openGym's api and web images",
+      "matchPackageNames": [
+        "ghcr.io/duartesantos8/opengym-*"
+      ],
+      "groupName": "openGym"
+    },
+    {
       "description": "One PR for the tools pinned in flake.nix",
       "matchFileNames": [
         "flake.nix"
