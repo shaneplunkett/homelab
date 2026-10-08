@@ -186,4 +186,8 @@ in
     shane
     builder
   ];
+  "terraform-cloudflare-token.age".publicKeys = [
+    shane
+    builder
+  ];
 }
