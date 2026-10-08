@@ -82,3 +82,13 @@ Before rebooting PVE:
   if it's ever off, nothing can mount its shares until someone starts it.
 - **Then remount its shares on Cube**, because they go stale whenever
   Unraid restarts. `docs/cube/README.md` has the commands.
+
+## The builder's key
+
+The builder's SSH key is in `shane`'s `authorized_keys` on both nodes, so
+Terraform on the builder can run `pct` for container devices and bind mounts.
+Add it again after rebuilding a node:
+
+```sh
+ssh root@builder ssh-keygen -y -f /run/agenix/builder-ssh-key | ssh shane@<node> 'cat >> ~/.ssh/authorized_keys'
+```

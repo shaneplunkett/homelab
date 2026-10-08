@@ -1,8 +1,8 @@
 # Hetzner
 
 A Hetzner Storage Box is the offsite restic target for homelab backups. It's
-defined in `terraform/hetzner.tf`, with state in Terraform Cloud and applies
-run locally from `terraform/`.
+defined in `terraform/hetzner.tf`, with state in Terraform Cloud, and applied
+by the builder when a change reaches `main`.
 
 ## Nix host backups
 

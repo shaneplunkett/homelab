@@ -15,6 +15,9 @@ in
       "forgejo-runner-secret"
       "builder-ssh-key"
       "forge-bot-token"
+      "terraform-cloud-token"
+      "terraform-pve-token"
+      "terraform-hcloud-token"
     ];
     monitoring.units = [ "${unit}.service" ];
   };
@@ -40,12 +43,16 @@ in
       config.programs.ssh.package
       config.nix.package
       pkgs.colmena
+      pkgs.terraform
     ];
   };
 
   systemd.services.${unit}.serviceConfig.LoadCredential = [
     "ssh-key:${config.age.secrets.builder-ssh-key.path}"
     "forge-bot-token:${config.age.secrets.forge-bot-token.path}"
+    "terraform-cloud-token:${config.age.secrets.terraform-cloud-token.path}"
+    "terraform-pve-token:${config.age.secrets.terraform-pve-token.path}"
+    "terraform-hcloud-token:${config.age.secrets.terraform-hcloud-token.path}"
   ];
 
   programs.ssh = {
@@ -60,7 +67,12 @@ in
       Host ${name}
         HostName ${lanAddress name}
         IdentityFile /run/credentials/${unit}.service/ssh-key
-    '') (lib.attrNames nodes);
+    '') (lib.attrNames nodes)
+    + ''
+      Host 192.168.1.169 192.168.1.238
+        User shane
+        IdentityFile /run/credentials/${unit}.service/ssh-key
+    '';
   };
 
   nix.gc = {

@@ -97,6 +97,10 @@ deploys every host tagged `deploy-on-merge`, one deploy at a time. The
 builder isn't tagged, because switching it restarts the runner mid-deploy,
 so it's deployed by hand with `colmena apply --on builder`.
 
+Terraform works the same way: a pull request touching `terraform/` gets its
+plan posted as a comment, and merging applies it. See
+[docs/pve/builder.md](docs/pve/builder.md).
+
 Updates are a pull request like any other: `nix flake update`, push a
 branch, and merge once it builds.
 

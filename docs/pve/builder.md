@@ -42,6 +42,22 @@ is `forge-bot-token`, in Bitwarden and agenix, and the runner loads it as a
 credential. A pull request can't ask its own author for a review, which is why
 the updates come from a bot and not from your account.
 
+## Terraform
+
+The terraform workflow runs when a pull request or a push to `main` touches
+`terraform/`. On a pull request it plans and posts the plan as a comment,
+which is where to check it. On `main` it plans again and applies, with no
+further check, queued so two applies never overlap. Run workflow from the
+Actions tab only plans, which is a quick way to look for drift.
+
+State stays in Terraform Cloud. The builder reaches it with
+`terraform-cloud-token`, a user API token in Bitwarden as `homelab_tfc_token`,
+and the Proxmox and Hetzner tokens come from `homelab_pve_token` and
+`homelab_hcloud_token`. All three are agenix secrets the runner loads as
+credentials. The step that sets a container's devices and bind mounts runs
+`pct` over SSH as `shane`, so the builder's key is in `shane`'s authorized
+keys on both nodes.
+
 ## Renovate
 
 Renovate runs on the builder every Sunday morning, as `forge-bot`, for the

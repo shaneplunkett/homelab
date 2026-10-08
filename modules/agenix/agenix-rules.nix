@@ -164,4 +164,16 @@ in
     shane
     builder
   ];
+  "terraform-cloud-token.age".publicKeys = [
+    shane
+    builder
+  ];
+  "terraform-pve-token.age".publicKeys = [
+    shane
+    builder
+  ];
+  "terraform-hcloud-token.age".publicKeys = [
+    shane
+    builder
+  ];
 }

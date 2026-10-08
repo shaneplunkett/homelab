@@ -1,0 +1,55 @@
+on:
+  pull_request:
+    paths:
+      - "terraform/**"
+  push:
+    branches: [main]
+    paths:
+      - "terraform/**"
+  workflow_dispatch:
+
+concurrency:
+  group: terraform
+  cancel-in-progress: false
+
+jobs:
+  terraform:
+    runs-on: nix
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Plan, and apply on main
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          creds=/run/credentials/forgejo-runner-builder.service
+          TF_TOKEN_app_terraform_io="$(< "$creds/terraform-cloud-token")"
+          TF_VAR_pve_api_token="$(< "$creds/terraform-pve-token")"
+          TF_VAR_hcloud_token="$(< "$creds/terraform-hcloud-token")"
+          export TF_TOKEN_app_terraform_io TF_VAR_pve_api_token TF_VAR_hcloud_token
+
+          terraform init -input=false -no-color
+          terraform plan -input=false -no-color -out=tfplan | tee plan.txt
+
+          if [ "$EVENT" = push ]; then
+            terraform apply -input=false -no-color tfplan
+          fi
+
+      - name: Post the plan on the pull request
+        if: github.event_name == 'pull_request'
+        env:
+          NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          token="$(< /run/credentials/forgejo-runner-builder.service/forge-bot-token)"
+          echo "::add-mask::$token"
+          summary="$(grep -E '^(Plan:|No changes\.)' plan.txt || echo 'See the full plan.')"
+          body="$(printf '### Terraform plan\n\n**%s**\n\n<details>\n<summary>Full plan</summary>\n\n```\n%s\n```\n\n</details>' \
+            "$summary" "$(cat plan.txt)")"
+          curl -sf -H "Authorization: token $token" -H "Content-Type: application/json" \
+            -d "$(jq -n --arg body "$body" '{body: $body}')" \
+            "$GITHUB_SERVER_URL/api/v1/repos/$GITHUB_REPOSITORY/issues/$NUMBER/comments" > /dev/null
