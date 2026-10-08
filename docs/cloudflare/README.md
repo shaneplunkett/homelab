@@ -19,7 +19,7 @@ Agent skills from `cloudflare/skills` (`cloudflare`, `cloudflare-one`, `wrangler
 Two tokens, one per job.
 
 - **Agents and local dev:** a user token, stored in rbw as `homelab_cf_token`. The password is the token and the username is the account ID. It's a user token because the Workers Builds API rejects account tokens with `12006 Invalid token`, whatever their permissions. Edit it in the dashboard under **My Profile → API Tokens**.
-- **Terraform:** an account token with only Account API Tokens: Edit, stored in rbw as `homelab_cf_terraform_token` and in agenix as `terraform-cloudflare-token` for the builder. It can mint tokens with any permission, so it gets the same care as the Proxmox and Hetzner tokens. Account tokens live in `terraform/cloudflare.tf`.
+- **Terraform:** an account token, stored in rbw as `homelab_cf_terraform_token` and in agenix as `terraform-cloudflare-token` for the builder. It has Account API Tokens: Edit, so it can mint tokens with any permission and gets the same care as the Proxmox and Hetzner tokens. That also lets it update its own policies through the API (`PUT /accounts/{id}/tokens/{token_id}`), which is how to give it more permissions without the dashboard. Its zone permissions cover the personal zones only.
 
 The ingress host's ACME renewals use a third token, scoped to DNS edit on the personal zones only, kept in agenix as `cloudflare-dns`. Terraform manages its permissions.
 
@@ -50,6 +50,7 @@ Zone permissions only take effect when the token's Zone Resources point at the a
 
 ## Gotchas
 
+- Terraform owns the account tokens (`terraform/cloudflare.tf`) and the personal zones' DNS records and DNSSEC (`terraform/cloudflare-dns.tf`). Change those in code. A change made through the MCP or the dashboard gets reverted on the next apply.
 - The dashboard's account-token page has no zone picker. It puts every permission into one account-wide policy, so zone permissions save and display but grant nothing, and saving an account token there drops any zone policy added through the API. Change account tokens through Terraform.
 - On the LAN, Blocky answers for all of `shaneplunkett.com` itself, so LAN lookups don't match the public answer. Ask public DNS instead, e.g. `dig @1.1.1.1` or `doggo @https://cloudflare-dns.com/dns-query`.
 - The `cf` CLI is beta. Non-interactive deletes without `--force` print `Aborted.` and exit 0, so check the result rather than the exit code.
