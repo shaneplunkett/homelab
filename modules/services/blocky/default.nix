@@ -1,4 +1,4 @@
-{ nodes, ... }: {
+{ nodes, pkgs, ... }: {
   services.blocky = {
     enable = true;
     settings = {
@@ -53,6 +53,7 @@
     wants = [ "unbound.service" ];
   };
   services.resolved.enable = false;
+  environment.systemPackages = [ pkgs.dnsutils ];
   networking.firewall = {
     allowedTCPPorts = [
       53

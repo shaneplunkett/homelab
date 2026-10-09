@@ -87,6 +87,9 @@ live next to the service they watch, and everything routes through
 Alertmanager to Discord. Gatus on the dashboard host watches the monitoring
 stack itself, so a dead Alertmanager still gets noticed.
 
+When the internet itself is broken, see
+[docs/internet-down.md](docs/internet-down.md).
+
 ## Ingress
 
 nginx on the ingress host terminates TLS with a wildcard certificate (ACME
