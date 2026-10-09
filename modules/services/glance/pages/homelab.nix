@@ -25,6 +25,7 @@
         (import ../widgets/proxmox-ve-stats)
         (import ../widgets/releases)
         (import ../widgets/dns { inherit nodes; })
+        (import ../widgets/blocked { inherit nodes; })
         (import ../widgets/backups { inherit lib nodes; })
       ];
     }
