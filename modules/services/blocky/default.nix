@@ -6,7 +6,15 @@
         dns = 53;
         http = 4000;
       };
-      upstreams.groups.default = [ "127.0.0.1:5335" ];
+      upstreams = {
+        strategy = "strict";
+        timeout = "1s";
+        groups.default = [
+          "127.0.0.1:5335"
+          "tcp-tls:9.9.9.9:853#dns.quad9.net"
+          "tcp-tls:1.1.1.1:853#cloudflare-dns.com"
+        ];
+      };
       blocking = {
         denylists.ads = [
           "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
