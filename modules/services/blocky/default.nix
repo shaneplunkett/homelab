@@ -8,7 +8,7 @@
       };
       upstreams = {
         strategy = "strict";
-        timeout = "1s";
+        timeout = "3s";
         groups.default = [
           "127.0.0.1:5335"
           "tcp-tls:9.9.9.9:853#dns.quad9.net"
