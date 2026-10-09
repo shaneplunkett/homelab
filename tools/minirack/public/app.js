@@ -70,8 +70,32 @@ const TEMPLATE_GROUPS = [
       { key: "pi-x2", name: "Pi mount · 2 bays", heightU: 1, width: "full", color: "#b5e6cf", style: "pi", align: "center", ports: oldPiPorts(2) },
       { key: "pi-x4", name: "Pi mount · 4 bays", heightU: 1, width: "full", color: "#b5e6cf", style: "pi", align: "center", ports: perUnit(4, "Pi", [["front", "rj45", 1, "LAN"], ["rear", "usb", 1, "power"]]) },
       { key: "mini-pc", name: "Mini PC", heightU: 2, width: "full", color: "#b6d8f5", style: "plain", ports: [port("front", "usba", 2), port("rear", "rj45", 2), port("rear", "power")] },
+      {
+        key: "itx-4u", name: "Mini ITX case · 4U", heightU: 4, width: "full", color: "#4a4458", style: "circuit",
+        ports: [
+          port("rear", "rj45", 1, { label: "LAN" }),
+          port("rear", "usba", 4),
+          port("rear", "usb", 1),
+          port("rear", "hdmi", 1, { label: "Board HDMI" }),
+          port("rear", "hdmi", 1, { label: "GPU HDMI" }),
+          port("rear", "power"),
+        ],
+      },
       { key: "jetkvm-1", name: "JetKVM", heightU: 1, width: "full", color: "#f6b8d0", style: "jetkvm", align: "center", screens: 1, ports: jetkvmPorts(1) },
       { key: "jetkvm-2", name: "JetKVM · 2 bays", heightU: 1, width: "full", color: "#f6b8d0", style: "jetkvm", align: "center", screens: 2, ports: jetkvmPorts(2) },
+      {
+        key: "mac-mini-kvm", name: "Mac mini + JetKVM", heightU: 2, width: "full", color: "#4a4458", style: "mac-kvm", align: "center", bays: ["kvm", "mac-mini"],
+        ports: [
+          port("rear", "hdmi", 1, { unit: 1, label: "KVM HDMI" }),
+          port("rear", "usb", 1, { unit: 1, label: "KVM USB-C" }),
+          port("rear", "rj45", 1, { unit: 1, label: "KVM LAN" }),
+          port("front", "usb", 2, { unit: 2, label: "Mac USB-C" }),
+          port("rear", "usb", 3, { unit: 2, label: "Mac Thunderbolt" }),
+          port("rear", "hdmi", 1, { unit: 2, label: "Mac HDMI" }),
+          port("rear", "rj45", 1, { unit: 2, label: "Mac Ethernet" }),
+          port("rear", "power", 1, { unit: 2, label: "Mac power" }),
+        ],
+      },
     ],
   },
   {
@@ -602,6 +626,9 @@ function itemEl(item, { U, bayW, parked = false, ghost = false }) {
   const units = [...new Set(ports.filter((p) => !p.pos).map((p) => p.unit ?? 0))];
   if (ui.view === "rear") units.reverse();
   const groups = units.map((u) => ports.filter((p) => !p.pos && (p.unit ?? 0) === u));
+  // A mount holding different devices side by side draws each in its own bay, with that device's ports inside it.
+  const bays = (t.bays ?? []).map((kind, i) => ({ kind, ports: ports.filter((p) => !p.pos && p.unit === i + 1) }));
+  if (ui.view === "rear") bays.reverse();
 
   return h("div", {
     class: cls.join(" "),
@@ -618,8 +645,16 @@ function itemEl(item, { U, bayW, parked = false, ghost = false }) {
     h("div", { class: "item-body" },
       flank("left"),
       h("div", { class: "item-center" },
-        decorEl(t),
-        groups.length ? h("div", { class: "ports" }, groups.map((g) => h("div", { class: "port-group" }, g.map(portBtn)))) : null,
+        bays.length
+          ? h("div", { class: "mount-bays" }, bays.map(({ kind, ports }) =>
+            h("div", { class: `mount-bay bay-${kind}` },
+              kind === "kvm" && ui.view === "front" ? h("div", { class: "kvm" }, h("div", { class: "kvm-screen" }, h("i"), h("i"))) : null,
+              ports.length ? h("div", { class: "ports" }, ports.map(portBtn)) : null,
+            )))
+          : [
+            decorEl(t),
+            groups.length ? h("div", { class: "ports" }, groups.map((g) => h("div", { class: "port-group" }, g.map(portBtn)))) : null,
+          ],
       ),
       flank("right"),
     ),
@@ -637,6 +672,7 @@ function decorEl({ style, screens = 0 }) {
   if (style === "rings") return h("div", { class: "decor rings" }, h("i"), h("i"), h("i"));
   if (style === "vent") return h("div", { class: "decor vent" });
   if (style === "shelf") return h("div", { class: "decor shelf" });
+  if (style === "circuit") return ui.view === "front" ? h("div", { class: "decor circuit" }, h("i")) : null;
   return null;
 }
 

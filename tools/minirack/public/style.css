@@ -930,6 +930,36 @@ body.dragging * {
   background-position: center;
 }
 
+.decor.circuit {
+  position: relative;
+  margin: 4px 2px;
+}
+
+.decor.circuit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0.28;
+  mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'><path d='M2 14h22l10 10v18M14 2v6l8 8M44 6h18l12 12v14M88 2v16l-10 10h-12M102 10h16M108 24v22l-10 10M4 40h12l8 8v22M40 52v16l10 10h22M60 40l14 14v10M92 64h16l10 10M30 84v14l10 10h14M6 96h10l8 8v14M70 92v12l-8 8M86 84l12 12v20M110 96v-8M50 26v8'/><g fill='black' stroke='none'><circle cx='34' cy='44' r='2.4'/><circle cx='74' cy='34' r='2.4'/><circle cx='64' cy='28' r='2.4'/><circle cx='96' cy='56' r='2.4'/><circle cx='24' cy='72' r='2.4'/><circle cx='74' cy='78' r='2.4'/><circle cx='74' cy='66' r='2.4'/><circle cx='56' cy='108' r='2.4'/><circle cx='62' cy='112' r='2.4'/><circle cx='98' cy='118' r='2.4'/><circle cx='110' cy='86' r='2.4'/><circle cx='50' cy='36' r='2.4'/><circle cx='22' cy='16' r='2.4'/><circle cx='118' cy='10' r='2.4'/></g></svg>") repeat center / calc(var(--u) * 2.2);
+}
+
+.decor.circuit i {
+  position: absolute;
+  left: 50%;
+  top: 68%;
+  width: calc(var(--u) * 0.32);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: #2b2433;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(255, 255, 255, 0.15);
+}
+
+.face-circuit .leds {
+  display: none;
+}
+
 .decor.shelf {
   border-bottom: 5px solid rgba(74, 63, 85, 0.22);
   border-radius: 0 0 3px 3px;
@@ -1623,8 +1653,53 @@ svg.cables.hidden .cable {
   background: #79c4ff;
 }
 
-.face-jetkvm .leds {
+.face-jetkvm .leds,
+.face-mac-kvm .leds {
   display: none;
+}
+
+/* Mounts that hold different devices side by side, one bay each. */
+.mount-bays {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 0.35);
+  margin-top: calc(var(--u) * 0.2);
+}
+
+.mount-bay {
+  flex: 1;
+  height: calc(var(--u) * 1.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mount-bay .kvm {
+  max-height: calc(var(--u) * 0.8);
+}
+
+.bay-mac-mini {
+  flex: 1.5;
+  position: relative;
+  justify-content: flex-start;
+  padding: 0 calc(var(--u) * 0.3);
+  border-radius: calc(var(--u) * 0.16);
+  background: linear-gradient(180deg, #f6f7f9, #c8cbd2);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12), 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.item.front .bay-mac-mini::after {
+  content: "";
+  position: absolute;
+  right: calc(var(--u) * 0.35);
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  translate: 0 -50%;
+  background: #fff;
+  box-shadow: 0 0 5px #fff;
 }
 
 .port-hdmi {
