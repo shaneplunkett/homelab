@@ -20,6 +20,12 @@
           "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
           "https://big.oisd.nl/domainswild"
         ];
+        allowlists.ads = [
+          ''
+            local
+            localhost
+          ''
+        ];
         clientGroupsBlock.default = [ "ads" ];
         blockType = "nxDomain";
         loading = {
