@@ -5,6 +5,7 @@ _: {
       settings.server = {
         port = 5335;
         serve-expired = true;
+        infra-keep-probing = true;
       };
 
       localControlSocketPath = "/run/unbound/unbound.ctl";
