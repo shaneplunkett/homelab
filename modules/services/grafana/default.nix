@@ -2,10 +2,15 @@
   config,
   lib,
   pkgs,
+  nodes,
   ...
 }:
 let
   secrets = config.age.secrets;
+  dashboards = {
+    hosts = import ./dashboards/hosts.nix { inherit lib; };
+    dns = import ./dashboards/dns.nix { inherit lib nodes; };
+  };
 in
 {
   homelab.secrets = [
@@ -63,8 +68,11 @@ in
       dashboards.settings.providers = [
         {
           name = "homelab";
-          options.path = pkgs.writeTextDir "hosts.json" (
-            builtins.toJSON (import ./dashboards/hosts.nix { inherit lib; })
+          options.path = pkgs.linkFarm "grafana-dashboards" (
+            lib.mapAttrs' (name: dashboard: {
+              name = "${name}.json";
+              value = pkgs.writeText "${name}.json" (builtins.toJSON dashboard);
+            }) dashboards
           );
         }
       ];
