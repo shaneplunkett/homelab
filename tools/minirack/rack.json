@@ -4,7 +4,7 @@
     {
       "id": "layout-4ymffz",
       "name": "My minirack",
-      "rackUnits": 8,
+      "rackUnits": 12,
       "filament": "#cdb8f2",
       "notes": "",
       "items": [
@@ -16,7 +16,7 @@
           "heightU": 1,
           "width": "full",
           "side": null,
-          "u": 3,
+          "u": 1,
           "parked": false,
           "ports": [
             {
@@ -80,7 +80,7 @@
           "heightU": 1,
           "width": "full",
           "side": null,
-          "u": 7,
+          "u": 5,
           "parked": false,
           "ports": [
             {
@@ -166,7 +166,7 @@
           "heightU": 1,
           "width": "full",
           "side": null,
-          "u": 6,
+          "u": 4,
           "parked": false,
           "ports": [
             {
@@ -234,7 +234,7 @@
           "heightU": 1,
           "width": "full",
           "side": null,
-          "u": 5,
+          "u": 3,
           "parked": false,
           "ports": [
             {
@@ -278,7 +278,7 @@
           "heightU": 1,
           "width": "full",
           "side": null,
-          "u": 4,
+          "u": 2,
           "parked": false,
           "ports": [
             {
@@ -357,38 +357,6 @@
           "notes": ""
         },
         {
-          "id": "item-bmo8yc",
-          "template": "jetkvm-1",
-          "name": "JetKVM",
-          "color": "#f6b8d0",
-          "heightU": 1,
-          "width": "full",
-          "side": null,
-          "u": 1,
-          "parked": false,
-          "ports": [
-            {
-              "id": "p-rsk9ed",
-              "kind": "hdmi",
-              "face": "rear",
-              "label": "KVM 1 HDMI"
-            },
-            {
-              "id": "p-78dnpl",
-              "kind": "usb",
-              "face": "rear",
-              "label": "KVM 1 USB-C"
-            },
-            {
-              "id": "p-opfm2z",
-              "kind": "rj45",
-              "face": "rear",
-              "label": "KVM 1 LAN"
-            }
-          ],
-          "notes": ""
-        },
-        {
           "id": "item-lsn2l5",
           "template": "pi-x2",
           "name": "Pi mount · 2 bays",
@@ -396,7 +364,7 @@
           "heightU": 1,
           "width": "full",
           "side": null,
-          "u": 8,
+          "u": 6,
           "parked": false,
           "ports": [
             {
@@ -453,6 +421,165 @@
               "kind": "power",
               "face": "rear",
               "label": "Pi 2 micro-USB power",
+              "unit": 2
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "item-yw2i0b",
+          "template": "itx-4u",
+          "name": "Mini ITX case · 4U",
+          "color": "#4a4458",
+          "heightU": 4,
+          "width": "full",
+          "side": null,
+          "u": 9,
+          "parked": false,
+          "ports": [
+            {
+              "id": "p-k2lsvp",
+              "kind": "rj45",
+              "face": "rear",
+              "label": "LAN"
+            },
+            {
+              "id": "p-zjw5y8",
+              "kind": "usba",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-byrigy",
+              "kind": "usba",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-vossh5",
+              "kind": "usba",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-i2l2ez",
+              "kind": "usba",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-y4x4e8",
+              "kind": "usb",
+              "face": "rear",
+              "label": ""
+            },
+            {
+              "id": "p-du2ehg",
+              "kind": "hdmi",
+              "face": "rear",
+              "label": "Board HDMI"
+            },
+            {
+              "id": "p-7fh85p",
+              "kind": "hdmi",
+              "face": "rear",
+              "label": "GPU HDMI"
+            },
+            {
+              "id": "p-21rdju",
+              "kind": "power",
+              "face": "rear",
+              "label": ""
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "item-xhg8lk",
+          "template": "mac-mini-kvm",
+          "name": "Mac mini + JetKVM",
+          "color": "#4a4458",
+          "heightU": 2,
+          "width": "full",
+          "side": null,
+          "u": 7,
+          "parked": false,
+          "ports": [
+            {
+              "id": "p-8tddup",
+              "kind": "hdmi",
+              "face": "rear",
+              "label": "KVM HDMI",
+              "unit": 1
+            },
+            {
+              "id": "p-a1414h",
+              "kind": "usb",
+              "face": "rear",
+              "label": "KVM USB-C",
+              "unit": 1
+            },
+            {
+              "id": "p-rt9284",
+              "kind": "rj45",
+              "face": "rear",
+              "label": "KVM LAN",
+              "unit": 1
+            },
+            {
+              "id": "p-4lx8ba",
+              "kind": "usb",
+              "face": "front",
+              "label": "Mac USB-C 1",
+              "unit": 2
+            },
+            {
+              "id": "p-r7w51s",
+              "kind": "usb",
+              "face": "front",
+              "label": "Mac USB-C 2",
+              "unit": 2
+            },
+            {
+              "id": "p-pnv3he",
+              "kind": "usb",
+              "face": "rear",
+              "label": "Mac Thunderbolt 1",
+              "unit": 2
+            },
+            {
+              "id": "p-eaci8z",
+              "kind": "usb",
+              "face": "rear",
+              "label": "Mac Thunderbolt 2",
+              "unit": 2
+            },
+            {
+              "id": "p-ek70gc",
+              "kind": "usb",
+              "face": "rear",
+              "label": "Mac Thunderbolt 3",
+              "unit": 2
+            },
+            {
+              "id": "p-t70sa3",
+              "kind": "hdmi",
+              "face": "rear",
+              "label": "Mac HDMI",
+              "unit": 2
+            },
+            {
+              "id": "p-j6do7n",
+              "kind": "rj45",
+              "face": "rear",
+              "label": "Mac Ethernet",
+              "unit": 2
+            },
+            {
+              "id": "p-ukxr41",
+              "kind": "power",
+              "face": "rear",
+              "label": "Mac power",
               "unit": 2
             }
           ],
