@@ -163,6 +163,10 @@ in
     shane
     home
   ];
+  "zigbee2mqtt-secret.age".publicKeys = [
+    shane
+    home
+  ];
   "forgejo-oidc-client-secret.age".publicKeys = [
     shane
     forge
