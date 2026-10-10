@@ -1,4 +1,9 @@
-{ config, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   secrets = config.age.secrets;
 in
@@ -52,6 +57,14 @@ in
           uid = "prometheus";
           url = "http://localhost:9090";
           isDefault = true;
+        }
+      ];
+      dashboards.settings.providers = [
+        {
+          name = "homelab";
+          options.path = pkgs.writeTextDir "hosts.json" (
+            builtins.toJSON (import ./dashboards/hosts.nix { inherit lib; })
+          );
         }
       ];
     };
