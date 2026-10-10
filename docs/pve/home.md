@@ -193,3 +193,30 @@ fabric's keys, so it's backed up. Losing it means re-sharing every Matter device
 Matter devices already in Apple Home join by sharing: in the Home app, open the
 device's settings, turn on pairing mode, and give Home Assistant the code it
 shows. The device stays in Apple Home as well.
+
+- **Apple Home can only open pairing mode while its hub reaches the device.**
+  The Apple TV lives on the main LAN for Thread, so Matter devices on the IoT
+  VLAN show "No Response" there. To share one, move the Apple TV's switch port
+  and DHCP reservation to IoT, restart it, share the device, then move it back
+  and restart it again. Once Home Assistant has a device, Apple Home losing it
+  doesn't matter.
+- **Home Assistant's network adapters include `eth1`** (Settings, System,
+  Network), so discovery sees the IoT VLAN.
+
+### LIFX switches
+
+The Matter update hides in the switch's advanced settings in the LIFX app, and
+only shows while the app can reach the switch through LIFX's cloud. If the app
+says it's disconnected, join the phone to the IoT Wi-Fi to reconnect it. The
+update ends with a Matter code, and the switch joins Home Assistant with it
+directly.
+
+- **Each button is welded to its relay** until its actions are cleared in the
+  LIFX app. After that, a press only reaches Home Assistant as an event, which
+  automations act on. The bathroom lights button works this way, because its
+  relay feeds the WiZ bulb and the basin switch, which are wired in series.
+  That relay powers on after a power cut so both stay reachable.
+- **Every press arrives as three events** within a millisecond. Automations on
+  the buttons run in `single` mode and end with a short delay, so they act
+  once.
+- Buttons that still drive their relay report presses too.
