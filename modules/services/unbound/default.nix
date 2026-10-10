@@ -6,6 +6,10 @@ _: {
         server = {
           port = 5335;
           serve-expired = true;
+          serve-expired-client-timeout = 0;
+          prefetch = true;
+          msg-cache-size = "32m";
+          rrset-cache-size = "64m";
           infra-keep-probing = true;
         };
         forward-zone = [

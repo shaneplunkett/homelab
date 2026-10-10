@@ -15,6 +15,10 @@
           "tcp-tls:1.1.1.1:853#cloudflare-dns.com"
         ];
       };
+      caching = {
+        prefetching = true;
+        minTime = "5m";
+      };
       blocking = {
         denylists.ads = [
           "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
