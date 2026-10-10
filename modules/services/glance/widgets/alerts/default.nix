@@ -8,6 +8,7 @@
     active = "true";
     silenced = "false";
     inhibited = "false";
+    filter = ''alertname!="Watchdog"'';
   };
   template = builtins.readFile ./template.html;
 }
