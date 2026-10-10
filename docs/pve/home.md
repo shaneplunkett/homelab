@@ -170,3 +170,13 @@ the Thread network through the route those routers advertise.
   saving, so change settings in its web page, which is only reachable from the
   home host (`ssh -L 8115:<shelly>:80 root@home`). It's set to edge input and
   off after a power cut, and shows up as a light through Switch as X.
+
+## Matter
+
+The matter.js server, Home Assistant's current Matter stack, runs natively from
+nixpkgs and listens for Home Assistant on localhost. Its storage holds the Matter
+fabric's keys, so it's backed up. Losing it means re-sharing every Matter device.
+
+Matter devices already in Apple Home join by sharing: in the Home app, open the
+device's settings, turn on pairing mode, and give Home Assistant the code it
+shows. The device stays in Apple Home as well.
