@@ -135,3 +135,38 @@ frontend is the `zigbee` route, behind the oauth2-proxy gate.
   doesn't try to migrate the file Nix writes.
 - The backup covers `/var/lib/zigbee2mqtt`, including the coordinator backup
   Zigbee2MQTT keeps, which is what moves the network to a new coordinator.
+
+## Thread
+
+The Eve Aqua is a HomeKit-over-Thread device, paired to Home Assistant through
+Apple's border routers (the HomePod and the Apple TV). Home Assistant reaches
+the Thread network through the route those routers advertise.
+
+- **The home host has to accept IPv6 router adverts.** Proxmox writes
+  `IPv6AcceptRA = false` into the container's `eth0.network`, so the module
+  adds a drop-in that turns it back on. Without the route, pairing fails with
+  `NetworkError`.
+- **Every Apple border router has to be on the main LAN.** When the Apple TV
+  sat on the IoT VLAN, the Aqua's replies left through it and were dropped at
+  the firewall, so pairing timed out. The same split is why the Apple TV kept
+  reporting network issues.
+- The Aqua is a sleepy battery device. Press its button to wake it before
+  pairing.
+
+## Moving devices over
+
+- **Hue lights:** unplug the Hue bridge before resetting them. While it's
+  running, half-reset lights drift back to it. With it off, a power-cycle reset
+  (off 2 seconds, on 8, five times) or the Hue dimmer (power + Hue, about 10
+  seconds) gets them into Zigbee2MQTT within seconds. Zigbee2MQTT's
+  serial-number reset wipes every serial listed, including lights that have
+  already joined.
+- **HomeKit devices** (Meross, Sensibo, the Aqua) come over with HomeKit
+  Controller: remove them from Apple Home, then pair with their code. Sensibo
+  only shares on/off, mode and temperature that way, so the Sensibo cloud
+  integration sits beside it for the flap and fan. The local one is hidden.
+- **The balcony Shelly** runs the community shelly-homekit firmware, so it pairs
+  through HomeKit Controller too. Its RPC `Shelly.SetConfig` reboots it without
+  saving, so change settings in its web page, which is only reachable from the
+  home host (`ssh -L 8115:<shelly>:80 root@home`). It's set to edge input and
+  off after a power cut, and shows up as a light through Switch as X.
