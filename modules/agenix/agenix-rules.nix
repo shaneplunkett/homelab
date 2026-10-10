@@ -23,6 +23,10 @@ in
     shane
     dashboard
   ];
+  "healthchecks-ping.age".publicKeys = [
+    shane
+    monitoring
+  ];
   "discord-webhook.age".publicKeys = [
     shane
     dashboard
