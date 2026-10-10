@@ -37,6 +37,8 @@ in
           180
         ];
         network_key = "!secret network_key";
+        log_output = [ "console" ];
+        log_namespaced_levels."z2m:mqtt" = "warning";
       };
       frontend = {
         enabled = true;
