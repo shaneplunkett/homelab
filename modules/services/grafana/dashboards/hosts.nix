@@ -206,6 +206,7 @@ in
       title = "CPU by mode";
       gridPos = at 0 32 12 9;
       stacked = true;
+      defaults = removeAttrs percent [ "max" ];
       targets = [
         (query "{{mode}}" ''100 * avg by (mode) (rate(node_cpu_seconds_total{${host},mode!="idle"}[$__rate_interval]))'')
       ];

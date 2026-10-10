@@ -57,6 +57,7 @@ in
           uid = "prometheus";
           url = "http://localhost:9090";
           isDefault = true;
+          jsonData.timeInterval = config.services.prometheus.globalConfig.scrape_interval;
         }
       ];
       dashboards.settings.providers = [
