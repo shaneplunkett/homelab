@@ -171,6 +171,19 @@ the Thread network through the route those routers advertise.
   home host (`ssh -L 8115:<shelly>:80 root@home`). It's set to edge input and
   off after a power cut, and shows up as a light through Switch as X.
 
+## The IoT leg
+
+The home container has a second interface, `eth1`, tagged onto the IoT VLAN,
+with a static address and no gateway, so `eth0` keeps the default route. It's
+there for Matter, which talks IPv6 link-local and can't cross the router the
+way HomeKit and Hue do. pve's `vmbr0` is VLAN-aware for it, a change made by
+hand in `/etc/network/interfaces` (`bridge-vlan-aware yes`, `bridge-vids
+2-4094`). Its switch port already allows every VLAN.
+
+Traffic to the IoT VLAN now goes straight out of `eth1` rather than through the
+router, so the "Home Assistant to IoT" firewall policy only matters if `eth1`
+goes away. IP forwarding is off, so the host doesn't route between the two.
+
 ## Matter
 
 The matter.js server, Home Assistant's current Matter stack, runs natively from

@@ -4,7 +4,10 @@
     monitoring.units = [ "matterjs-server.service" ];
   };
 
-  services.matterjs-server.enable = true;
+  services.matterjs-server = {
+    enable = true;
+    extraArgs = [ "--primary-interface=eth1" ];
+  };
 
   networking.firewall.allowedUDPPorts = [ 5540 ];
 }

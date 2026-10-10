@@ -7,4 +7,12 @@ module "home" {
   cores       = 2
   memory      = 2048
   disk_size   = 16
+
+  extra_networks = [
+    {
+      vlan_id     = 20
+      mac_address = "BC:24:11:33:8D:CE"
+      ip          = "192.168.20.117/24"
+    },
+  ]
 }

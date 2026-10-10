@@ -86,3 +86,13 @@ variable "mac_address" {
   default     = null
   description = "MAC address for the network interface (preserves DHCP reservations)"
 }
+
+variable "extra_networks" {
+  type = list(object({
+    vlan_id     = number
+    mac_address = string
+    ip          = string
+  }))
+  default     = []
+  description = "Extra interfaces on tagged VLANs, as eth1 onwards. Static IPs with no gateway, so eth0 keeps the default route."
+}

@@ -37,6 +37,17 @@ resource "proxmox_virtual_environment_container" "this" {
     mac_address = var.mac_address
   }
 
+  dynamic "network_interface" {
+    for_each = var.extra_networks
+    content {
+      name        = "eth${network_interface.key + 1}"
+      bridge      = "vmbr0"
+      firewall    = true
+      vlan_id     = network_interface.value.vlan_id
+      mac_address = network_interface.value.mac_address
+    }
+  }
+
   initialization {
     hostname = var.hostname
 
@@ -44,6 +55,15 @@ resource "proxmox_virtual_environment_container" "this" {
       ipv4 {
         address = var.ip
         gateway = var.ip != "dhcp" ? var.gateway : null
+      }
+    }
+
+    dynamic "ip_config" {
+      for_each = var.extra_networks
+      content {
+        ipv4 {
+          address = ip_config.value.ip
+        }
       }
     }
   }
