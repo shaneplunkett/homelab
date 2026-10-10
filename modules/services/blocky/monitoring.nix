@@ -61,6 +61,24 @@ in
                   check = "dig @{{ $labels.instance }} example.com";
                 };
               }
+              {
+                alert = "DnsLookupsFailing";
+                expr = ''
+                  (
+                    sum by (host) (increase(blocky_error_total[10m]))
+                      / sum by (host) (increase(blocky_query_total[10m]))
+                    > 0.02
+                  )
+                  and sum by (host) (increase(blocky_error_total[10m])) >= 10
+                '';
+                for = "5m";
+                labels.severity = "warning";
+                annotations = {
+                  summary = "{{ $labels.host }} is failing {{ $value | humanizePercentage }} of DNS lookups";
+                  condition = "Over 2% of lookups, and at least 10, failing for 5m";
+                  check = "ssh root@{{ $labels.host }} \"journalctl -u blocky --since -15m | grep -c 'no resolver returned'\", then docs/internet-down.md";
+                };
+              }
             ];
           }
         ];
