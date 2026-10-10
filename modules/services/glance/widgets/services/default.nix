@@ -43,6 +43,10 @@ let
       title = "Home Assistant";
       icon = "di:home-assistant";
     };
+    zigbee = {
+      title = "Zigbee2MQTT";
+      icon = "di:zigbee2mqtt";
+    };
     rss = {
       title = "FreshRSS";
       icon = "di:freshrss";
