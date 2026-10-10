@@ -65,7 +65,7 @@ locals {
       zone      = "shaneplunkett.com"
       type      = "TXT"
       name      = "_dmarc.shaneplunkett.com"
-      content   = "\"v=DMARC1; p=quarantine;\""
+      content   = "\"v=DMARC1; p=quarantine; rua=mailto:6e0a0ed52a3e4164a2c2306cc5f74054@dmarc-reports.cloudflare.net\""
     }
     "com/TXT/google-verification" = {
       record_id = "7edaa142e2719bf517d16a3a3bdccd4c"
@@ -82,14 +82,6 @@ locals {
       name      = "shaneplunkett.com"
       content   = "\"v=spf1 include:_spf.google.com ~all\""
       ttl       = 3600
-    }
-    "dev/CNAME/sig1._domainkey" = {
-      record_id = "086b776821e8f90ee00e219aae897b8e"
-      zone      = "shaneplunkett.dev"
-      type      = "CNAME"
-      name      = "sig1._domainkey.shaneplunkett.dev"
-      content   = "sig1.dkim.shaneplunkett.dev.at.icloudmailadmin.com"
-      ttl       = 120
     }
     "dev/CNAME/vex" = {
       record_id = "a49bcc31f8a34ee5095e4bc26a22139c"
@@ -150,13 +142,6 @@ locals {
       type      = "TXT"
       name      = "_dmarc.shaneplunkett.dev"
       content   = "\"v=DMARC1;p=reject;pct=100;rua=mailto:24b4411b41b143f3b98550df738e0074@dmarc-reports.cloudflare.net\""
-    }
-    "dev/TXT/apple-domain" = {
-      record_id = "54d2dfcbbe9b4a42fb0ee73b68507ef2"
-      zone      = "shaneplunkett.dev"
-      type      = "TXT"
-      name      = "shaneplunkett.dev"
-      content   = "\"apple-domain=3jgOn1Nf2CdbZq7O\""
     }
     "dev/TXT/google-verification" = {
       record_id = "82655cf13b30a6f5a2d7d935501c709c"
