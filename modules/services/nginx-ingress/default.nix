@@ -35,6 +35,12 @@ let
     coffee = "http://192.168.20.29:80";
   };
 
+  serverConfig = {
+    coffee = ''
+      add_header Content-Security-Policy "upgrade-insecure-requests" always;
+    '';
+  };
+
   hiveRoutes = lib.concatMapAttrs (
     _: node:
     lib.mapAttrs (
@@ -86,6 +92,7 @@ in
         lib.nameValuePair "${name}.${domain}" {
           useACMEHost = domain;
           forceSSL = true;
+          extraConfig = serverConfig.${name} or "";
           locations = lib.genAttrs ([ "/" ] ++ gated.${name} or [ ]) (path: {
             proxyPass = upstream;
             proxyWebsockets = true;
