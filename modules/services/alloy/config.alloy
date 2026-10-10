@@ -13,6 +13,20 @@ loki.relabel "journal" {
 	}
 
 	rule {
+		source_labels = ["unit"]
+		regex         = "sshd@.+\\.service"
+		target_label  = "unit"
+		replacement   = "sshd@.service"
+	}
+
+	rule {
+		source_labels = ["unit"]
+		regex         = "session-.+\\.scope"
+		target_label  = "unit"
+		replacement   = "session.scope"
+	}
+
+	rule {
 		source_labels = ["__journal_priority_keyword"]
 		target_label  = "level"
 	}
