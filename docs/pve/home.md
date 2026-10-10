@@ -67,6 +67,45 @@ other login method on the welcome screen. The password is in Bitwarden.
 Sessions already signed in keep working, because Pocket ID is only used at
 login.
 
+## Reaching the IoT network
+
+The smart home devices are on the IoT VLAN. One UniFi zone policy, "Home
+Assistant to IoT", lets the home host into the IoT zone, with return traffic
+allowed. IoT devices still can't start a connection to anything on the LAN.
+Every IoT device has a fixed IP, so Home Assistant can find it even when mDNS
+gets flaky.
+
+## Vex's access
+
+Vex has its own admin user, `Vex`, and a long-lived token in Bitwarden as
+`home-assistant-vex-token`. The logbook shows what Vex did, and disabling the
+user cuts it off without touching Shane's login.
+
+Some changes are only on the websocket API, not REST: enabling an entity,
+setting a device's area or name, and listing discovered devices.
+
+## After a power cut
+
+The "Turn things off after a power cut" automation turns off any light that
+comes back on by itself. It leaves the Play bars alone, and only switches off
+plugs listed in its `plugs` variable.
+
+- It only acts in the first 20 minutes after pve boots. Home Assistant
+  restarting, or a device dropping off Wi-Fi and coming back, isn't a power
+  cut, and it would otherwise turn off a 3D printer mid-print.
+- It reads pve's boot time from System Monitor's `sensor.system_monitor_uptime`.
+  Inside podman, `/proc/uptime` is the Proxmox host's, not the LXC's, which is
+  exactly the signal a power cut leaves. System Monitor turns that sensor off
+  by default, so it has to be enabled.
+- Lights without a power-on setting still flash on for a moment before it
+  catches them.
+
+## Scenes
+
+Starlight is a Home Assistant scene copied from the Hue bridge's own scene
+definition, so it survives the Play bars leaving the bridge. Hue's version
+lives on the bridge as `scene.*_starlight`. Ours is `scene.starlight`.
+
 ## Backups
 
 The recorder database is copied with SQLite's `.backup` to `backup.db` before
