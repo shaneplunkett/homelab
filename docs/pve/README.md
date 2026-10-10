@@ -14,6 +14,7 @@ Per-service docs:
 - [forge.md](forge.md)
 - [builder.md](builder.md)
 - [rss.md](rss.md)
+- [home.md](home.md)
 
 ## Gotchas
 

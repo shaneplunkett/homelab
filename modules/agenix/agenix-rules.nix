@@ -15,6 +15,7 @@ let
     dlna
     gym
     rss
+    home
     ;
 in
 {
@@ -112,6 +113,7 @@ in
     dlna
     gym
     rss
+    home
   ];
   "backup-brain.age".publicKeys = [
     shane
@@ -156,6 +158,10 @@ in
   "backup-rss.age".publicKeys = [
     shane
     rss
+  ];
+  "backup-home.age".publicKeys = [
+    shane
+    home
   ];
   "forgejo-oidc-client-secret.age".publicKeys = [
     shane

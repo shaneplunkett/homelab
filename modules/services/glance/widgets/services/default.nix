@@ -39,6 +39,10 @@ let
       title = "Gatus";
       icon = "di:gatus";
     };
+    home = {
+      title = "Home Assistant";
+      icon = "di:home-assistant";
+    };
     rss = {
       title = "FreshRSS";
       icon = "di:freshrss";
