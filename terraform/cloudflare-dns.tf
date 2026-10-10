@@ -65,7 +65,7 @@ locals {
       zone      = "shaneplunkett.com"
       type      = "TXT"
       name      = "_dmarc.shaneplunkett.com"
-      content   = "\"v=DMARC1; p=none;\""
+      content   = "\"v=DMARC1; p=quarantine;\""
     }
     "com/TXT/google-verification" = {
       record_id = "7edaa142e2719bf517d16a3a3bdccd4c"
@@ -179,7 +179,7 @@ locals {
       zone      = "shaneplunkett.dev"
       type      = "TXT"
       name      = "shaneplunkett.dev"
-      content   = "\"v=spf1 include:icloud.com include:_spf.google.com ~all\""
+      content   = "\"v=spf1 include:_spf.google.com ~all\""
       ttl       = 3600
     }
   }
